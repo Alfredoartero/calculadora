@@ -2,337 +2,128 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Importación - Importaciones Yesica</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora Rosada - Importaciones Yesica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #007bff; /* Azul vibrante */
-            --secondary-color: #6c757d; /* Gris secundario */
-            --accent-color: #28a745; /* Verde para destacados */
-            --text-color: #343a40;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --border-color: #e9ecef;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Alinea arriba */
-            min-height: 100vh;
-            padding: 30px 15px;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        .container {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-            border-top: 5px solid var(--primary-color);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 700;
-            font-size: 2.2em;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative; /* Para el autocomplete */
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-color);
-            font-size: 0.95em;
-        }
-
-        input[type="number"],
-        input[type="text"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1em;
-            color: var(--text-color);
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-        }
-
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid var(--border-color);
-            border-top: none;
-            z-index: 99;
-            top: 100%; /* Justo debajo del input */
-            left: 0;
-            right: 0;
-            background-color: var(--card-bg);
-            max-height: 200px;
-            overflow-y: auto;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-        }
-
-        .autocomplete-items div {
-            padding: 10px 15px;
-            cursor: pointer;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.95em;
-            color: var(--text-color);
-        }
-
-        .autocomplete-items div:hover {
-            background-color: var(--bg-color);
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-        }
-
-        button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .results-section {
-            margin-top: 30px;
-            padding: 25px;
-            background-color: var(--bg-color);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            display: none; /* Oculto por defecto */
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 1em;
-            color: var(--text-color);
-        }
-        .result-item strong { color: var(--primary-color); }
-        
-        .total-summary {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px dashed var(--border-color);
-            text-align: center;
-        }
-        .total-label {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 8px;
-        }
-        .total-amount {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: var(--accent-color); /* Verde para el total */
-            display: block;
-        }
+        :root { --primary: #d63384; --bg: #fff0f6; --accent: #e83e8c; --text: #4b162c; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; color: var(--text); }
+        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15); width: 100%; max-width: 480px; border: 2px solid #f8bbd0; }
+        h1 { color: var(--primary); text-align: center; margin-bottom: 5px; font-size: 1.8rem; font-weight: 700; }
+        .subtitle { text-align: center; color: #a37085; font-size: 0.9rem; margin-bottom: 30px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+        input { width: 100%; padding: 16px; border: 2px solid #fce4ec; border-radius: 15px; box-sizing: border-box; font-size: 16px; margin-bottom: 20px; -webkit-appearance: none; background: #fff9fb; }
+        input:focus { border-color: var(--primary); outline: none; background: white; }
+        .search-container { position: relative; }
+        .suggs { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); z-index: 1000; max-height: 250px; overflow-y: auto; display: none; margin-top: -15px; border: 1px solid #f8bbd0; }
+        .suggs div { padding: 15px 20px; border-bottom: 1px solid #fff0f6; font-size: 0.95rem; cursor: pointer; }
+        button { width: 100%; background: var(--primary); color: white; padding: 18px; border: none; border-radius: 15px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3); }
+        .res { margin-top: 30px; padding: 20px; background: #fff9fb; border-radius: 20px; display: none; border: 1px solid #fce4ec; animation: fadeIn 0.4s; }
+        .line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+        .total-box { margin-top: 20px; padding-top: 20px; border-top: 2px dashed #f8bbd0; text-align: center; }
+        .total-price { display: block; font-size: 2.3rem; color: var(--primary); font-weight: 800; margin-top: 5px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
-<div class="container">
+<div class="card">
     <h1>IMPORTACIONES YESICA</h1>
-    
-    <div class="input-group">
-        <label for="subasta">Precio de Martillo (Subasta):</label>
-        <input type="number" id="subasta" placeholder="$0.00" oninput="clearSelection()">
+    <div class="subtitle">Calculadora Logística Premium</div>
+    <label>Precio de Martillo (Subasta):</label>
+    <input type="number" id="sub" placeholder="Ej: 5000" inputmode="decimal">
+    <label>Ciudad de la Grúa (Copart):</label>
+    <div class="search-container">
+        <input type="text" id="bus" placeholder="Busca la ciudad..." autocomplete="off">
+        <div id="box" class="suggs"></div>
     </div>
-
-    <div class="input-group">
-        <label for="busquedaGrua">Buscar Ubicación de Grúa (Copart):</label>
-        <input type="text" id="busquedaGrua" placeholder="Escribe ciudad, estado (ej. Miami, FL)..." autocomplete="off">
-        <div id="listaSugerencias" class="autocomplete-items"></div>
-    </div>
-
-    <button onclick="calcular()">CALCULAR PRESUPUESTO</button>
-
-    <div id="resultado" class="results-section">
-        <div class="result-item"><span>Precio Subasta + $700:</span> <strong><span id="valCompra"></span></strong></div>
-        <div class="result-item"><span>Flete Total (Marítimo + Grúa):</span> <strong><span id="valFlete"></span></strong></div>
-        <div class="result-item"><span>Total Impuestos:</span> <strong><span id="valImpuestos"></span></strong></div>
-        <div class="result-item"><span>Gastos Fijos de Gestión:</span> <strong>$350.00</strong></div>
-        
-        <div class="total-summary">
-            <span class="total-label">GRAN TOTAL A PAGAR:</span>
-            <span class="total-amount" id="resTotal"></span>
+    <button onclick="calc()">CALCULAR PRESUPUESTO</button>
+    <div id="out" class="res">
+        <div class="line"><span>Valor Aduana (+700):</span> <b id="rC"></b></div>
+        <div class="line"><span>Flete (Marítimo + Grúa):</span> <b id="rF"></b></div>
+        <div class="line"><span>Impuestos El Salvador:</span> <b id="rI"></b></div>
+        <div class="line"><span>Gestión de Importación:</span> <b>$350.00</b></div>
+        <div class="total-box">
+            <span style="font-weight:600; color: var(--accent);">PRECIO TOTAL ESTIMADO:</span>
+            <span class="total-price" id="rT"></span>
         </div>
     </div>
 </div>
-
 <script>
-// Base de datos completa de grúas (Copart) extraída de tus imágenes
-const ubicaciones = [
-    // --- LISTA FLORIDA (Puerto Marítimo $750) ---
-    { nombre: "Miami Central (FL)", grua: 100, puerto: 750 },
-    { nombre: "Miami North (FL)", grua: 100, puerto: 750 },
-    { nombre: "Miami South (FL)", grua: 100, puerto: 750 },
-    { nombre: "Orlando North (FL)", grua: 175, puerto: 750 },
-    { nombre: "Orlando South (FL)", grua: 175, puerto: 750 },
-    { nombre: "West Palm Beach (FL)", grua: 120, puerto: 750 },
-    { nombre: "Tampa North (FL)", grua: 225, puerto: 750 },
-    { nombre: "Tampa South (FL)", grua: 205, puerto: 750 },
-    { nombre: "Jacksonville North (FL)", grua: 250, puerto: 750 },
-    { nombre: "Punta Gorda (FL)", grua: 220, puerto: 750 },
-    { nombre: "Tallahassee (FL)", grua: 320, puerto: 750 },
-    { nombre: "Ocala (FL)", grua: 250, puerto: 750 },
-    { nombre: "Clewiston (FL)", grua: 175, puerto: 750 },
-    { nombre: "Atlanta West (GA)", grua: 345, puerto: 750 },
-    { nombre: "Savannah (GA)", grua: 345, puerto: 750 },
-    { nombre: "Houston (TX)", grua: 550, puerto: 750 },
-    { nombre: "Dallas (TX)", grua: 500, puerto: 750 },
-    { nombre: "San Antonio (TX)", grua: 500, puerto: 750 },
-    { nombre: "Charlotte (NC)", grua: 400, puerto: 750 },
-    { nombre: "Nashville (TN)", grua: 480, puerto: 750 },
-    { nombre: "Louisville (KY)", grua: 675, puerto: 750 },
-    { nombre: "Birmingham (AL)", grua: 485, puerto: 750 },
-    { nombre: "Mobile (AL)", grua: 475, puerto: 750 },
+const data = [
+    // --- FLORIDA (Flete Marítimo $750) ---
+    {n:"Birmingham (Copart/ IAAI)",g:485,p:750},{n:"Mobile (Copart)",g:475,p:750},{n:"Mobile South (Copart)",g:495,p:750},{n:"Montgomery (Copart)",g:475,p:750},
+    {n:"Fayetteville (Copart/ IAAI)",g:675,p:750},{n:"Little Rock (Copart/ IAAI)",g:700,p:750},{n:"Fort Pierce (Copart/ IAAI)",g:150,p:750},{n:"Jacksonville North (Copart)",g:250,p:750},
+    {n:"Miami Central (Copart)",g:100,p:750},{n:"Miami North (Copart/ IAAI)",g:100,p:750},{n:"Miami South (Copart)",g:100,p:750},{n:"Ocala (Copart)",g:250,p:750},
+    {n:"Orlando North (Copart/ IAAI)",g:175,p:750},{n:"Orlando South (Copart/ IAAI)",g:175,p:750},{n:"Punta Gorda (Copart)",g:220,p:750},{n:"Punta Gorda South (Copart)",g:225,p:750},
+    {n:"Tallahassee (Copart)",g:320,p:750},{n:"Tampa South (Copart)",g:205,p:750},{n:"West Palm Beach (Copart)",g:120,p:750},{n:"Atlanta Crashedtoys (Copart)",g:345,p:750},
+    {n:"Atlanta East/ North/ South (Copart/ IAAI)",g:345,p:750},{n:"Atlanta West (Copart)",g:345,p:750},{n:"Cartersville (Copart)",g:345,p:750},{n:"Macon (Copart/ IAAI)",g:345,p:750},
+    {n:"Savannah (Copart/ IAAI)",g:345,p:750},{n:"Tifton (Copart/ IAAI)",g:345,p:750},{n:"Chicago North (Copart/ IAAI)",g:725,p:750},{n:"Chicago South (Copart/ IAAI)",g:750,p:750},
+    {n:"Southern Illinois (Copart)",g:675,p:750},{n:"Wheeling (Copart)",g:675,p:750},{n:"Dyer (Copart)",g:700,p:750},{n:"Fort Wayne (Copart)",g:900,p:750},{n:"Indianapolis (Copart)",g:670,p:750},
+    {n:"Indianapolis South (IAAI)",g:670,p:750},{n:"Kansas City (Copart/ IAAI)",g:675,p:750},{n:"Lexington East/ West (Copart)",g:675,p:750},{n:"Louisville (Copart/ IAAI)",g:675,p:750},
+    {n:"Baton Rouge (Copart/ IAAI)",g:495,p:750},{n:"New Orleans (Copart/ IAAI)",g:495,p:750},{n:"New Orleans East (IAAI)",g:495,p:750},{n:"Baltimore (Copart/ IAAI)",g:580,p:750},
+    {n:"Baltimore East (Copart)",g:580,p:750},{n:"Washington DC (Copart)",g:580,p:750},{n:"Detroit (Copart/ IAAI)",g:850,p:750},{n:"Minneapolis (Copart)",g:795,p:750},{n:"Minneapolis North (Copart)",g:795,p:750},
+    {n:"Columbia (Copart)",g:750,p:750},{n:"Springfield (Copart/ IAAI)",g:725,p:750},{n:"St. Louis (Copart)",g:675,p:750},{n:"China Grove (Copart)",g:400,p:750},{n:"Concord (Copart/ IAAI)",g:400,p:750},
+    {n:"Gastonia (Copart)",g:425,p:750},{n:"Raleigh North (Copart)",g:395,p:750},{n:"Raleigh (Copart/ IAAI)",g:395,p:750},{n:"Cleveland East/ West (Copart)",g:750,p:750},
+    {n:"Columbus (Copart/ IAAI)",g:725,p:750},{n:"Oklahoma City (Copart/ IAAI)",g:500,p:750},{n:"Tulsa (Copart/ IAAI)",g:500,p:750},{n:"North Charleston (Copart)",g:325,p:750},
+    {n:"Memphis (Copart/ IAAI)",g:480,p:750},{n:"Nashville (Copart/ IAAI)",g:480,p:750},{n:"Austin (Copart/ IAAI)",g:500,p:750},{n:"Dallas South (Copart)",g:500,p:750},{n:"Dallas / Ft Worth (IAAI)",g:500,p:750},
+    {n:"Fort Worth (Copart)",g:600,p:750},{n:"Houston (Copart/ IAAI)",g:550,p:750},{n:"Houston East (Copart)",g:550,p:750},{n:"Houston South (IAAI)",g:550,p:750},{n:"San Antonio (Copart/ IAAI)",g:500,p:750},
+    {n:"San Antonio South (IAAI)",g:500,p:750},{n:"Fredericksburg (Copart)",g:550,p:750},{n:"Fredericksburg South (Copart/ IAAI)",g:550,p:750},{n:"Hampton (Copart)",g:575,p:750},{n:"Richmond (Copart/ IAAI)",g:550,p:750},
+    {n:"Richmond East (Copart)",g:550,p:750},{n:"Tidewater (IAAI)",g:550,p:750},
 
-    // --- LISTA PHILADELPHIA (Puerto Marítimo $825) ---
-    { nombre: "Philadelphia (PA)", grua: 145, puerto: 825 },
-    { nombre: "Harrisburg (PA)", grua: 170, puerto: 825 },
-    { nombre: "York Haven (PA)", grua: 175, puerto: 825 },
-    { nombre: "Chambersburg (PA)", grua: 220, puerto: 825 },
-    { nombre: "Altoona (PA)", grua: 330, puerto: 825 },
-    { nombre: "Glassboro East/West (NJ)", grua: 150, puerto: 825 },
-    { nombre: "Somerville (NJ)", grua: 180, puerto: 825 },
-    { nombre: "Trenton Jobstown (NJ)", grua: 225, puerto: 825 },
-    { nombre: "Long Island (NY)", grua: 325, puerto: 825 },
-    { nombre: "Newburgh (NY)", grua: 270, puerto: 825 },
-    { nombre: "Baltimore East (MD)", grua: 235, puerto: 825 },
-    { nombre: "Washington DC", grua: 225, puerto: 825 },
-    { nombre: "Hartford Springfield (CT)", grua: 300, puerto: 825 },
-    { nombre: "New Britain (CT)", grua: 275, puerto: 825 },
-    { nombre: "Seaford Fruitland (DE)", grua: 300, puerto: 825 },
-    { nombre: "Chicago North/South (IL)", grua: 650, puerto: 825 },
-    { nombre: "Detroit (MI)", grua: 750, puerto: 825 },
-    { nombre: "Minneapolis (MN)", grua: 775, puerto: 825 },
-    { nombre: "Madison (WI)", grua: 775, puerto: 825 },
-    { nombre: "Columbus (OH)", grua: 575, puerto: 825 }
+    // --- PHILADELPHIA (Flete Marítimo $825) ---
+    {n:"Hartford Springfield (Copart)",g:300,p:825},{n:"New Britain - Copart*",g:275,p:825},{n:"Seaford Fruitland (Copart)*",g:300,p:825},{n:"Chicago North (Copart/ IAAI)",g:650,p:825},
+    {n:"Chicago South (Copart/ IAAI)",g:650,p:825},{n:"Chicago West (IAAI)",g:650,p:825},{n:"Southern Illinois (Copart)",g:650,p:825},{n:"Wheeling (Copart)",g:650,p:825},{n:"Baltimore (Copart/ IAAI)",g:200,p:825},
+    {n:"Baltimore East (Copart)",g:235,p:825},{n:"Baltimore East (Copart)*",g:265,p:825},{n:"Washington DC (Copart)",g:225,p:825},{n:"Washington DC (Copart)*",g:250,p:825},{n:"Boston North (Copart)",g:500,p:825},
+    {n:"Boston North Hudson (Copart)*",g:500,p:825},{n:"Freetown (Copart)",g:430,p:825},{n:"West Warren (Copart)",g:500,p:825},{n:"Detroit (Copart/ IAAI)",g:750,p:825},{n:"Kincheloe (Copart)",g:875,p:825},
+    {n:"Lansing (Copart)",g:750,p:825},{n:"Wayland (Copart)",g:750,p:825},{n:"Minneapolis (Copart)",g:775,p:825},{n:"Minneapolis North (Copart)",g:775,p:825},{n:"Minneapolis/ St. Paul (IAAI)",g:775,p:825},
+    {n:"Minneapolis South (IAAI)",g:775,p:825},{n:"St. Cloud (Copart)",g:775,p:825},{n:"Candia (Copart)",g:580,p:825},{n:"Avenel (IAAI)",g:180,p:825},{n:"Central New Jersey (IAAI)",g:180,p:825},
+    {n:"Glassboro East/ West (Copart)",g:150,p:825},{n:"Somerville (Copart)",g:180,p:825},{n:"Southern New Jersey (IAAI)",g:175,p:825},{n:"Trenton (Copart)",g:180,p:825},{n:"Trenton Jobstown (Copart)*",g:225,p:825},
+    {n:"Trenton Somerville / York Haven (Copart)*",g:200,p:825},{n:"Somerville Coopersburg (Copart)*",g:250,p:825},{n:"Albany (Copart/ IAAI)",g:325,p:825},{n:"Alden (Copart)*",g:800,p:825},{n:"Amsterdam (Copart)*",g:450,p:825},
+    {n:"Buffalo (Copart)",g:625,p:825},{n:"Buffalo Vulcan (IAAI)*",g:575,p:825},{n:"Long Island (Copart/ IAAI)",g:325,p:825},{n:"Montecillo (Copart)*",g:350,p:825},{n:"Newburgh (Copart/ IAAI)",g:270,p:825},
+    {n:"Rochester (Copart/ IAAI)",g:425,p:825},{n:"Route (Copart)*",g:325,p:825},{n:"Syracuse (IAAI/ Copart)",g:375,p:825},{n:"Akron-Canton (IAAI)",g:575,p:825},{n:"Cleveland (IAAI)",g:575,p:825},
+    {n:"Cleveland East/ West (Copart)",g:575,p:825},{n:"Columbus (Copart/ IAAI)",g:575,p:825},{n:"Dayton (Copart/ IAAI)",g:575,p:825},{n:"Altoona (IAAI/ Copart)",g:330,p:825},{n:"Chambersburg (Copart)",g:220,p:825},
+    {n:"Harrisburg (Copart)",g:170,p:825},{n:"Philadelphia (Copart)",g:145,p:825},{n:"Philadelphia East Malvern (Copart)*",g:225,p:825},{n:"Pittsburgh North (IAAI/ Copart)",g:375,p:825},{n:"Pittsburgh West (Copart)*",g:425,p:825},
+    {n:"Scranton (IAAI/ Copart)",g:190,p:825},{n:"York Haven (Copart)",g:175,p:825},{n:"Fredericksburg (Copart)",g:325,p:825},{n:"Hampton (Copart)",g:425,p:825},{n:"Richmond (Copart/ IAAI)",g:350,p:825},
+    {n:"Richmond East (Copart)",g:375,p:825},{n:"Milwaukee (Copart/ IAAI)",g:750,p:825},{n:"Milwaukee South (Copart)",g:750,p:825}
 ];
 
-let seleccionada = null; // Para guardar la ubicación de grúa elegida
-
-const inputBusqueda = document.getElementById("busquedaGrua");
-const listaSugerencias = document.getElementById("listaSugerencias");
-
-// Evento para mostrar sugerencias al escribir
-inputBusqueda.addEventListener("input", function() {
-    const val = this.value.toLowerCase();
-    listaSugerencias.innerHTML = ""; // Limpiar sugerencias anteriores
-    seleccionada = null; // Limpiar selección previa
-
-    if (!val) {
-        listaSugerencias.style.display = 'none';
-        return;
-    }
-
-    const filtradas = ubicaciones.filter(u => u.nombre.toLowerCase().includes(val));
-    
-    if (filtradas.length > 0) {
-        listaSugerencias.style.display = 'block';
-        filtradas.forEach(u => {
-            const div = document.createElement("div");
-            div.innerHTML = u.nombre;
-            div.addEventListener("click", function() {
-                inputBusqueda.value = u.nombre;
-                seleccionada = u; // Guarda la ubicación seleccionada
-                listaSugerencias.innerHTML = "";
-                listaSugerencias.style.display = 'none';
-            });
-            listaSugerencias.appendChild(div);
+let sel = null;
+const inB = document.getElementById('bus');
+const box = document.getElementById('box');
+inB.addEventListener('input', function() {
+    const v = this.value.toLowerCase();
+    box.innerHTML = '';
+    if(!v){ box.style.display='none'; return; }
+    const m = data.filter(u => u.n.toLowerCase().includes(v));
+    if(m.length > 0){
+        box.style.display='block';
+        m.slice(0, 15).forEach(x => {
+            const d = document.createElement('div');
+            d.textContent = x.n;
+            d.onclick = () => { inB.value = x.n; sel = x; box.style.display='none'; };
+            box.appendChild(d);
         });
-    } else {
-        listaSugerencias.style.display = 'none';
-    }
+    } else { box.style.display='none'; }
 });
-
-// Limpiar sugerencias si el usuario hace clic fuera
-document.addEventListener("click", function (e) {
-    if (e.target != inputBusqueda) {
-        listaSugerencias.innerHTML = "";
-        listaSugerencias.style.display = 'none';
-    }
-});
-
-// Limpiar selección si el usuario edita el input de subasta
-function clearSelection() {
-    seleccionada = null;
-    inputBusqueda.value = "";
+function calc() {
+    const s = parseFloat(document.getElementById('sub').value);
+    if(!s || !sel) return alert("Por favor ingresa el precio y selecciona una ciudad.");
+    const vC = s + 700;
+    const f = sel.g + sel.p;
+    const cif = vC + f;
+    const dai = cif * 0.25;
+    const iva = (cif + dai) * 0.13;
+    const aiv = cif * 0.01;
+    const mat = cif * 0.0569;
+    const imp = dai + iva + aiv + mat + 40;
+    const total = vC + f + imp + 350;
+    document.getElementById('rC').textContent = `$${vC.toFixed(2)}`;
+    document.getElementById('rF').textContent = `$${f.toFixed(2)}`;
+    document.getElementById('rI').textContent = `$${imp.toFixed(2)}`;
+    document.getElementById('rT').textContent = `$${total.toLocaleString('en-US',{minimumFractionDigits:2})}`;
+    document.getElementById('out').style.display = 'block';
 }
-
-function calcular() {
-    const subasta = parseFloat(document.getElementById("subasta").value);
-
-    if (isNaN(subasta) || subasta <= 0) {
-        alert("Por favor, ingresa un precio de subasta válido.");
-        return;
-    }
-    if (!seleccionada) {
-        alert("Por favor, selecciona una ubicación de grúa de la lista.");
-        return;
-    }
-
-    // 1. Lógica de Negocio
-    const valorCompraBase = subasta + 700; // Precio Subasta + $700 fijos
-    const fleteTotal = seleccionada.grua + seleccionada.puerto; // Grúa + Marítimo
-    const cif = valorCompraBase + fleteTotal; // Base Imponible CIF
-
-    // 2. Impuestos Aduaneros (fórmulas deducidas de tus capturas)
-    const dai = cif * 0.25; // 25% del CIF
-    const iva = (cif + dai) * 0.13; // 13% de (CIF + DAI)
-    const aiv = cif * 0.01; // 1% del CIF
-    const matricula = cif * 0.0569; // ~5.69% del CIF (Primera Mat.)
-    const pe = 40.00; // Cargo fijo PE
-    const totalImpuestos = dai + iva + aiv + matricula + pe;
-
-    // 3. Gran Total (incluye los $350 finales)
-    const gastosFijosFinales = 350.00;
-    const granTotalFinal = valorCompraBase + fleteTotal + totalImpuestos + gastosFijosFinales;
-
-    // Mostrar Resultados en la Interfaz
-    document.getElementById('valCompra').innerText = `$${valorCompraBase.toFixed(2)}`;
-    document.getElementById('valFlete').innerText = `$${fleteTotal.toFixed(2)}`;
-    document.getElementById('valImpuestos').innerText = `$${totalImpuestos.toFixed(2)}`;
-    document.getElementById('resTotal').innerText = `$${granTotalFinal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    
-    document.getElementById('resultado').style.display = 'block'; // Mostrar la sección de resultados
-}
+document.addEventListener('click', (e) => { if(e.target !== inB) box.style.display='none'; });
 </script>
-
 </body>
 </html>
