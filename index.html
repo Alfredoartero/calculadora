@@ -3,75 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Calculadora Pro - Importaciones Yesica</title>
+    <title>Auditor de Impuestos - Yesica</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gradiente: linear-gradient(135deg, #1a73e8 0%, #d63384 100%); --blue: #1a73e8; --pink: #d63384; --bg: #f4f7f9; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .card { background: white; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 450px; overflow: hidden; }
-        .header { background: var(--gradiente); color: white; padding: 20px; text-align: center; }
-        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
-        .content { padding: 20px; }
-        label { display: block; font-weight: 600; margin: 10px 0 5px; font-size: 0.8rem; color: #444; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; box-sizing: border-box; font-size: 15px; margin-bottom: 10px; font-family: 'Poppins'; }
-        .fee-preview { background: #fff5f8; padding: 10px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--pink); display: none; }
-        .fee-preview p { margin: 2px 0; font-size: 0.72rem; color: #d63384; font-weight: 500; }
-        .search-container { position: relative; }
-        .suggs { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 1000; max-height: 200px; overflow-y: auto; display: none; border: 1px solid #eee; }
-        .suggs div { padding: 12px; border-bottom: 1px solid #f7f7f7; font-size: 0.8rem; cursor: pointer; }
-        button { width: 100%; background: var(--gradiente); color: white; padding: 16px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3); }
-        .res { margin-top: 20px; padding: 18px; background: #f8fbff; border-radius: 15px; display: none; border: 1px solid #e2e8f0; }
-        .line { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem; color: #555; }
-        .total-box { margin-top: 15px; padding-top: 15px; border-top: 2px dashed #cbd5e0; text-align: center; }
-        .total-price { display: block; font-size: 2.1rem; color: #2ecc71; font-weight: 800; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; padding: 20px; }
+        h2 { color: #1a73e8; text-align: center; font-size: 1.2rem; margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-top: 15px; font-size: 0.8rem; color: #555; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #e1e4e8; border-radius: 10px; box-sizing: border-box; font-size: 16px; margin-top: 5px; }
+        .fee-info { background: #fff4f9; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.75rem; color: #d63384; display: none; border-left: 3px solid #d63384; }
+        button { width: 100%; background: linear-gradient(135deg, #1a73e8, #d63384); color: white; padding: 15px; border: none; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer; }
+        .results { margin-top: 20px; border-top: 2px solid #eee; pt: 15px; display: none; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
+        .highlight { color: #2ecc71; font-weight: 700; }
+        .tax-total { font-size: 1.1rem; color: #d63384; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
+
 <div class="card">
-    <div class="header"><h1>Importaciones Yesica</h1></div>
-    <div class="content">
-        <label>Precio de Subasta (Martillo):</label>
-        <input type="number" id="sub" placeholder="Ej: 3000" oninput="updateLiveFees()">
-        
-        <div id="feeBox" class="fee-preview">
-            <p id="lBuyer"></p>
-            <p id="lInternet"></p>
-            <p id="lGate"></p>
-        </div>
+    <h2>AUDITOR DE IMPUESTOS</h2>
+    
+    <label>Monto de Subasta ($):</label>
+    <input type="number" id="monto" placeholder="Ej: 2700" oninput="mostrarFees()">
+    
+    <div id="infoFees" class="fee-info"></div>
 
-        <label>Tipo de Vehículo / Motor:</label>
-        <select id="tipoVehiculo">
-            <option value="0.20|202.17">Menor a 1300 cm³ (20% DAI)</option>
-            <option value="0.25|210.53">Mayor a 1300 cm³ (25% DAI)</option>
-            <option value="0.30|218.89">Mayor a 2000 cm³ (30% DAI)</option>
-            <option value="0.30|328.34">Mayor a 2000 cm³ AWD (30% DAI)</option>
-            <option value="0.01|150.00">Pick-up / Carga (1% DAI)</option>
-        </select>
+    <label>Categoría del Vehículo:</label>
+    <select id="categoria">
+        <option value="0.20|0.054">Menor a 1300 cm³ (20% DAI)</option>
+        <option value="0.25|0.057">Mayor a 1300 cm³ (25% DAI)</option>
+        <option value="0.30|0.059">Mayor a 2000 cm³ (30% DAI)</option>
+        <option value="0.30|0.088">Mayor a 2000 cm³ AWD (30% DAI)</option>
+        <option value="0.01|0.040">Pick-up / Carga (1% DAI)</option>
+    </select>
 
-        <label>Ciudad de la Grúa (Copart/IAAI):</label>
-        <div class="search-container">
-            <input type="text" id="bus" placeholder="Busca tu ciudad..." autocomplete="off">
-            <div id="box" class="suggs"></div>
-        </div>
+    <button onclick="calcular()">CALCULAR SOLO IMPUESTO</button>
 
-        <button onclick="calculate()">GENERAR COTIZACIÓN</button>
-
-        <div id="out" class="res">
-            <div class="line"><span>Factura Copart Final:</span> <b id="rFactura"></b></div>
-            <div class="line"><span>Logística (Flete+Grúa):</span> <b id="rLog"></b></div>
-            <div class="line"><span>Impuestos SV (Variables):</span> <b id="rImp"></b></div>
-            <div class="line"><span>Honorarios Yesica:</span> <b>$350.00</b></div>
-            <div class="total-box">
-                <span style="font-weight:600;">TOTAL ESTIMADO EN SV:</span>
-                <span class="total-price" id="rT"></span>
-            </div>
-        </div>
+    <div id="resultado" class="results">
+        <div class="row"><span>Factura Copart:</span> <span id="resFactura" class="highlight"></span></div>
+        <div class="row"><span>DAI:</span> <span id="resDAI"></span></div>
+        <div class="row"><span>IVA (13%):</span> <span id="resIVA"></span></div>
+        <div class="row"><span>AIV (1%):</span> <span id="resAIV"></span></div>
+        <div class="row"><span>Matrícula:</span> <span id="resMat"></span></div>
+        <div class="row"><span>Gastos Fijos:</span> <span>$40.00</span></div>
+        <div class="row tax-total"><strong>TOTAL IMPUESTOS:</strong> <strong id="resTotalImp"></strong></div>
     </div>
 </div>
 
 <script>
-// Lógica de Fees basada en tus imágenes
-function getFees(p) {
+function calcularFees(p) {
     let buyer = 0;
     if (p <= 499) buyer = 200;
     else if (p <= 999) buyer = 350;
@@ -80,84 +61,42 @@ function getFees(p) {
     else if (p <= 3999) buyer = 700;
     else if (p <= 4999) buyer = 800;
     else buyer = p * 0.15;
-    return { buyer, internet: 110, gate: 95, env: 15, title: 20 };
+    
+    // Suma fija de Internet(110) + Gate(95) + Env(15) + Title(20) = 240
+    return buyer + 240; 
 }
 
-function updateLiveFees() {
-    const s = parseFloat(document.getElementById('sub').value);
-    const box = document.getElementById('feeBox');
-    if(s) {
-        const f = getFees(s);
-        document.getElementById('lBuyer').textContent = "Buyer Fee: $" + f.buyer;
-        document.getElementById('lInternet').textContent = "Internet Fee: $" + f.internet;
-        document.getElementById('lGate').textContent = "Gate/Env/Title: $" + (f.gate + f.env + f.title);
-        box.style.display = 'block';
-    } else { box.style.display = 'none'; }
+function mostrarFees() {
+    const p = parseFloat(document.getElementById('monto').value);
+    const div = document.getElementById('infoFees');
+    if(p) {
+        const totalFees = calcularFees(p) - p;
+        div.style.display = 'block';
+        div.innerHTML = `<strong>Fees estimados:</strong> $${calcularFees(p) - p} <br> <strong>Factura total:</strong> $${calcularFees(p)}`;
+    } else { div.style.display = 'none'; }
 }
 
-// Base de datos de grúas completa
-const cities = [
-    // FLORIDA (Flete 750)
-    {n:"Miami Central (Copart)", g:100, p:750}, {n:"Miami North (Copart/IAAI)", g:100, p:750},
-    {n:"Miami South (Copart)", g:100, p:750}, {n:"Orlando North (Copart/IAAI)", g:175, p:750},
-    {n:"Orlando South (Copart/IAAI)", g:175, p:750}, {n:"Tampa South (Copart)", g:205, p:750},
-    {n:"Jacksonville North (Copart)", g:250, p:750}, {n:"Tallahassee (Copart)", g:320, p:750},
-    {n:"West Palm Beach (Copart)", g:120, p:750}, {n:"Fort Pierce (Copart)", g:150, p:750},
-    {n:"Ocala (Copart)", g:250, p:750}, {n:"Pensacola (IAAI)", g:350, p:750},
-    // PHILADELPHIA (Flete 825)
-    {n:"Philadelphia (Copart)", g:145, p:825}, {n:"Harrisburg (Copart)", g:170, p:825},
-    {n:"Baltimore East (Copart)", g:235, p:825}, {n:"Washington DC (Copart)", g:225, p:825},
-    {n:"Newburgh (Copart/IAAI)", g:270, p:825}, {n:"Long Island (Copart/IAAI)", g:325, p:825},
-    {n:"Trenton (Copart)", g:180, p:825}, {n:"York Haven (Copart)", g:175, p:825},
-    // OTROS
-    {n:"Atlanta West (Copart)", g:345, p:750}, {n:"Savannah (Copart)", g:345, p:750},
-    {n:"Birmingham (Copart)", g:485, p:750}, {n:"Houston (Copart)", g:550, p:750}
-];
+function calcular() {
+    const p = parseFloat(document.getElementById('monto').value);
+    const config = document.getElementById('categoria').value.split('|');
+    if(!p) return alert("Ingresa un monto");
 
-let selectedCity = null;
-const inputBus = document.getElementById('bus');
-const suggBox = document.getElementById('box');
+    const factura = calcularFees(p);
+    const cif = factura; // En esta prueba el CIF es igual a la factura
 
-inputBus.addEventListener('input', function() {
-    const v = this.value.toLowerCase(); suggBox.innerHTML = '';
-    if(!v){ suggBox.style.display='none'; return; }
-    const matches = cities.filter(c => c.n.toLowerCase().includes(v));
-    if(matches.length > 0){
-        suggBox.style.display='block';
-        matches.forEach(c => {
-            const d = document.createElement('div'); d.textContent = c.n;
-            d.onclick = () => { inputBus.value = c.n; selectedCity = c; suggBox.style.display='none'; };
-            suggBox.appendChild(d);
-        });
-    }
-});
-
-function calculate() {
-    const subasta = parseFloat(document.getElementById('sub').value);
-    const config = document.getElementById('tipoVehiculo').value.split('|');
-    if(!subasta || !selectedCity) return alert("Por favor ingresa precio y ciudad");
-
-    const fees = getFees(subasta);
-    const totalFactura = subasta + fees.buyer + fees.internet + fees.gate + fees.env + fees.title;
-    const logistica = selectedCity.g + selectedCity.p;
-    const cif = totalFactura + logistica;
-    
-    // Cálculo Dinámico de Aduana SV
-    const daiPct = parseFloat(config[0]);
-    const matFijo = parseFloat(config[1]);
-    
-    const dai = cif * daiPct;
+    const dai = cif * parseFloat(config[0]);
     const iva = (cif + dai) * 0.13;
     const aiv = cif * 0.01;
-    const impuestosTotal = dai + iva + aiv + matFijo + 40; 
-    
-    const totalGeneral = totalFactura + logistica + impuestosTotal + 350;
+    const mat = cif * parseFloat(config[1]);
+    const totalImp = dai + iva + aiv + mat + 40;
 
-    document.getElementById('rFactura').textContent = "$" + totalFactura.toFixed(2);
-    document.getElementById('rLog').textContent = "$" + logistica.toFixed(2);
-    document.getElementById('rImp').textContent = "$" + impuestosTotal.toFixed(2);
-    document.getElementById('rT').textContent = "$" + totalGeneral.toLocaleString('en-US',{minimumFractionDigits:2});
-    document.getElementById('out').style.display = 'block';
+    document.getElementById('resFactura').textContent = "$" + factura.toFixed(2);
+    document.getElementById('resDAI').textContent = "$" + dai.toFixed(2);
+    document.getElementById('resIVA').textContent = "$" + iva.toFixed(2);
+    document.getElementById('resAIV').textContent = "$" + aiv.toFixed(2);
+    document.getElementById('resMat').textContent = "$" + mat.toFixed(2);
+    document.getElementById('resTotalImp').textContent = "$" + totalImp.toFixed(2);
+    document.getElementById('resultado').style.display = 'block';
 }
 </script>
 </body>
