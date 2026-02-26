@@ -2,101 +2,72 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Auditor de Impuestos - Yesica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditor por Categoría - Yesica</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .card { background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; padding: 20px; }
-        h2 { color: #1a73e8; text-align: center; font-size: 1.2rem; margin-bottom: 20px; }
+        .card { background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; padding: 25px; }
+        h2 { color: #1a73e8; text-align: center; font-size: 1.1rem; margin-bottom: 20px; }
         label { display: block; font-weight: 600; margin-top: 15px; font-size: 0.8rem; color: #555; }
         input, select { width: 100%; padding: 12px; border: 2px solid #e1e4e8; border-radius: 10px; box-sizing: border-box; font-size: 16px; margin-top: 5px; }
-        .fee-info { background: #fff4f9; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.75rem; color: #d63384; display: none; border-left: 3px solid #d63384; }
-        button { width: 100%; background: linear-gradient(135deg, #1a73e8, #d63384); color: white; padding: 15px; border: none; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer; }
-        .results { margin-top: 20px; border-top: 2px solid #eee; pt: 15px; display: none; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
-        .highlight { color: #2ecc71; font-weight: 700; }
-        .tax-total { font-size: 1.1rem; color: #d63384; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; }
+        button { width: 100%; background: #1a73e8; color: white; padding: 18px; border: none; border-radius: 12px; font-weight: 700; margin-top: 25px; cursor: pointer; }
+        .results { margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px; display: none; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+        .total { font-size: 1.2rem; color: #d63384; font-weight: 800; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>AUDITOR DE IMPUESTOS</h2>
+    <h2>AUDITORIA TRANS-AUTO</h2>
     
-    <label>Monto de Subasta ($):</label>
-    <input type="number" id="monto" placeholder="Ej: 2700" oninput="mostrarFees()">
-    
-    <div id="infoFees" class="fee-info"></div>
+    <label>Valor CIF (Factura + Flete):</label>
+    <input type="number" id="cif" placeholder="Ej: 9290">
 
-    <label>Categoría del Vehículo:</label>
-    <select id="categoria">
-        <option value="0.20|0.054">Menor a 1300 cm³ (20% DAI)</option>
-        <option value="0.25|0.057">Mayor a 1300 cm³ (25% DAI)</option>
-        <option value="0.30|0.059">Mayor a 2000 cm³ (30% DAI)</option>
-        <option value="0.30|0.088">Mayor a 2000 cm³ AWD (30% DAI)</option>
-        <option value="0.01|0.040">Pick-up / Carga (1% DAI)</option>
+    <label>Selecciona Tipo de Carro:</label>
+    <select id="tipo">
+        <option value="0.20|0.05464">Automóvil Menor 1300 cc (20% DAI)</option>
+        <option value="0.25|0.05690">Automóvil Mayor 1300 cc (25% DAI)</option>
+        <option value="0.30|0.05916">Automóvil Mayor 2000 cc (30% DAI)</option>
+        <option value="0.30|0.08875">Automóvil Mayor 2000 cc AWD (30% DAI)</option>
     </select>
 
-    <button onclick="calcular()">CALCULAR SOLO IMPUESTO</button>
+    <button onclick="auditar()">COMPARAR RESULTADO</button>
 
-    <div id="resultado" class="results">
-        <div class="row"><span>Factura Copart:</span> <span id="resFactura" class="highlight"></span></div>
-        <div class="row"><span>DAI:</span> <span id="resDAI"></span></div>
-        <div class="row"><span>IVA (13%):</span> <span id="resIVA"></span></div>
-        <div class="row"><span>AIV (1%):</span> <span id="resAIV"></span></div>
-        <div class="row"><span>Matrícula:</span> <span id="resMat"></span></div>
-        <div class="row"><span>Gastos Fijos:</span> <span>$40.00</span></div>
-        <div class="row tax-total"><strong>TOTAL IMPUESTOS:</strong> <strong id="resTotalImp"></strong></div>
+    <div id="res" class="results">
+        <div class="row"><span>DAI:</span> <b id="rD"></b></div>
+        <div class="row"><span>IVA (13%):</span> <b id="rV"></b></div>
+        <div class="row"><span>AIV (1%):</span> <b id="rA"></b></div>
+        <div class="row"><span>Matrícula:</span> <b id="rM" style="color: blue;"></b></div>
+        <div class="row"><span>P.E. / Otros:</span> <b>$40.00</b></div>
+        <div class="total" id="rT"></div>
     </div>
 </div>
 
 <script>
-function calcularFees(p) {
-    let buyer = 0;
-    if (p <= 499) buyer = 200;
-    else if (p <= 999) buyer = 350;
-    else if (p <= 1999) buyer = 500;
-    else if (p <= 2999) buyer = 610; 
-    else if (p <= 3999) buyer = 700;
-    else if (p <= 4999) buyer = 800;
-    else buyer = p * 0.15;
+function auditar() {
+    const cif = parseFloat(document.getElementById('cif').value);
+    const config = document.getElementById('tipo').value.split('|');
+    if(!cif) return;
+
+    const daiPct = parseFloat(config[0]);
+    const matFactor = parseFloat(config[1]);
+
+    // Fórmulas validadas con tus fotos
+    const dai = Math.round(cif * daiPct * 100) / 100;
+    const iva = Math.round((cif + dai) * 0.13 * 100) / 100;
+    const aiv = Math.round(cif * 0.01 * 100) / 100;
+    const mat = Math.round(cif * matFactor * 100) / 100;
     
-    // Suma fija de Internet(110) + Gate(95) + Env(15) + Title(20) = 240
-    return buyer + 240; 
-}
+    const total = dai + iva + aiv + mat + 40;
 
-function mostrarFees() {
-    const p = parseFloat(document.getElementById('monto').value);
-    const div = document.getElementById('infoFees');
-    if(p) {
-        const totalFees = calcularFees(p) - p;
-        div.style.display = 'block';
-        div.innerHTML = `<strong>Fees estimados:</strong> $${calcularFees(p) - p} <br> <strong>Factura total:</strong> $${calcularFees(p)}`;
-    } else { div.style.display = 'none'; }
-}
-
-function calcular() {
-    const p = parseFloat(document.getElementById('monto').value);
-    const config = document.getElementById('categoria').value.split('|');
-    if(!p) return alert("Ingresa un monto");
-
-    const factura = calcularFees(p);
-    const cif = factura; // En esta prueba el CIF es igual a la factura
-
-    const dai = cif * parseFloat(config[0]);
-    const iva = (cif + dai) * 0.13;
-    const aiv = cif * 0.01;
-    const mat = cif * parseFloat(config[1]);
-    const totalImp = dai + iva + aiv + mat + 40;
-
-    document.getElementById('resFactura').textContent = "$" + factura.toFixed(2);
-    document.getElementById('resDAI').textContent = "$" + dai.toFixed(2);
-    document.getElementById('resIVA').textContent = "$" + iva.toFixed(2);
-    document.getElementById('resAIV').textContent = "$" + aiv.toFixed(2);
-    document.getElementById('resMat').textContent = "$" + mat.toFixed(2);
-    document.getElementById('resTotalImp').textContent = "$" + totalImp.toFixed(2);
-    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('rD').textContent = "$" + dai.toFixed(2);
+    document.getElementById('rV').textContent = "$" + iva.toFixed(2);
+    document.getElementById('rA').textContent = "$" + aiv.toFixed(2);
+    document.getElementById('rM').textContent = "$" + mat.toFixed(2);
+    document.getElementById('rT').textContent = "TOTAL: $" + total.toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById('res').style.display = 'block';
 }
 </script>
 </body>
