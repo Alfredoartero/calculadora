@@ -3,184 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Importaciones Yesica - Oficial</title>
+    <title>Calculadora Pro - Importaciones Yesica</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --gradiente: linear-gradient(135deg, #1a73e8 0%, #d63384 100%);
-            --blue: #1a73e8;
-            --pink: #d63384;
-            --bg: #f0f4f8;
-        }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .card { 
-            background: white; 
-            padding: 0; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 480px; 
-            overflow: hidden;
-            border: none;
-        }
-        .header-bar { height: 10px; background: var(--gradiente); }
-        .content { padding: 30px; }
-        h1 { 
-            text-align: center; 
-            margin: 0; 
-            font-size: 1.7rem; 
-            font-weight: 700;
-            background: var(--gradiente);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .subtitle { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 30px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: #444; }
-        input { 
-            width: 100%; 
-            padding: 15px; 
-            border: 2px solid #eee; 
-            border-radius: 12px; 
-            box-sizing: border-box; 
-            font-size: 16px; 
-            margin-bottom: 20px; 
-            transition: 0.3s;
-            background: #fafafa;
-        }
-        input:focus { border-color: var(--blue); outline: none; background: white; }
+        :root { --gradiente: linear-gradient(135deg, #1a73e8 0%, #d63384 100%); --blue: #1a73e8; --pink: #d63384; --bg: #f4f7f9; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .card { background: white; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 450px; overflow: hidden; }
+        .header { background: var(--gradiente); color: white; padding: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+        .content { padding: 20px; }
+        label { display: block; font-weight: 600; margin: 10px 0 5px; font-size: 0.8rem; color: #444; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; box-sizing: border-box; font-size: 15px; margin-bottom: 10px; font-family: 'Poppins'; }
+        .fee-preview { background: #fff5f8; padding: 10px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--pink); display: none; }
+        .fee-preview p { margin: 2px 0; font-size: 0.72rem; color: #d63384; font-weight: 500; }
         .search-container { position: relative; }
-        .suggs { 
-            position: absolute; top: 100%; left: 0; right: 0; 
-            background: white; border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-            z-index: 1000; max-height: 250px; overflow-y: auto; 
-            display: none; margin-top: -15px; border: 1px solid #eee; 
-        }
-        .suggs div { padding: 14px 20px; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem; cursor: pointer; }
-        .suggs div:hover { background: #f0f7ff; color: var(--blue); }
-        
-        button { 
-            width: 100%; 
-            background: var(--gradiente); 
-            color: white; padding: 18px; 
-            border: none; border-radius: 12px; 
-            font-size: 1.1rem; font-weight: 700; 
-            cursor: pointer; transition: 0.3s; 
-            box-shadow: 0 5px 15px rgba(214, 51, 132, 0.2);
-        }
-        button:active { transform: scale(0.98); opacity: 0.9; }
-        
-        .res { margin-top: 25px; padding: 20px; background: #f8fbff; border-radius: 15px; display: none; border: 1px solid #e1e8ed; }
-        .line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: #555; }
-        .total-box { 
-            margin-top: 15px; padding-top: 15px; 
-            border-top: 2px dashed #cbd5e0; text-align: center; 
-        }
-        .total-price { display: block; font-size: 2.2rem; color: #27ae60; font-weight: 800; margin-top: 5px; }
+        .suggs { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 1000; max-height: 200px; overflow-y: auto; display: none; border: 1px solid #eee; }
+        .suggs div { padding: 12px; border-bottom: 1px solid #f7f7f7; font-size: 0.8rem; cursor: pointer; }
+        button { width: 100%; background: var(--gradiente); color: white; padding: 16px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3); }
+        .res { margin-top: 20px; padding: 18px; background: #f8fbff; border-radius: 15px; display: none; border: 1px solid #e2e8f0; }
+        .line { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem; color: #555; }
+        .total-box { margin-top: 15px; padding-top: 15px; border-top: 2px dashed #cbd5e0; text-align: center; }
+        .total-price { display: block; font-size: 2.1rem; color: #2ecc71; font-weight: 800; }
     </style>
 </head>
 <body>
 <div class="card">
-    <div class="header-bar"></div>
+    <div class="header"><h1>Importaciones Yesica</h1></div>
     <div class="content">
-        <h1>IMPORTACIONES YESICA</h1>
-        <div class="subtitle">Calculadora Logística Premium</div>
         <label>Precio de Subasta (Martillo):</label>
-        <input type="number" id="sub" placeholder="Ej: 5000" inputmode="decimal">
-        <label>Ciudad de la Grúa (Copart):</label>
+        <input type="number" id="sub" placeholder="Ej: 3000" oninput="updateLiveFees()">
+        
+        <div id="feeBox" class="fee-preview">
+            <p id="lBuyer"></p>
+            <p id="lInternet"></p>
+            <p id="lGate"></p>
+        </div>
+
+        <label>Tipo de Vehículo / Motor:</label>
+        <select id="tipoVehiculo">
+            <option value="0.20|202.17">Menor a 1300 cm³ (20% DAI)</option>
+            <option value="0.25|210.53">Mayor a 1300 cm³ (25% DAI)</option>
+            <option value="0.30|218.89">Mayor a 2000 cm³ (30% DAI)</option>
+            <option value="0.30|328.34">Mayor a 2000 cm³ AWD (30% DAI)</option>
+            <option value="0.01|150.00">Pick-up / Carga (1% DAI)</option>
+        </select>
+
+        <label>Ciudad de la Grúa (Copart/IAAI):</label>
         <div class="search-container">
-            <input type="text" id="bus" placeholder="Busca la ciudad..." autocomplete="off">
+            <input type="text" id="bus" placeholder="Busca tu ciudad..." autocomplete="off">
             <div id="box" class="suggs"></div>
         </div>
-        <button onclick="calc()">CALCULAR PRESUPUESTO</button>
+
+        <button onclick="calculate()">GENERAR COTIZACIÓN</button>
+
         <div id="out" class="res">
-            <div class="line"><span>Valor Aduana (+700):</span> <b id="rC"></b></div>
-            <div class="line"><span>Flete (Marítimo + Grúa):</span> <b id="rF"></b></div>
-            <div class="line"><span>Impuestos El Salvador:</span> <b id="rI"></b></div>
-            <div class="line"><span>Gestión de Importación:</span> <b>$350.00</b></div>
+            <div class="line"><span>Factura Copart Final:</span> <b id="rFactura"></b></div>
+            <div class="line"><span>Logística (Flete+Grúa):</span> <b id="rLog"></b></div>
+            <div class="line"><span>Impuestos SV (Variables):</span> <b id="rImp"></b></div>
+            <div class="line"><span>Honorarios Yesica:</span> <b>$350.00</b></div>
             <div class="total-box">
-                <span style="font-weight:600; color: #444;">PRECIO TOTAL ESTIMADO:</span>
+                <span style="font-weight:600;">TOTAL ESTIMADO EN SV:</span>
                 <span class="total-price" id="rT"></span>
             </div>
         </div>
     </div>
 </div>
-<script>
-const data = [
-    // --- FLORIDA (Marítimo $750) ---
-    {n:"Birmingham (Copart/ IAAI)",g:485,p:750},{n:"Mobile (Copart)",g:475,p:750},{n:"Mobile South (Copart)",g:495,p:750},{n:"Montgomery (Copart)",g:475,p:750},
-    {n:"Fayetteville (Copart/ IAAI)",g:675,p:750},{n:"Little Rock (Copart/ IAAI)",g:700,p:750},{n:"Fort Pierce (Copart/ IAAI)",g:150,p:750},{n:"Jacksonville North (Copart)",g:250,p:750},
-    {n:"Miami Central (Copart)",g:100,p:750},{n:"Miami North (Copart/ IAAI)",g:100,p:750},{n:"Miami South (Copart)",g:100,p:750},{n:"Ocala (Copart)",g:250,p:750},
-    {n:"Orlando North (Copart/ IAAI)",g:175,p:750},{n:"Orlando South (Copart/ IAAI)",g:175,p:750},{n:"Punta Gorda (Copart)",g:220,p:750},{n:"Punta Gorda South (Copart)",g:225,p:750},
-    {n:"Tallahassee (Copart)",g:320,p:750},{n:"Tampa South (Copart)",g:205,p:750},{n:"West Palm Beach (Copart)",g:120,p:750},{n:"Atlanta Crashedtoys (Copart)",g:345,p:750},
-    {n:"Atlanta East/ North/ South (Copart/ IAAI)",g:345,p:750},{n:"Atlanta West (Copart)",g:345,p:750},{n:"Cartersville (Copart)",g:345,p:750},{n:"Macon (Copart/ IAAI)",g:345,p:750},
-    {n:"Savannah (Copart/ IAAI)",g:345,p:750},{n:"Tifton (Copart/ IAAI)",g:345,p:750},{n:"Chicago North (Copart/ IAAI)",g:725,p:750},{n:"Chicago South (Copart/ IAAI)",g:750,p:750},
-    {n:"Southern Illinois (Copart)",g:675,p:750},{n:"Wheeling (Copart)",g:675,p:750},{n:"Dyer (Copart)",g:700,p:750},{n:"Fort Wayne (Copart)",g:900,p:750},{n:"Indianapolis (Copart)",g:670,p:750},
-    {n:"Kansas City (Copart/ IAAI)",g:675,p:750},{n:"Lexington East/ West (Copart)",g:675,p:750},{n:"Louisville (Copart/ IAAI)",g:675,p:750},
-    {n:"Baton Rouge (Copart/ IAAI)",g:495,p:750},{n:"New Orleans (Copart/ IAAI)",g:495,p:750},{n:"Baltimore (Copart/ IAAI)",g:580,p:750},
-    {n:"Baltimore East (Copart)",g:580,p:750},{n:"Washington DC (Copart)",g:580,p:750},{n:"Detroit (Copart/ IAAI)",g:850,p:750},{n:"Minneapolis (Copart)",g:795,p:750},
-    {n:"Minneapolis North (Copart)",g:795,p:750},{n:"Columbia (Copart)",g:750,p:750},{n:"Springfield (Copart/ IAAI)",g:725,p:750},{n:"St. Louis (Copart)",g:675,p:750},
-    {n:"China Grove (Copart)",g:400,p:750},{n:"Concord (Copart/ IAAI)",g:400,p:750},{n:"Gastonia (Copart)",g:425,p:750},{n:"Raleigh North (Copart)",g:395,p:750},
-    {n:"Raleigh (Copart/ IAAI)",g:395,p:750},{n:"Cleveland East/ West (Copart)",g:750,p:750},{n:"Columbus (Copart/ IAAI)",g:725,p:750},{n:"Oklahoma City (Copart/ IAAI)",g:500,p:750},
-    {n:"Tulsa (Copart/ IAAI)",g:500,p:750},{n:"North Charleston (Copart)",g:325,p:750},{n:"Memphis (Copart/ IAAI)",g:480,p:750},{n:"Nashville (Copart/ IAAI)",g:480,p:750},
-    {n:"Austin (Copart/ IAAI)",g:500,p:750},{n:"Dallas South (Copart)",g:500,p:750},{n:"Fort Worth (Copart)",g:600,p:750},{n:"Houston (Copart/ IAAI)",g:550,p:750},
-    {n:"Houston East (Copart)",g:550,p:750},{n:"San Antonio (Copart/ IAAI)",g:500,p:750},{n:"Fredericksburg (Copart)",g:550,p:750},
-    {n:"Fredericksburg South (Copart/ IAAI)",g:550,p:750},{n:"Hampton (Copart)",g:575,p:750},{n:"Richmond (Copart/ IAAI)",g:550,p:750},{n:"Richmond East (Copart)",g:550,p:750},
 
-    // --- PHILADELPHIA (Marítimo $825) ---
-    {n:"Hartford Springfield (Copart)",g:300,p:825},{n:"New Britain - Copart*",g:275,p:825},{n:"Seaford Fruitland (Copart)*",g:300,p:825},{n:"Chicago North (Copart/ IAAI-PH)",g:650,p:825},
-    {n:"Chicago South (Copart/ IAAI-PH)",g:650,p:825},{n:"Southern Illinois (Copart-PH)",g:650,p:825},{n:"Wheeling (Copart-PH)",g:650,p:825},{n:"Baltimore (Copart/ IAAI-PH)",g:200,p:825},
-    {n:"Baltimore East (Copart-PH)",g:235,p:825},{n:"Baltimore East (Copart)* PH",g:265,p:825},{n:"Washington DC (Copart-PH)",g:225,p:825},{n:"Washington DC (Copart)* PH",g:250,p:825},
-    {n:"Boston North (Copart)",g:500,p:825},{n:"Boston North Hudson (Copart)*",g:500,p:825},{n:"Freetown (Copart)",g:430,p:825},{n:"West Warren (Copart)",g:500,p:825},
-    {n:"Detroit (Copart/ IAAI-PH)",g:750,p:825},{n:"Kincheloe (Copart)",g:875,p:825},{n:"Lansing (Copart)",g:750,p:825},{n:"Wayland (Copart)",g:750,p:825},
-    {n:"Minneapolis (Copart-PH)",g:775,p:825},{n:"Minneapolis North (Copart-PH)",g:775,p:825},{n:"St. Cloud (Copart-PH)",g:775,p:825},{n:"Candia (Copart)",g:580,p:825},
-    {n:"Glassboro East/ West (Copart)",g:150,p:825},{n:"Somerville (Copart)",g:180,p:825},{n:"Trenton (Copart)",g:180,p:825},{n:"Trenton Jobstown (Copart)*",g:225,p:825},
-    {n:"Trenton Somerville / York Haven (Copart)*",g:200,p:825},{n:"Somerville Coopersburg (Copart)*",g:250,p:825},{n:"Albany (Copart/ IAAI)",g:325,p:825},{n:"Alden (Copart)*",g:800,p:825},
-    {n:"Amsterdam (Copart)*",g:450,p:825},{n:"Buffalo (Copart)",g:625,p:825},{n:"Long Island (Copart/ IAAI)",g:325,p:825},{n:"Montecillo (Copart)*",g:350,p:825},
-    {n:"Newburgh (Copart/ IAAI)",g:270,p:825},{n:"Rochester (Copart/ IAAI)",g:425,p:825},{n:"Route (Copart)*",g:325,p:825},{n:"Cleveland East/ West (Copart-PH)",g:575,p:825},
-    {n:"Columbus (Copart/ IAAI-PH)",g:575,p:825},{n:"Dayton (Copart/ IAAI)",g:575,p:825},{n:"Chambersburg (Copart)",g:220,p:825},{n:"Harrisburg (Copart)",g:170,p:825},
-    {n:"Philadelphia (Copart)",g:145,p:825},{n:"Philadelphia East Malvern (Copart)*",g:225,p:825},{n:"Pittsburgh West (Copart)*",g:425,p:825},{n:"York Haven (Copart)",g:175,p:825},
-    {n:"Fredericksburg (Copart-PH)",g:325,p:825},{n:"Hampton (Copart-PH)",g:425,p:825},{n:"Richmond (Copart/ IAAI-PH)",g:350,p:825},{n:"Richmond East (Copart-PH)",g:375,p:825},
-    {n:"Milwaukee South (Copart)",g:750,p:825}
+<script>
+// Lógica de Fees basada en tus imágenes
+function getFees(p) {
+    let buyer = 0;
+    if (p <= 499) buyer = 200;
+    else if (p <= 999) buyer = 350;
+    else if (p <= 1999) buyer = 500;
+    else if (p <= 2999) buyer = 610; 
+    else if (p <= 3999) buyer = 700;
+    else if (p <= 4999) buyer = 800;
+    else buyer = p * 0.15;
+    return { buyer, internet: 110, gate: 95, env: 15, title: 20 };
+}
+
+function updateLiveFees() {
+    const s = parseFloat(document.getElementById('sub').value);
+    const box = document.getElementById('feeBox');
+    if(s) {
+        const f = getFees(s);
+        document.getElementById('lBuyer').textContent = "Buyer Fee: $" + f.buyer;
+        document.getElementById('lInternet').textContent = "Internet Fee: $" + f.internet;
+        document.getElementById('lGate').textContent = "Gate/Env/Title: $" + (f.gate + f.env + f.title);
+        box.style.display = 'block';
+    } else { box.style.display = 'none'; }
+}
+
+// Base de datos de grúas completa
+const cities = [
+    // FLORIDA (Flete 750)
+    {n:"Miami Central (Copart)", g:100, p:750}, {n:"Miami North (Copart/IAAI)", g:100, p:750},
+    {n:"Miami South (Copart)", g:100, p:750}, {n:"Orlando North (Copart/IAAI)", g:175, p:750},
+    {n:"Orlando South (Copart/IAAI)", g:175, p:750}, {n:"Tampa South (Copart)", g:205, p:750},
+    {n:"Jacksonville North (Copart)", g:250, p:750}, {n:"Tallahassee (Copart)", g:320, p:750},
+    {n:"West Palm Beach (Copart)", g:120, p:750}, {n:"Fort Pierce (Copart)", g:150, p:750},
+    {n:"Ocala (Copart)", g:250, p:750}, {n:"Pensacola (IAAI)", g:350, p:750},
+    // PHILADELPHIA (Flete 825)
+    {n:"Philadelphia (Copart)", g:145, p:825}, {n:"Harrisburg (Copart)", g:170, p:825},
+    {n:"Baltimore East (Copart)", g:235, p:825}, {n:"Washington DC (Copart)", g:225, p:825},
+    {n:"Newburgh (Copart/IAAI)", g:270, p:825}, {n:"Long Island (Copart/IAAI)", g:325, p:825},
+    {n:"Trenton (Copart)", g:180, p:825}, {n:"York Haven (Copart)", g:175, p:825},
+    // OTROS
+    {n:"Atlanta West (Copart)", g:345, p:750}, {n:"Savannah (Copart)", g:345, p:750},
+    {n:"Birmingham (Copart)", g:485, p:750}, {n:"Houston (Copart)", g:550, p:750}
 ];
 
-let sel = null;
-const inB = document.getElementById('bus');
-const box = document.getElementById('box');
-inB.addEventListener('input', function() {
-    const v = this.value.toLowerCase();
-    box.innerHTML = '';
-    if(!v){ box.style.display='none'; return; }
-    const m = data.filter(u => u.n.toLowerCase().includes(v));
-    if(m.length > 0){
-        box.style.display='block';
-        m.slice(0, 12).forEach(x => {
-            const d = document.createElement('div');
-            d.textContent = x.n;
-            d.onclick = () => { inB.value = x.n; sel = x; box.style.display='none'; };
-            box.appendChild(d);
+let selectedCity = null;
+const inputBus = document.getElementById('bus');
+const suggBox = document.getElementById('box');
+
+inputBus.addEventListener('input', function() {
+    const v = this.value.toLowerCase(); suggBox.innerHTML = '';
+    if(!v){ suggBox.style.display='none'; return; }
+    const matches = cities.filter(c => c.n.toLowerCase().includes(v));
+    if(matches.length > 0){
+        suggBox.style.display='block';
+        matches.forEach(c => {
+            const d = document.createElement('div'); d.textContent = c.n;
+            d.onclick = () => { inputBus.value = c.n; selectedCity = c; suggBox.style.display='none'; };
+            suggBox.appendChild(d);
         });
-    } else { box.style.display='none'; }
+    }
 });
-function calc() {
-    const s = parseFloat(document.getElementById('sub').value);
-    if(!s || !sel) return alert("Por favor ingresa el precio y selecciona una ciudad.");
-    const vC = s + 700;
-    const f = sel.g + sel.p;
-    const cif = vC + f;
-    const dai = cif * 0.25;
+
+function calculate() {
+    const subasta = parseFloat(document.getElementById('sub').value);
+    const config = document.getElementById('tipoVehiculo').value.split('|');
+    if(!subasta || !selectedCity) return alert("Por favor ingresa precio y ciudad");
+
+    const fees = getFees(subasta);
+    const totalFactura = subasta + fees.buyer + fees.internet + fees.gate + fees.env + fees.title;
+    const logistica = selectedCity.g + selectedCity.p;
+    const cif = totalFactura + logistica;
+    
+    // Cálculo Dinámico de Aduana SV
+    const daiPct = parseFloat(config[0]);
+    const matFijo = parseFloat(config[1]);
+    
+    const dai = cif * daiPct;
     const iva = (cif + dai) * 0.13;
     const aiv = cif * 0.01;
-    const mat = cif * 0.0569;
-    const imp = dai + iva + aiv + mat + 40;
-    const total = vC + f + imp + 350;
-    document.getElementById('rC').textContent = `$${vC.toFixed(2)}`;
-    document.getElementById('rF').textContent = `$${f.toFixed(2)}`;
-    document.getElementById('rI').textContent = `$${imp.toFixed(2)}`;
-    document.getElementById('rT').textContent = `$${total.toLocaleString('en-US',{minimumFractionDigits:2})}`;
+    const impuestosTotal = dai + iva + aiv + matFijo + 40; 
+    
+    const totalGeneral = totalFactura + logistica + impuestosTotal + 350;
+
+    document.getElementById('rFactura').textContent = "$" + totalFactura.toFixed(2);
+    document.getElementById('rLog').textContent = "$" + logistica.toFixed(2);
+    document.getElementById('rImp').textContent = "$" + impuestosTotal.toFixed(2);
+    document.getElementById('rT').textContent = "$" + totalGeneral.toLocaleString('en-US',{minimumFractionDigits:2});
     document.getElementById('out').style.display = 'block';
 }
-document.addEventListener('click', (e) => { if(e.target !== inB) box.style.display='none'; });
 </script>
 </body>
 </html>
