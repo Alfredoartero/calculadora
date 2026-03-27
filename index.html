@@ -13,89 +13,98 @@
         .input-style { width: 100%; padding: 0.9rem; border-radius: 0.75rem; border: 2px solid #cbd5e1; font-weight: 700; font-size: 1rem; outline: none; transition: all 0.2s; }
         .input-style:focus { border-color: #be185d; box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.1); }
         
-        /* Contenedor del Reporte */
+        /* Contenedor del Reporte - DISEÑO ESTÉTICO PARA MÓVIL */
         #reporteFinal { 
-            background: white; border: 4px solid #be185d; 
-            width: 100%; max-width: 800px; min-height: 1050px; 
-            padding: 45px; position: relative; display: flex; flex-direction: column;
+            background: white; 
+            border: 3px solid #be185d; 
+            border-radius: 1.5rem; /* Bordes redondeados en la web para que parezca una tarjeta */
+            width: 100%; max-width: 800px; 
+            padding: 30px 20px; /* Padding más sutil para celular */
+            position: relative; display: flex; flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
             margin: 0 auto;
             box-sizing: border-box;
+            min-height: 650px; /* Proporción de hoja en celular */
         }
 
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8rem; font-weight: 900; color: rgba(190, 24, 93, 0.03); pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        /* Pantallas grandes (Computadora) */
+        @media (min-width: 768px) {
+            #reporteFinal { padding: 45px; min-height: 1050px; border: 4px solid #be185d; border-radius: 0; }
+        }
+
+        /* Marca de agua adaptable */
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: clamp(4rem, 15vw, 8rem); font-weight: 900; color: rgba(190, 24, 93, 0.03); pointer-events: none; text-transform: uppercase; white-space: nowrap; }
 
         /* SELLO TODO INCLUIDO */
         .badge-container { position: relative; display: inline-flex; align-items: center; justify-content: center; }
         .badge-todo { 
             position: absolute; 
-            top: -20px; 
-            right: -30px; 
-            background: #be185d !important; 
-            color: white !important; 
-            font-size: 11px; 
-            font-weight: 900; 
-            padding: 4px 12px; 
-            border-radius: 6px; 
-            transform: rotate(10deg); 
-            text-transform: uppercase;
-            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-            white-space: nowrap;
-            z-index: 50;
-            -webkit-print-color-adjust: exact;
+            top: -15px; right: -5px; /* Ajuste perfecto para celular */
+            background: #be185d !important; color: white !important; 
+            font-size: 10px; font-weight: 900; padding: 4px 8px; 
+            border-radius: 6px; transform: rotate(10deg); 
+            text-transform: uppercase; box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+            white-space: nowrap; z-index: 50; -webkit-print-color-adjust: exact;
         }
-        #resPresupuesto { font-size: 95px; font-weight: 900; line-height: 1; letter-spacing: -4px; }
+        @media (min-width: 768px) {
+            .badge-todo { top: -20px; right: -30px; font-size: 11px; padding: 4px 12px; }
+        }
 
-        /* CONFIGURACIÓN DE IMPRESIÓN */
+        /* Precio dinámico (se encoge en celular, se agranda en PC/PDF) */
+        #resPresupuesto { font-size: clamp(3rem, 12vw, 95px); font-weight: 900; line-height: 1; letter-spacing: -2px; }
+
+        /* CONFIGURACIÓN ESTRICTA DE IMPRESIÓN PDF (Ignora la vista móvil) */
         @media print {
             @page { size: letter; margin: 0mm; }
             body { background: white !important; padding: 0 !important; margin: 0 !important; }
             .no-print { display: none !important; }
             #reporteFinal { 
                 margin: 0 !important; width: 100% !important; max-width: 100% !important; 
-                border: none !important; height: 100vh !important; min-height: 100vh !important;
+                border: none !important; border-radius: 0 !important; 
+                height: 100vh !important; min-height: 100vh !important;
                 box-shadow: none !important; padding: 40px !important; 
                 display: flex !important; flex-direction: column !important;
                 justify-content: space-around !important; 
             }
             .header-pink { color: #be185d !important; -webkit-print-color-adjust: exact; }
-            .badge-todo { background: #be185d !important; -webkit-print-color-adjust: exact; }
-            .watermark { opacity: 0.1 !important; }
+            .badge-todo { background: #be185d !important; -webkit-print-color-adjust: exact; top: -20px !important; right: -30px !important; font-size: 11px !important; padding: 4px 12px !important; }
+            #resPresupuesto { font-size: 95px !important; letter-spacing: -4px !important; }
+            .watermark { opacity: 0.1 !important; font-size: 8rem !important; }
         }
     </style>
 </head>
 <body class="p-3 md:p-6">
 
-    <div class="max-w-[1450px] mx-auto">
+    <div class="max-w-[1450px] mx-auto overflow-hidden sm:overflow-visible">
         
-        <div class="text-center mb-8 no-print">
-            <h1 class="text-5xl font-black header-pink italic tracking-tighter uppercase">IMPORTACIONES YESICA</h1>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.4em]">Cotizador Maestro Profesional</p>
+        <div class="text-center mb-6 md:mb-8 no-print px-2">
+            <h1 class="text-3xl md:text-5xl font-black header-pink italic tracking-tighter uppercase mb-1">IMPORTACIONES YESICA</h1>
+            <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.4em]">Cotizador Maestro Profesional</p>
         </div>
 
-        <div class="flex flex-wrap lg:flex-nowrap gap-8 justify-center items-start">
+        <div class="flex flex-wrap lg:flex-nowrap gap-6 md:gap-8 justify-center items-start">
             
-            <div class="w-full lg:w-[480px] space-y-6 no-print flex-shrink-0">
-                <div class="card p-6 space-y-5 border-t-8 border-slate-900 shadow-xl">
-                    <h2 class="text-lg font-black text-slate-800 uppercase italic border-b pb-2">1. Configuración de Unidad</h2>
-                    <div class="grid grid-cols-1 gap-4">
-                        <input type="text" id="infoVehiculo" placeholder="Vehículo (Año Marca Modelo)" class="input-style" oninput="actualizar()">
-                        <input type="text" id="infoLote" placeholder="Número de Lote (Subasta)" class="input-style" oninput="actualizar()">
+            <div class="w-full lg:w-[480px] space-y-6 no-print flex-shrink-0 px-2 sm:px-0">
+                <div class="card p-5 md:p-6 space-y-5 border-t-8 border-slate-900 shadow-xl">
+                    <h2 class="text-base md:text-lg font-black text-slate-800 uppercase italic border-b pb-2">1. Configuración de Unidad</h2>
+                    <div class="grid grid-cols-1 gap-3 md:gap-4">
+                        <input type="text" id="infoVehiculo" placeholder="Vehículo (Ej: 2020 Honda Civic)" class="input-style text-sm md:text-base" oninput="actualizar()">
+                        <input type="text" id="infoLote" placeholder="Número de Lote (Subasta)" class="input-style text-sm md:text-base" oninput="actualizar()">
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-3">
                         <div>
-                            <label class="text-[10px] font-black uppercase text-pink-600 mb-1 block">Oferta $</label>
-                            <input type="number" id="inputBid" placeholder="0.00" class="input-style border-pink-200" oninput="calcular()">
+                            <label class="text-[10px] md:text-[10px] font-black uppercase text-pink-600 mb-1 block">Oferta $</label>
+                            <input type="number" id="inputBid" placeholder="0.00" class="input-style border-pink-200 text-sm md:text-base px-2 md:px-3" oninput="calcular()">
                         </div>
                         <div>
-                            <label class="text-[10px] font-black uppercase text-green-600 mb-1 block">Ganancia $</label>
-                            <input type="number" id="inputGanancia" placeholder="0.00" class="input-style border-green-200" oninput="calcular()">
+                            <label class="text-[10px] md:text-[10px] font-black uppercase text-green-600 mb-1 block">Ganancia $</label>
+                            <input type="number" id="inputGanancia" placeholder="0.00" class="input-style border-green-200 text-sm md:text-base px-2 md:px-3" oninput="calcular()">
                         </div>
-                        <div>
-                            <label class="text-[10px] font-black uppercase text-slate-500 mb-1 block">Categoría</label>
-                            <select id="tamanoIdx" class="input-style text-sm" onchange="calcular()">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="text-[10px] md:text-[10px] font-black uppercase text-slate-500 mb-1 block">Categoría</label>
+                            <select id="tamanoIdx" class="input-style text-xs md:text-sm px-2 md:px-3" onchange="calcular()">
                                 <option value="0">Pequeño</option>
                                 <option value="1">Especial</option>
                                 <option value="2">Mediano</option>
@@ -105,21 +114,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-5 rounded-2xl border-2 border-dashed border-slate-300 relative">
-                        <label class="text-xs font-black uppercase text-slate-500 mb-3 block text-center italic">--- Puerto y Grúa ---</label>
-                        <input type="text" id="searchCiudad" placeholder="Buscar Ciudad..." class="input-style w-full mb-3 border-slate-400" oninput="filtrarCiudades()">
-                        <div id="listaSug" class="absolute z-50 bg-white border-2 border-slate-300 shadow-2xl rounded-xl max-h-72 overflow-y-auto hidden w-full left-0 mt-[-10px]"></div>
+                    <div class="bg-slate-50 p-4 md:p-5 rounded-2xl border-2 border-dashed border-slate-300 relative">
+                        <label class="text-[10px] md:text-xs font-black uppercase text-slate-500 mb-2 md:mb-3 block text-center italic">--- Puerto y Grúa ---</label>
+                        <input type="text" id="searchCiudad" placeholder="Buscar Ciudad..." class="input-style w-full mb-3 border-slate-400 text-sm md:text-base" oninput="filtrarCiudades()">
+                        <div id="listaSug" class="absolute z-50 bg-white border-2 border-slate-300 shadow-2xl rounded-xl max-h-60 md:max-h-72 overflow-y-auto hidden w-full left-0 mt-[-10px]"></div>
                         
-                        <div class="flex gap-4">
-                            <input type="number" id="gruaValue" placeholder="Precio Grúa $" class="input-style w-1/2" oninput="calcular()">
-                            <select id="zonaOrigen" class="input-style w-1/2 text-xs" onchange="calcular()">
+                        <div class="flex gap-2 sm:gap-4">
+                            <input type="number" id="gruaValue" placeholder="Grúa $" class="input-style w-1/2 text-sm md:text-base px-2" oninput="calcular()">
+                            <select id="zonaOrigen" class="input-style w-1/2 text-[11px] sm:text-sm px-1 sm:px-3" onchange="calcular()">
                                 <option value="FL">Florida (FL)</option>
                                 <option value="PH">Philadelphia (PH)</option>
                             </select>
                         </div>
                     </div>
 
-                    <select id="aduanaIdx" class="input-style bg-slate-900 text-white" onchange="calcular()">
+                    <select id="aduanaIdx" class="input-style bg-slate-900 text-white text-[11px] sm:text-sm px-2 sm:px-3" onchange="calcular()">
                         <option value="0.20|0.05464|std">Aduana: Motor Menor 1300 cc</option>
                         <option value="0.25|0.05690|std">Aduana: Motor 1300 a 2000 cc</option>
                         <option value="0.30|0.05916|std">Aduana: Motor Mayor 2000 cc</option>
@@ -128,67 +137,67 @@
                         <option value="0.25|0.06000|nejapa">Aduana: Motor Menor a 2000 cc AWD (Nejapa)</option>
                     </select>
 
-                    <button onclick="window.print()" class="w-full bg-pink-600 text-white font-black py-5 rounded-2xl shadow-xl text-xl hover:bg-pink-700 active:scale-95 transition-all uppercase italic">
+                    <button onclick="window.print()" class="w-full bg-pink-600 text-white font-black py-4 md:py-5 rounded-2xl shadow-xl text-lg md:text-xl hover:bg-pink-700 active:scale-95 transition-all uppercase italic">
                         🖨️ GENERAR PDF
                     </button>
                 </div>
 
-                <div class="card p-6 bg-slate-900 text-white border-l-[10px] border-pink-600 shadow-xl">
-                    <h3 class="text-sm font-black uppercase text-pink-400 mb-4 italic text-center border-b border-slate-800 pb-2">Cálculos Internos (Solo Yesica)</h3>
-                    <div class="space-y-1 text-xs">
+                <div class="card p-5 md:p-6 bg-slate-900 text-white border-l-[8px] md:border-l-[10px] border-pink-600 shadow-xl">
+                    <h3 class="text-[11px] md:text-sm font-black uppercase text-pink-400 mb-3 md:mb-4 italic text-center border-b border-slate-800 pb-2">Cálculos Internos (Solo Yesica)</h3>
+                    <div class="space-y-1 text-[10px] md:text-xs">
                         <div class="flex justify-between border-b border-slate-800 pb-1"><span>Subasta:</span><span id="intSubasta" class="text-pink-300">$0.00</span></div>
                         <div class="flex justify-between border-b border-slate-800 pb-1"><span>Impuestos SV:</span><span id="intImpuestos" class="text-pink-300 font-bold">$0.00</span></div>
                         <div class="flex justify-between border-b border-slate-800 pb-1"><span>Logística:</span><span id="intLogistica" class="text-pink-300">$0.00</span></div>
                     </div>
-                    <div class="mt-4 flex justify-between items-center pt-2 border-t border-slate-800">
-                        <span class="text-xs uppercase font-black text-slate-400">Inversión Real:</span>
-                        <span id="intTotalCosto" class="text-xl font-black text-white">$0.00</span>
+                    <div class="mt-3 md:mt-4 flex justify-between items-center pt-2 border-t border-slate-800">
+                        <span class="text-[10px] md:text-xs uppercase font-black text-slate-400">Inversión Real:</span>
+                        <span id="intTotalCosto" class="text-lg md:text-xl font-black text-white">$0.00</span>
                     </div>
                 </div>
             </div>
 
-            <div class="w-full flex justify-center flex-grow">
+            <div class="w-full flex justify-center flex-grow px-2 sm:px-0">
                 <div id="reporteFinal">
                     <div class="watermark">YESICA</div>
                     
-                    <div class="flex justify-between items-start border-b-8 border-pink-600 pb-6 mb-10">
-                        <div>
-                            <h2 class="text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
-                            <p class="text-sm font-bold text-slate-800 mt-2 tracking-[0.2em] uppercase">Cotización de Referencia de Importación</p>
+                    <div class="flex flex-col md:flex-row justify-between items-center md:items-start border-b-4 md:border-b-8 border-pink-600 pb-4 md:pb-6 mb-6 md:mb-10 text-center md:text-left">
+                        <div class="mb-3 md:mb-0">
+                            <h2 class="text-2xl sm:text-3xl md:text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
+                            <p class="text-[9px] md:text-sm font-bold text-slate-800 mt-1 md:mt-2 tracking-[0.15em] md:tracking-[0.2em] uppercase">Cotización de Referencia de Importación</p>
                         </div>
-                        <div class="text-right">
-                            <p id="fechaActual" class="text-xl font-black text-slate-900"></p>
+                        <div class="text-center md:text-right">
+                            <p id="fechaActual" class="text-[11px] md:text-xl font-black text-slate-900"></p>
                         </div>
                     </div>
 
-                    <div class="flex-grow space-y-12">
-                        <div class="bg-slate-50 p-10 rounded-[2rem] border-2 border-slate-100 relative">
-                            <span class="absolute -top-3 left-10 bg-slate-900 text-white text-[10px] font-black px-4 py-1 rounded uppercase tracking-widest italic">Unidad de Referencia</span>
-                            <h3 id="dispVehiculo" class="text-5xl font-black text-slate-900 uppercase italic leading-tight">---</h3>
-                            <div class="flex justify-between mt-10 border-t pt-6 border-slate-200 text-xl font-bold text-slate-500 uppercase">
+                    <div class="flex-grow space-y-6 md:space-y-12">
+                        <div class="bg-slate-50 p-5 md:p-10 rounded-2xl md:rounded-[2rem] border-2 border-slate-100 relative">
+                            <span class="absolute -top-3 left-4 md:left-10 bg-slate-900 text-white text-[8px] md:text-[10px] font-black px-3 py-1 rounded uppercase tracking-widest italic">Unidad de Referencia</span>
+                            <h3 id="dispVehiculo" class="text-xl sm:text-2xl md:text-5xl font-black text-slate-900 uppercase italic leading-tight text-center md:text-left break-words mt-2 md:mt-0">---</h3>
+                            <div class="flex flex-col sm:flex-row justify-between mt-4 md:mt-10 border-t pt-4 md:pt-6 border-slate-200 text-[11px] sm:text-sm md:text-xl font-bold text-slate-500 uppercase gap-2 sm:gap-0">
                                 <p>LOTE #: <span id="dispLote" class="text-slate-900 font-black">---</span></p>
                                 <p>ORIGEN: <span id="dispCiudad" class="text-slate-900 font-black">---</span></p>
                             </div>
                         </div>
 
-                        <div class="text-center py-12">
-                            <p class="text-sm font-black text-slate-400 uppercase tracking-[0.5em] mb-6">Inversión Total Aproximada</p>
+                        <div class="text-center py-6 md:py-12">
+                            <p class="text-[9px] md:text-sm font-black text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 md:mb-6">Inversión Total Aproximada</p>
                             
                             <div class="badge-container">
                                 <span id="resPresupuesto" class="text-slate-900 leading-none tracking-tighter">$0</span>
                                 <div class="badge-todo">Todo Incluido</div>
                             </div>
 
-                            <p class="text-md font-bold text-slate-500 mt-24 max-w-xl mx-auto italic leading-relaxed px-8 text-center">
+                            <p class="text-[10px] md:text-md font-bold text-slate-500 mt-10 md:mt-24 max-w-xl mx-auto italic leading-relaxed px-2 md:px-8 text-center">
                                 Este monto representa el costo total estimado del vehículo puesto en El Salvador, incluyendo impuestos de aduana cancelados, transporte internacional y gestión profesional hasta primera matrícula.
                             </p>
                         </div>
                     </div>
 
-                    <div class="border-t-4 border-slate-100 pt-10 grid grid-cols-3 gap-6 text-center mt-auto text-sm font-bold">
-                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">País Destino</p><p class="uppercase">EL SALVADOR</p></div>
-                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">Trámite</p><p class="uppercase">1° PLACA</p></div>
-                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">Aduana</p><p class="uppercase">CANCELADA</p></div>
+                    <div class="border-t-2 md:border-t-4 border-slate-100 pt-5 md:pt-10 grid grid-cols-3 gap-2 md:gap-6 text-center mt-auto text-[9px] md:text-sm font-bold">
+                        <div><p class="text-[8px] md:text-[10px] font-black text-slate-400 uppercase mb-1 md:mb-2">Destino</p><p class="uppercase">EL SALVADOR</p></div>
+                        <div><p class="text-[8px] md:text-[10px] font-black text-slate-400 uppercase mb-1 md:mb-2">Trámite</p><p class="uppercase">1° PLACA</p></div>
+                        <div><p class="text-[8px] md:text-[10px] font-black text-slate-400 uppercase mb-1 md:mb-2">Aduana</p><p class="uppercase">CANCELADA</p></div>
                     </div>
                 </div>
             </div>
