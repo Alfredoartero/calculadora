@@ -1,111 +1,104 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Importaciones Yesica - Cotizador Maestro Profesional</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 0; overflow-x: hidden; }
-        .header-pink { color: #be185d; }
-        .card { background: white; border-radius: 1.2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .input-style { width: 100%; padding: 0.9rem; border-radius: 0.75rem; border: 2px solid #cbd5e1; font-weight: 700; font-size: 1rem; outline: none; transition: all 0.2s; }
-        .input-style:focus { border-color: #be185d; box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.1); }
-        
-        /* Contenedor del Reporte - DISEÑO ESTÉTICO PARA MÓVIL */
+<!DOCTYPE html><html lang="es"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Importaciones Yesica - Cotizador Maestro Profesional</title>    <script src="https://cdn.tailwindcss.com"></script>    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap" rel="stylesheet">    <style>        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 0; overflow-x: hidden; }        .header-pink { color: #be185d; }        .card { background: white; border-radius: 1.2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }        .input-style { width: 100%; padding: 0.9rem; border-radius: 0.75rem; border: 2px solid #cbd5e1; font-weight: 700; font-size: 1rem; outline: none; transition: all 0.2s; }        .input-style:focus { border-color: #be185d; box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.1); }        
+        /* Contenedor del Reporte */
         #reporteFinal { 
-            background: white; 
-            border: 3px solid #be185d; 
-            border-radius: 1.5rem; /* Bordes redondeados en la web para que parezca una tarjeta */
-            width: 100%; max-width: 800px; 
-            padding: 30px 20px; /* Padding más sutil para celular */
-            position: relative; display: flex; flex-direction: column;
+            background: white; border: 4px solid #be185d; 
+            width: 100%; max-width: 800px; min-height: 1050px; 
+            padding: 45px; position: relative; display: flex; flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             margin: 0 auto;
             box-sizing: border-box;
-            min-height: 650px; /* Proporción de hoja en celular */
         }
-
-        /* Pantallas grandes (Computadora) */
-        @media (min-width: 768px) {
-            #reporteFinal { padding: 45px; min-height: 1050px; border: 4px solid #be185d; border-radius: 0; }
-        }
-
-        /* Marca de agua adaptable */
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: clamp(4rem, 15vw, 8rem); font-weight: 900; color: rgba(190, 24, 93, 0.03); pointer-events: none; text-transform: uppercase; white-space: nowrap; }
-
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8rem; font-weight: 900; color: rgba(190, 24, 93, 0.03); pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        
         /* SELLO TODO INCLUIDO */
         .badge-container { position: relative; display: inline-flex; align-items: center; justify-content: center; }
         .badge-todo { 
             position: absolute; 
-            top: -15px; right: -5px; /* Ajuste perfecto para celular */
-            background: #be185d !important; color: white !important; 
-            font-size: 10px; font-weight: 900; padding: 4px 8px; 
-            border-radius: 6px; transform: rotate(10deg); 
-            text-transform: uppercase; box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-            white-space: nowrap; z-index: 50; -webkit-print-color-adjust: exact;
+            top: -20px; 
+            right: -30px; 
+            background: #be185d !important; 
+            color: white !important; 
+            font-size: 11px; 
+            font-weight: 900; 
+            padding: 4px 12px; 
+            border-radius: 6px; 
+            transform: rotate(10deg); 
+            text-transform: uppercase;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            z-index: 50;
+            -webkit-print-color-adjust: exact;
         }
-        @media (min-width: 768px) {
-            .badge-todo { top: -20px; right: -30px; font-size: 11px; padding: 4px 12px; }
-        }
+        #resPresupuesto { font-size: 95px; font-weight: 900; line-height: 1; letter-spacing: -4px; }
 
-        /* Precio dinámico (se encoge en celular, se agranda en PC/PDF) */
-        #resPresupuesto { font-size: clamp(3rem, 12vw, 95px); font-weight: 900; line-height: 1; letter-spacing: -2px; }
-
-        /* CONFIGURACIÓN ESTRICTA DE IMPRESIÓN PDF (Ignora la vista móvil) */
+        /* CONFIGURACIÓN DE IMPRESIÓN */
         @media print {
             @page { size: letter; margin: 0mm; }
             body { background: white !important; padding: 0 !important; margin: 0 !important; }
             .no-print { display: none !important; }
             #reporteFinal { 
                 margin: 0 !important; width: 100% !important; max-width: 100% !important; 
-                border: none !important; border-radius: 0 !important; 
-                height: 100vh !important; min-height: 100vh !important;
+                border: none !important; height: 100vh !important; min-height: 100vh !important;
                 box-shadow: none !important; padding: 40px !important; 
                 display: flex !important; flex-direction: column !important;
                 justify-content: space-around !important; 
             }
             .header-pink { color: #be185d !important; -webkit-print-color-adjust: exact; }
-            .badge-todo { background: #be185d !important; -webkit-print-color-adjust: exact; top: -20px !important; right: -30px !important; font-size: 11px !important; padding: 4px 12px !important; }
-            #resPresupuesto { font-size: 95px !important; letter-spacing: -4px !important; }
-            .watermark { opacity: 0.1 !important; font-size: 8rem !important; }
+            .badge-todo { background: #be185d !important; -webkit-print-color-adjust: exact; }
+            .watermark { opacity: 0.1 !important; }
         }
     </style>
 </head>
 <body class="p-3 md:p-6">
-
-    <div class="max-w-[1450px] mx-auto overflow-hidden sm:overflow-visible">
-        
-        <div class="text-center mb-6 md:mb-8 no-print px-2">
-            <h1 class="text-3xl md:text-5xl font-black header-pink italic tracking-tighter uppercase mb-1">IMPORTACIONES YESICA</h1>
-            <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.4em]">Cotizador Maestro Profesional</p>
+    <div class="max-w-[1450px] mx-auto">
+        <div class="text-center mb-8 no-print">
+            <h1 class="text-5xl font-black header-pink italic tracking-tighter uppercase">IMPORTACIONES YESICA</h1>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.4em]">Cotizador Maestro Profesional</p>
         </div>
 
-        <div class="flex flex-wrap lg:flex-nowrap gap-6 md:gap-8 justify-center items-start">
+        <div class="flex flex-wrap lg:flex-nowrap gap-8 justify-center items-start">
             
-            <div class="w-full lg:w-[480px] space-y-6 no-print flex-shrink-0 px-2 sm:px-0">
-                <div class="card p-5 md:p-6 space-y-5 border-t-8 border-slate-900 shadow-xl">
-                    <h2 class="text-base md:text-lg font-black text-slate-800 uppercase italic border-b pb-2">1. Configuración de Unidad</h2>
-                    <div class="grid grid-cols-1 gap-3 md:gap-4">
-                        <input type="text" id="infoVehiculo" placeholder="Vehículo (Ej: 2020 Honda Civic)" class="input-style text-sm md:text-base" oninput="actualizar()">
-                        <input type="text" id="infoLote" placeholder="Número de Lote (Subasta)" class="input-style text-sm md:text-base" oninput="actualizar()">
+            <!-- PANEL DE CONFIGURACIÓN ORIGINAL -->
+            <div class="w-full lg:w-[480px] space-y-6 no-print flex-shrink-0">
+                <div class="card p-6 space-y-5 border-t-8 border-slate-900 shadow-xl">
+                    <h2 class="text-lg font-black text-slate-800 uppercase italic border-b pb-2">1. Configuración de Unidad</h2>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        <input type="text" id="infoVehiculo" placeholder="Vehículo (Año Marca Modelo)" class="input-style" oninput="actualizar()">
+                        <input type="text" id="infoLote" placeholder="Número de Lote (Subasta)" class="input-style" oninput="actualizar()">
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-3">
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[10px] md:text-[10px] font-black uppercase text-pink-600 mb-1 block">Oferta $</label>
-                            <input type="number" id="inputBid" placeholder="0.00" class="input-style border-pink-200 text-sm md:text-base px-2 md:px-3" oninput="calcular()">
+                            <label class="text-[10px] font-black uppercase text-slate-600 mb-1 block">Subasta</label>
+                            <select id="subastaSelect" class="input-style text-xs" onchange="calcular()">
+                                <option value="copart">Copart</option>
+                                <option value="iaai">IAAI</option>
+                            </select>
                         </div>
                         <div>
-                            <label class="text-[10px] md:text-[10px] font-black uppercase text-green-600 mb-1 block">Ganancia $</label>
-                            <input type="number" id="inputGanancia" placeholder="0.00" class="input-style border-green-200 text-sm md:text-base px-2 md:px-3" oninput="calcular()">
+                            <label class="text-[10px] font-black uppercase text-pink-600 mb-1 block">Versión / Usuario</label>
+                            <select id="versionSelect" class="input-style text-xs font-black text-pink-700" onchange="calcular()">
+                                <option value="yesica">Versión Yesica</option>
+                                <option value="cesar">Versión César</option>
+                            </select>
                         </div>
-                        <div class="col-span-2 md:col-span-1">
-                            <label class="text-[10px] md:text-[10px] font-black uppercase text-slate-500 mb-1 block">Categoría</label>
-                            <select id="tamanoIdx" class="input-style text-xs md:text-sm px-2 md:px-3" onchange="calcular()">
-                                <option value="0">Pequeño</option>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-pink-600 mb-1 block">Oferta $</label>
+                            <input type="number" id="inputBid" placeholder="0.00" class="input-style border-pink-200" oninput="calcular()">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-green-600 mb-1 block" title="Monto exacto libre">Ganancia Neta $</label>
+                            <input type="number" id="inputGanancia" placeholder="0.00" class="input-style border-green-200" oninput="calcular()">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-slate-500 mb-1 block">Categoría</label>
+                            <select id="tamanoIdx" class="input-style text-sm" onchange="if(!navieraManual) optimizarNaviera(); calcular()">
+                                <option value="0">Sedán / Pequeño</option>
                                 <option value="1">Especial</option>
                                 <option value="2">Mediano</option>
                                 <option value="3">Grande</option>
@@ -114,90 +107,164 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-4 md:p-5 rounded-2xl border-2 border-dashed border-slate-300 relative">
-                        <label class="text-[10px] md:text-xs font-black uppercase text-slate-500 mb-2 md:mb-3 block text-center italic">--- Puerto y Grúa ---</label>
-                        <input type="text" id="searchCiudad" placeholder="Buscar Ciudad..." class="input-style w-full mb-3 border-slate-400 text-sm md:text-base" oninput="filtrarCiudades()">
-                        <div id="listaSug" class="absolute z-50 bg-white border-2 border-slate-300 shadow-2xl rounded-xl max-h-60 md:max-h-72 overflow-y-auto hidden w-full left-0 mt-[-10px]"></div>
+                    <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 mt-2">
+                        <label class="text-[10px] font-black uppercase text-slate-600 mb-2 block">Forma de Pago en USA</label>
+                        <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+                            <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                                <input type="radio" name="pagoUSA" value="transferencia" checked onchange="toggleTransferencia(); calcular()" class="accent-pink-600">
+                                Transferencia Int.
+                            </label>
+                            <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                                <input type="radio" name="pagoUSA" value="tarjeta" onchange="toggleTransferencia(); calcular()" class="accent-pink-600">
+                                Tarjeta Crédito/Débito
+                            </label>
+                            <div id="dividirTransfContainer" class="flex items-center gap-2 ml-0 sm:ml-auto">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Dividir cobro entre:</span>
+                                <select id="dividirPago" class="p-1.5 text-xs border border-slate-300 rounded font-bold" onchange="calcular()">
+                                    <option value="1">1 Vehículo</option>
+                                    <option value="2">2 Vehículos</option>
+                                    <option value="3">3 Vehículos</option>
+                                    <option value="4">4 Vehículos</option>
+                                    <option value="5">5 Vehículos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border-2 border-dashed border-slate-300 relative">
+                        <label class="text-xs font-black uppercase text-slate-500 mb-3 block text-center italic">--- Puerto, Grúa y Naviera ---</label>
+                        <input type="text" id="searchCiudad" placeholder="Buscar Ciudad..." class="input-style w-full mb-3 border-slate-400" oninput="filtrarCiudades()">
+                        <div id="listaSug" class="absolute z-50 bg-white border-2 border-slate-300 shadow-2xl rounded-xl max-h-72 overflow-y-auto hidden w-full left-0 mt-[-10px]"></div>
                         
-                        <div class="flex gap-2 sm:gap-4">
-                            <input type="number" id="gruaValue" placeholder="Grúa $" class="input-style w-1/2 text-sm md:text-base px-2" oninput="calcular()">
-                            <select id="zonaOrigen" class="input-style w-1/2 text-[11px] sm:text-sm px-1 sm:px-3" onchange="calcular()">
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="text-[9px] font-black uppercase text-slate-500 mb-1 block">Precio Grúa $</label>
+                                <input type="number" id="gruaValue" placeholder="0.00" class="input-style text-sm" oninput="calcular()">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-black uppercase text-slate-500 mb-1 block">Naviera</label>
+                                <select id="navieraSelect" class="input-style text-xs" onchange="navieraManual = true; actualizarGruaManual(); calcular();">
+                                    <option value="matus">Matus International</option>
+                                    <option value="maverick">Maverick International</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <select id="zonaOrigen" class="input-style w-full text-xs" onchange="calcular()">
                                 <option value="FL">Florida (FL)</option>
-                                <option value="PH">Philadelphia (PH)</option>
+                                <option value="PH">Philadelphia/Delaware (PH)</option>
+                                <option value="TX">Texas (TX)</option>
+                                <option value="CA">California (CA)</option>
                             </select>
                         </div>
                     </div>
 
-                    <select id="aduanaIdx" class="input-style bg-slate-900 text-white text-[11px] sm:text-sm px-2 sm:px-3" onchange="calcular()">
-                        <option value="0.20|0.05464|std">Aduana: Motor Menor 1300 cc</option>
-                        <option value="0.25|0.05690|std">Aduana: Motor 1300 a 2000 cc</option>
-                        <option value="0.30|0.05916|std">Aduana: Motor Mayor 2000 cc</option>
-                        <option value="0.30|0.08535|std">Aduana: Motor Mayor 2000 cc AWD</option>
-                        <option value="0.05|0.01197|std">Aduana: Pickups</option>
-                        <option value="0.25|0.06000|nejapa">Aduana: Motor Menor a 2000 cc AWD (Nejapa)</option>
+                    <select id="aduanaIdx" class="input-style bg-slate-900 text-white" onchange="calcular()">
+                        <option value="0.20|0.048">Aduana: Motor desde 1001 a 1300 cc</option>
+                        <option value="0.25|0.05">Aduana: Motor desde 1301 a 2000 cc</option>
+                        <option value="0.30|0.052">Aduana: Motor desde 2001 a 3000 cc</option>
+                        <option value="0.25|0.075">Aduana: Motor Menor a 2000 cc AWD</option>
+                        <option value="0.30|0.078">Aduana: Motor Mayor 2000 cc AWD</option>
+                        <option value="0.05|0.0105">Aduana: Pickups</option>
                     </select>
 
-                    <button onclick="window.print()" class="w-full bg-pink-600 text-white font-black py-4 md:py-5 rounded-2xl shadow-xl text-lg md:text-xl hover:bg-pink-700 active:scale-95 transition-all uppercase italic">
+                    <button onclick="window.print()" class="w-full bg-pink-600 text-white font-black py-5 rounded-2xl shadow-xl text-xl hover:bg-pink-700 active:scale-95 transition-all uppercase italic">
                         🖨️ GENERAR PDF
                     </button>
                 </div>
 
-                <div class="card p-5 md:p-6 bg-slate-900 text-white border-l-[8px] md:border-l-[10px] border-pink-600 shadow-xl">
-                    <h3 class="text-[11px] md:text-sm font-black uppercase text-pink-400 mb-3 md:mb-4 italic text-center border-b border-slate-800 pb-2">Cálculos Internos (Solo Yesica)</h3>
-                    <div class="space-y-1 text-[10px] md:text-xs">
-                        <div class="flex justify-between border-b border-slate-800 pb-1"><span>Subasta:</span><span id="intSubasta" class="text-pink-300">$0.00</span></div>
-                        <div class="flex justify-between border-b border-slate-800 pb-1"><span>Impuestos SV:</span><span id="intImpuestos" class="text-pink-300 font-bold">$0.00</span></div>
-                        <div class="flex justify-between border-b border-slate-800 pb-1"><span>Logística:</span><span id="intLogistica" class="text-pink-300">$0.00</span></div>
+                <div class="card p-5 bg-slate-900 text-white border-l-[10px] border-pink-600 shadow-xl no-print">
+                    <h3 class="text-sm font-black uppercase text-pink-400 mb-3 italic text-center border-b border-slate-800 pb-2">Desglose Detallado (Interno)</h3>
+                    <div class="space-y-1 text-[11px]">
+                        <div class="flex justify-between text-slate-400"><span>Valor Oferta (Bid):</span><span id="detBid" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Buyer Fee:</span><span id="detBuyer" class="text-slate-300">$0.00</span></div>
+                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Virtual/Internet Fee:</span><span id="detVirtual" class="text-slate-300">$0.00</span></div>
+                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Gate/Service Fee:</span><span id="detService" class="text-slate-300">$0.00</span></div>
+                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Env & Title Fee:</span><span id="detEnvTitle" class="text-slate-300">$0.00</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1 mb-1 font-bold"><span>Total Compra USA:</span><span id="intSubasta" class="text-pink-300">$0.00</span></div>
+
+                        <div class="flex justify-between text-slate-400 pt-1"><span>Grúa Terrestre:</span><span id="detGrua" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>Flete Marítimo:</span><span id="detMaritimo" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1 mb-1 font-bold"><span>Total Logística:</span><span id="intLogistica" class="text-pink-300">$0.00</span></div>
+
+                        <div class="flex justify-between text-slate-400 pt-1"><span>Valor Seguro (2%):</span><span id="detSeguro" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>Valor CIF Base:</span><span id="detCif" class="text-white">$0.00</span></div>
+                        
+                        <div class="flex justify-between text-slate-400 pt-1"><span>- DAI:</span><span id="detDai" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>- IVA (13%):</span><span id="detIva" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>- Pago a Cuenta (PM):</span><span id="detPm" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>- AIV / Porterea:</span><span id="detOtrosImp" class="text-white">$0.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>- Constantes ($113 + $18):</span><span class="text-white">$131.00</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1 mb-1 font-bold"><span>Total Impuestos:</span><span id="intImpuestos" class="text-pink-300">$0.00</span></div>
+
+                        <div class="flex justify-between text-slate-400 pt-1"><span>Operativos (Jurídico, Grúa, Revisión):</span><span class="text-white">$65.00</span></div>
+                        <div class="flex justify-between text-slate-400"><span>Fee Pago USA:</span><span id="detFeePago" class="text-white">$0.00</span></div>
+                        <div id="rowCesarFee" class="flex justify-between text-pink-400 font-bold hidden"><span>Ganancia Dueña (César):</span><span id="detCesarFee">$100.00</span></div>
+
+                        <div class="mt-2 pt-2 border-t border-slate-700">
+                            <div class="flex justify-between text-slate-300 font-bold mb-1"><span>Costo Total (Antes de Tributos Venta):</span><span id="detCostoPrevio" class="text-white">$0.00</span></div>
+                            <span class="text-[10px] uppercase font-black text-amber-400 block mb-1">Rentabilidad Final (Local SV):</span>
+                            <div class="flex justify-between text-slate-400 pl-2"><span>Ganancia Bruta (Requerida):</span><span id="detGananciaBruta" class="text-white">$0.00</span></div>
+                            <div class="flex justify-between text-slate-400 pl-2"><span>- IVA Venta (13% s/ Ganancia):</span><span id="detIvaVenta" class="text-red-300">$0.00</span></div>
+                            <div class="flex justify-between text-slate-400 pl-2"><span>- Pago a Cuenta (1.75% s/ Venta Total):</span><span id="detPagoCuentaVenta" class="text-red-300">$0.00</span></div>
+                            <div class="flex justify-between font-bold text-green-400 pt-1 border-t border-slate-700 mt-1"><span>GANANCIA NETA LÍQUIDA:</span><span id="detGananciaNeta">$0.00</span></div>
+                        </div>
                     </div>
-                    <div class="mt-3 md:mt-4 flex justify-between items-center pt-2 border-t border-slate-800">
-                        <span class="text-[10px] md:text-xs uppercase font-black text-slate-400">Inversión Real:</span>
-                        <span id="intTotalCosto" class="text-lg md:text-xl font-black text-white">$0.00</span>
+                    <div class="mt-3 flex justify-between items-center pt-2 border-t border-slate-800">
+                        <span class="text-xs uppercase font-black text-slate-400">Costo Final SV:</span>
+                        <span id="intTotalCosto" class="text-lg font-black text-white">$0.00</span>
+                    </div>
+                    <div class="mt-1 flex justify-between items-center">
+                        <span class="text-[10px] uppercase font-black text-green-400">Venta Cliente (Inversión + Ganancia):</span>
+                        <span id="detVenta" class="text-sm font-black text-green-400">$0.00</span>
                     </div>
                 </div>
             </div>
 
-            <div class="w-full flex justify-center flex-grow px-2 sm:px-0">
+            <!-- REPORTE FINAL ORIGINAL -->
+            <div class="w-full flex justify-center flex-grow">
                 <div id="reporteFinal">
                     <div class="watermark">YESICA</div>
                     
-                    <div class="flex flex-col md:flex-row justify-between items-center md:items-start border-b-4 md:border-b-8 border-pink-600 pb-4 md:pb-6 mb-6 md:mb-10 text-center md:text-left">
-                        <div class="mb-3 md:mb-0">
-                            <h2 class="text-2xl sm:text-3xl md:text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
-                            <p class="text-[9px] md:text-sm font-bold text-slate-800 mt-1 md:mt-2 tracking-[0.15em] md:tracking-[0.2em] uppercase">Cotización de Referencia de Importación</p>
+                    <div class="flex justify-between items-start border-b-8 border-pink-600 pb-6 mb-10">
+                        <div>
+                            <h2 class="text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
+                            <p class="text-sm font-bold text-slate-800 mt-2 tracking-[0.2em] uppercase">Cotización de Referencia de Importación</p>
                         </div>
-                        <div class="text-center md:text-right">
-                            <p id="fechaActual" class="text-[11px] md:text-xl font-black text-slate-900"></p>
+                        <div class="text-right">
+                            <p id="fechaActual" class="text-xl font-black text-slate-900"></p>
                         </div>
                     </div>
 
-                    <div class="flex-grow space-y-6 md:space-y-12">
-                        <div class="bg-slate-50 p-5 md:p-10 rounded-2xl md:rounded-[2rem] border-2 border-slate-100 relative">
-                            <span class="absolute -top-3 left-4 md:left-10 bg-slate-900 text-white text-[8px] md:text-[10px] font-black px-3 py-1 rounded uppercase tracking-widest italic">Unidad de Referencia</span>
-                            <h3 id="dispVehiculo" class="text-xl sm:text-2xl md:text-5xl font-black text-slate-900 uppercase italic leading-tight text-center md:text-left break-words mt-2 md:mt-0">---</h3>
-                            <div class="flex flex-col sm:flex-row justify-between mt-4 md:mt-10 border-t pt-4 md:pt-6 border-slate-200 text-[11px] sm:text-sm md:text-xl font-bold text-slate-500 uppercase gap-2 sm:gap-0">
+                    <div class="flex-grow space-y-12">
+                        <div class="bg-slate-50 p-10 rounded-[2rem] border-2 border-slate-100 relative">
+                            <span class="absolute -top-3 left-10 bg-slate-900 text-white text-[10px] font-black px-4 py-1 rounded uppercase tracking-widest italic">Unidad de Referencia</span>
+                            <h3 id="dispVehiculo" class="text-5xl font-black text-slate-900 uppercase italic leading-tight">---</h3>
+                            <div class="flex justify-between mt-10 border-t pt-6 border-slate-200 text-xl font-bold text-slate-500 uppercase">
                                 <p>LOTE #: <span id="dispLote" class="text-slate-900 font-black">---</span></p>
                                 <p>ORIGEN: <span id="dispCiudad" class="text-slate-900 font-black">---</span></p>
                             </div>
                         </div>
 
-                        <div class="text-center py-6 md:py-12">
-                            <p class="text-[9px] md:text-sm font-black text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 md:mb-6">Inversión Total Aproximada</p>
+                        <div class="text-center py-12">
+                            <p class="text-sm font-black text-slate-400 uppercase tracking-[0.5em] mb-6">Inversión Total Aproximada</p>
                             
                             <div class="badge-container">
                                 <span id="resPresupuesto" class="text-slate-900 leading-none tracking-tighter">$0</span>
                                 <div class="badge-todo">Todo Incluido</div>
                             </div>
 
-                            <p class="text-[10px] md:text-md font-bold text-slate-500 mt-10 md:mt-24 max-w-xl mx-auto italic leading-relaxed px-2 md:px-8 text-center">
+                            <p class="text-md font-bold text-slate-500 mt-24 max-w-xl mx-auto italic leading-relaxed px-8 text-center">
                                 Este monto representa el costo total estimado del vehículo puesto en El Salvador, incluyendo impuestos de aduana cancelados, transporte internacional y gestión profesional hasta primera matrícula.
                             </p>
                         </div>
                     </div>
 
-                    <div class="border-t-2 md:border-t-4 border-slate-100 pt-5 md:pt-10 grid grid-cols-3 gap-2 md:gap-6 text-center mt-auto text-[9px] md:text-sm font-bold">
-                        <div><p class="text-[8px] md:text-[10px] font-black text-slate-400 uppercase mb-1 md:mb-2">Destino</p><p class="uppercase">EL SALVADOR</p></div>
-                        <div><p class="text-[8px] md:text-[10px] font-black text-slate-400 uppercase mb-1 md:mb-2">Trámite</p><p class="uppercase">1° PLACA</p></div>
-                        <div><p class="text-[8px] md:text-[10px] font-black text-slate-400 uppercase mb-1 md:mb-2">Aduana</p><p class="uppercase">CANCELADA</p></div>
+                    <div class="border-t-4 border-slate-100 pt-10 grid grid-cols-3 gap-6 text-center mt-auto text-sm font-bold">
+                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">País Destino</p><p class="uppercase">EL SALVADOR</p></div>
+                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">Trámite</p><p class="uppercase">1° PLACA</p></div>
+                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">Aduana</p><p class="uppercase">CANCELADA</p></div>
                     </div>
                 </div>
             </div>
@@ -206,32 +273,682 @@
     </div>
 
     <script>
-        const TARIFAS_MAR = { "FL": [750, 850, 900, 950, 1325], "PH": [825, 925, 975, 1100, 1395] };
-        
-        // BASE DE DATOS COMPLETA DE CIUDADES
-        const CIUDADES = {
-            "Birmingham (Copart/IAAI)": {p: 485, z: "FL"}, "Dothan (Copart/IAAI)": {p: 485, z: "FL"}, "Huntsville (IAAI)": {p: 485, z: "FL"}, "Mobile (Copart)": {p: 475, z: "FL"}, "Mobile South (Copart)": {p: 495, z: "FL"}, "Montgomery (Copart)": {p: 475, z: "FL"}, "Tanner (Copart)": {p: 495, z: "FL"}, "Fayetteville (Copart/IAAI)": {p: 675, z: "FL"}, "Little Rock (Copart/IAAI)": {p: 700, z: "FL"}, "Clearwater (IAAI)": {p: 225, z: "FL"}, "Clewiston (IAAI)*": {p: 175, z: "FL"}, "Fort Myers (IAAI)": {p: 220, z: "FL"}, "Fort Pierce (Copart/IAAI)": {p: 150, z: "FL"}, "Jacksonville (IAAI)": {p: 250, z: "FL"}, "Jacksonville North (Copart)": {p: 250, z: "FL"}, "Miami Central (Copart)": {p: 100, z: "FL"}, "Miami North (Copart/IAAI)": {p: 100, z: "FL"}, "Miami South (Copart)": {p: 100, z: "FL"}, "Ocala (Copart)": {p: 250, z: "FL"}, "Orlando (IAAI)": {p: 175, z: "FL"}, "Orlando North (Copart/IAAI)": {p: 175, z: "FL"}, "Orlando South (Copart)": {p: 175, z: "FL"}, "Pensacola (IAAI)": {p: 350, z: "FL"}, "Punta Gorda (Copart)": {p: 220, z: "FL"}, "Punta Gorda South (Copart)": {p: 225, z: "FL"}, "Tallahassee (Copart)": {p: 320, z: "FL"}, "Tampa (IAAI)": {p: 225, z: "FL"}, "Tampa North (IAAI)": {p: 225, z: "FL"}, "Tampa South (Copart)": {p: 205, z: "FL"}, "Thonotosassa (Copart)": {p: 250, z: "FL"}, "West Palm Beach (Copart)": {p: 120, z: "FL"}, "West Palm Beach (IAAI)": {p: 145, z: "FL"}, "Atlanta (IAAI)": {p: 345, z: "FL"}, "Atlanta Crashedtoys (Copart)": {p: 345, z: "FL"}, "Atlanta East/N/S (Copart/IAAI)": {p: 345, z: "FL"}, "Atlanta West (Copart)": {p: 345, z: "FL"}, "Augusta": {p: 395, z: "FL"}, "Cartersville (Copart)": {p: 345, z: "FL"}, "Fairburn (Copart)": {p: 345, z: "FL"}, "Macon (Copart/IAAI)": {p: 345, z: "FL"}, "Savannah (Copart/IAAI)": {p: 345, z: "FL"}, "Tifton (Copart/IAAI)": {p: 345, z: "FL"}, "Chicago North (FL-Route)": {p: 725, z: "FL"}, "Chicago South (FL-Route)": {p: 750, z: "FL"}, "Chicago West (IAAI) (FL-Route)": {p: 725, z: "FL"}, "Lincoln (IAAI) (FL-Route)": {p: 825, z: "FL"}, "Peoria (Copart) (FL-Route)": {p: 825, z: "FL"}, "Southern Illinois (Copart) (FL-Route)": {p: 675, z: "FL"}, "St. Louis (IAAI) (FL-Route)": {p: 675, z: "FL"}, "Wheeling (Copart) (FL-Route)": {p: 675, z: "FL"}, "Cicero (Copart)": {p: 700, z: "FL"}, "Dyer (Copart)": {p: 700, z: "FL"}, "Fort Wayne (Copart)": {p: 900, z: "FL"}, "Indianapolis (Copart/IAAI)": {p: 670, z: "FL"}, "Indianapolis South (IAAI)": {p: 670, z: "FL"}, "South Bend (IAAI)": {p: 875, z: "FL"}, "Kansas City (Copart/IAAI)": {p: 675, z: "FL"}, "Bowling Green (IAAI)": {p: 750, z: "FL"}, "Earlington (Copart)": {p: 800, z: "FL"}, "Lexington East/West (Copart)": {p: 675, z: "FL"}, "Louisville (Copart/IAAI)": {p: 675, z: "FL"}, "Louisville North (IAAI)": {p: 675, z: "FL"}, "Paducah (IAAI)": {p: 975, z: "FL"}, "Walton (Copart)": {p: 625, z: "FL"}, "Baton Rouge (Copart/IAAI)": {p: 495, z: "FL"}, "Lafayette (IAAI)": {p: 525, z: "FL"}, "New Orleans (Copart/IAAI)": {p: 495, z: "FL"}, "New Orleans East (IAAI)": {p: 495, z: "FL"}, "Baltimore (Copart/IAAI) (FL-Route)": {p: 580, z: "FL"}, "Baltimore East (Copart) (FL-Route)": {p: 580, z: "FL"}, "Dundalk (IAAI) (FL-Route)": {p: 580, z: "FL"}, "Laurel (IAAI) (FL-Route)": {p: 580, z: "FL"}, "Metro DC (IAAI) (FL-Route)": {p: 580, z: "FL"}, "Washington DC (Copart) (FL-Route)": {p: 580, z: "FL"}, "Detroit (Copart/IAAI) (FL-Route)": {p: 850, z: "FL"}, "Minneapolis (Copart) (FL-Route)": {p: 795, z: "FL"}, "Minneapolis North (Copart) (FL-Route)": {p: 795, z: "FL"}, "Minneapolis/St. Paul (IAAI) (FL-Route)": {p: 795, z: "FL"}, "St. Cloud (Copart) (FL-Route)": {p: 795, z: "FL"}, "Grenada (IAAI)": {p: 475, z: "FL"}, "Gulf Coast (IAAI)": {p: 495, z: "FL"}, "Jackson (Copart/IAAI)": {p: 475, z: "FL"}, "Columbia (Copart) (MO)": {p: 750, z: "FL"}, "Kansas City East (IAAI) (MO)": {p: 695, z: "FL"}, "Springfield (Copart/IAAI) (MO)": {p: 725, z: "FL"}, "St. Louis (Copart) (MO)": {p: 675, z: "FL"}, "Asheville (IAAI)": {p: 500, z: "FL"}, "Charlotte (IAAI)": {p: 400, z: "FL"}, "China Grove (Copart)": {p: 400, z: "FL"}, "Concord (Copart/IAAI)": {p: 400, z: "FL"}, "Gastonia (Copart)": {p: 425, z: "FL"}, "Greensboro (IAAI)": {p: 400, z: "FL"}, "High Point": {p: 450, z: "FL"}, "Lumberton (Copart)": {p: 400, z: "FL"}, "Mebane (Copart)": {p: 400, z: "FL"}, "Mocksville (Copart)": {p: 430, z: "FL"}, "Raleigh (Copart/IAAI)": {p: 395, z: "FL"}, "Raleigh North (Copart)": {p: 395, z: "FL"}, "Wilmington (IAAI)": {p: 500, z: "FL"}, "Akron-Canton (IAAI) (OH) (FL-Route)": {p: 775, z: "FL"}, "Cincinnati (IAAI) (OH) (FL-Route)": {p: 725, z: "FL"}, "Cincinnati South (IAAI) (OH) (FL-Route)": {p: 725, z: "FL"}, "Cleveland (IAAI) (OH) (FL-Route)": {p: 750, z: "FL"}, "Cleveland E/W (Copart) (OH) (FL-Route)": {p: 750, z: "FL"}, "Columbus (Copart/IAAI) (OH) (FL-Route)": {p: 725, z: "FL"}, "Dayton (Copart/IAAI) (OH) (FL-Route)": {p: 725, z: "FL"}, "Charleston (IAAI) (SC)": {p: 350, z: "FL"}, "Columbia (Copart/IAAI) (SC)": {p: 325, z: "FL"}, "Gaston (Copart)* (SC)": {p: 400, z: "FL"}, "Greenville (IAAI) (SC)": {p: 350, z: "FL"}, "Lexington (IAAI) (SC)": {p: 325, z: "FL"}, "North Charleston (Copart) (SC)": {p: 325, z: "FL"}, "Shallotte (Copart)* (SC)": {p: 400, z: "FL"}, "Spartanburg (Copart) (SC)": {p: 360, z: "FL"}, "Chattanooga (IAAI)": {p: 550, z: "FL"}, "Knoxville (Copart/IAAI)": {p: 480, z: "FL"}, "Memphis (Copart/IAAI)": {p: 480, z: "FL"}, "Nashville (Copart/IAAI)": {p: 480, z: "FL"}, "Austin (Copart/IAAI) (TX)": {p: 500, z: "FL"}, "Dallas (IAAI) (TX)": {p: 500, z: "FL"}, "Dallas/Ft. Worth (IAAI) (TX)": {p: 500, z: "FL"}, "Dallas South (Copart) (TX)": {p: 500, z: "FL"}, "Fort Worth North (IAAI) (TX)": {p: 600, z: "FL"}, "Ft Worth (Copart) (TX)": {p: 600, z: "FL"}, "Houston (Copart/IAAI) (TX)": {p: 550, z: "FL"}, "Houston East (Copart) (TX)": {p: 550, z: "FL"}, "Houston North (IAAI) (TX)": {p: 550, z: "FL"}, "Houston South (IAAI) (TX)": {p: 550, z: "FL"}, "San Antonio (Copart/IAAI) (TX)": {p: 500, z: "FL"}, "San Antonio South (IAAI) (TX)": {p: 500, z: "FL"}, "Culpeper (IAAI) (VA) (FL-Route)": {p: 550, z: "FL"}, "Danville (Copart) (VA) (FL-Route)": {p: 600, z: "FL"}, "Fredericksburg (Copart) (VA) (FL-Route)": {p: 550, z: "FL"}, "Fredericksburg South (Copart/IAAI) (VA) (FL-Route)": {p: 550, z: "FL"}, "Hampton (Copart) (VA) (FL-Route)": {p: 575, z: "FL"}, "Northern Virginia (IAAI) (VA) (FL-Route)": {p: 550, z: "FL"}, "Richmond (Copart/IAAI) (VA) (FL-Route)": {p: 550, z: "FL"}, "Richmond East (Copart) (VA) (FL-Route)": {p: 550, z: "FL"}, "Suffolk (IAAI) (VA) (FL-Route)": {p: 550, z: "FL"}, "Tidewater (IAAI) (VA) (FL-Route)": {p: 550, z: "FL"},
-            "Hartford (Copart/IAAI)": {p: 275, z: "PH"}, "Hartford North (IAAI)": {p: 275, z: "PH"}, "Hartford South (IAAI)": {p: 300, z: "PH"}, "Hartford Springfield (Copart)": {p: 300, z: "PH"}, "New Britain (Copart)*": {p: 275, z: "PH"}, "New Castle (IAAI) (DE)": {p: 125, z: "PH"}, "Seaford (Copart) (DE)": {p: 200, z: "PH"}, "Seaford Fruitland (Copart)* (DE)": {p: 300, z: "PH"}, "Chicago North (Copart/IAAI) (PH-Route)": {p: 650, z: "PH"}, "Chicago South (Copart/IAAI) (PH-Route)": {p: 650, z: "PH"}, "Chicago West (IAAI) (PH-Route)": {p: 650, z: "PH"}, "Southern Illinois (Copart) (PH-Route)": {p: 650, z: "PH"}, "Lyman (Copart) (ME)": {p: 650, z: "PH"}, "Portland Gorham (IAAI) (ME)": {p: 625, z: "PH"}, "Windham (Copart) (ME)": {p: 650, z: "PH"}, "Baltimore (Copart/IAAI) (PH-Route)": {p: 200, z: "PH"}, "Baltimore East (Copart) (PH-Route)": {p: 235, z: "PH"}, "Baltimore East (Copart)* (PH-Route)": {p: 265, z: "PH"}, "Dundalk (IAAI) (PH-Route)": {p: 200, z: "PH"}, "Laurel (IAAI) (PH-Route)": {p: 235, z: "PH"}, "Metro DC (IAAI) (PH-Route)": {p: 225, z: "PH"}, "Washington DC (Copart) (PH-Route)": {p: 225, z: "PH"}, "Washington DC (Copart)* (PH-Route)": {p: 250, z: "PH"}, "Elkton (IAAI) (PH-Route)": {p: 175, z: "PH"}, "Boston North (Copart)": {p: 500, z: "PH"}, "Boston North Hudson (Copart)*": {p: 500, z: "PH"}, "Boston Shirley (IAAI)": {p: 500, z: "PH"}, "Boston South (Copart)": {p: 500, z: "PH"}, "Frederown (Copart)": {p: 430, z: "PH"}, "Taunton (IAAI)": {p: 430, z: "PH"}, "Templeton (IAAI)": {p: 525, z: "PH"}, "West Warren (Copart)": {p: 500, z: "PH"}, "Detroit (Copart/IAAI) (PH-Route)": {p: 750, z: "PH"}, "Flint (Copart/IAAI) (PH-Route)": {p: 750, z: "PH"}, "Grand Rapids (Copart) (PH-Route)": {p: 750, z: "PH"}, "Kincheloe (Copart)": {p: 875, z: "PH"}, "Lansing (Copart)": {p: 750, z: "PH"}, "Wayland (Copart)": {p: 750, z: "PH"}, "Minneapolis (Copart) (PH-Route)": {p: 775, z: "PH"}, "Minneapolis North (Copart) (PH-Route)": {p: 775, z: "PH"}, "Minneapolis/St. Paul (IAAI) (PH-Route)": {p: 775, z: "PH"}, "Minneapolis South (IAAI) (PH-Route)": {p: 775, z: "PH"}, "St. Cloud (Copart) (PH-Route)": {p: 775, z: "PH"}, "Candia (Copart) (NH)": {p: 580, z: "PH"}, "Manchester (IAAI) (NH)": {p: 530, z: "PH"}, "Avenel (IAAI) (NJ)": {p: 180, z: "PH"}, "Central New Jersey (IAAI)": {p: 180, z: "PH"}, "Englishtown (IAAI)": {p: 185, z: "PH"}, "Glassboro East/West (Copart)": {p: 150, z: "PH"}, "Port Murray (IAAI)": {p: 275, z: "PH"}, "Sayreville (IAAI)": {p: 225, z: "PH"}, "Somerville (Copart) (NJ)": {p: 180, z: "PH"}, "Southern New Jersey (IAAI)": {p: 175, z: "PH"}, "Trenton (Copart) (NJ)": {p: 180, z: "PH"}, "Trenton Jobstown (Copart)*": {p: 225, z: "PH"}, "Somerville Coopersburg (Copart)*": {p: 250, z: "PH"}, "Albany (Copart/IAAI) (NY)": {p: 325, z: "PH"}, "Alden (Copart)* (NY)": {p: 800, z: "PH"}, "Amsterdam (Copart)* (NY)": {p: 450, z: "PH"}, "Buffalo (Copart) (NY)": {p: 625, z: "PH"}, "Buffalo (IAAI) (NY)": {p: 575, z: "PH"}, "Buffalo Vulcan (IAAI)*": {p: 575, z: "PH"}, "Long Island (Copart/IAAI) (NY)": {p: 325, z: "PH"}, "Monticello (Copart) (NY)": {p: 350, z: "PH"}, "Newburgh (Copart/IAAI) (NY)": {p: 270, z: "PH"}, "Rochester (Copart/IAAI) (NY)": {p: 425, z: "PH"}, "Route (Copart)* (NY)": {p: 325, z: "PH"}, "Staten Island (IAAI) (NY)": {p: 350, z: "PH"}, "Syracuse (IAAI/Copart)": {p: 375, z: "PH"}, "Akron-Canton (IAAI) (OH) (PH-Route)": {p: 575, z: "PH"}, "Cincinnati (IAAI) (OH) (PH-Route)": {p: 600, z: "PH"}, "Cincinnati South (IAAI) (OH) (PH-Route)": {p: 600, z: "PH"}, "Cleveland (IAAI) (OH) (PH-Route)": {p: 575, z: "PH"}, "Cleveland E/W (Copart) (OH) (PH-Route)": {p: 575, z: "PH"}, "Columbus (Copart/IAAI) (OH) (PH-Route)": {p: 575, z: "PH"}, "Dayton (Copart/IAAI) (OH) (PH-Route)": {p: 575, z: "PH"}, "Altoona (IAAI/Copart) (PA)": {p: 330, z: "PH"}, "Bridgeport (IAAI) (PA)": {p: 120, z: "PH"}, "Chambersburg (Copart) (PA)": {p: 220, z: "PH"}, "Erie (IAAI) (PA)": {p: 540, z: "PH"}, "Harrisburg (Copart) (PA)": {p: 170, z: "PH"}, "Philadelphia (Copart) (PA)": {p: 145, z: "PH"}, "Philadelphia (IAAI) (PA)": {p: 120, z: "PH"}, "Philadelphia East (Copart)*": {p: 145, z: "PH"}, "Philadelphia East Malvern (Copart)*": {p: 225, z: "PH"}, "Pittsburgh (IAAI) (PA)": {p: 375, z: "PH"}, "Pittsburgh E/S/W (Copart)": {p: 375, z: "PH"}, "Pittsburgh North (IAAI/Copart)": {p: 375, z: "PH"}, "Pittsburgh West (Copart)*": {p: 425, z: "PH"}, "Scranton (IAAI/Copart) (PA)": {p: 190, z: "PH"}, "York Haven (Copart) (PA)": {p: 175, z: "PH"}, "York Springs (IAAI) (PA)": {p: 190, z: "PH"}, "Exeter (Copart) (RI)": {p: 400, z: "PH"}, "Providence (IAAI) (RI)": {p: 375, z: "PH"}, "Burlington (IAAI) (VT)": {p: 725, z: "PH"}, "Rutland (Copart) (VT)": {p: 750, z: "PH"}, "Culpeper (IAAI) (VA) (PH-Route)": {p: 325, z: "PH"}, "Danville (Copart) (VA) (PH-Route)": {p: 525, z: "PH"}, "Fredericksburg (Copart) (VA) (PH-Route)": {p: 325, z: "PH"}, "Hampton (Copart) (VA) (PH-Route)": {p: 425, z: "PH"}, "Northern Virginia (IAAI) (VA) (PH-Route)": {p: 325, z: "PH"}, "Pulaski (IAAI) (VA) (PH-Route)": {p: 525, z: "PH"}, "Richmond (Copart/IAAI) (VA) (PH-Route)": {p: 350, z: "PH"}, "Richmond East (Copart) (VA) (PH-Route)": {p: 375, z: "PH"}, "Roanoke (IAAI) (VA) (PH-Route)": {p: 525, z: "PH"}, "Suffolk (IAAI) (VA) (PH-Route)": {p: 470, z: "PH"}, "Tidewater (IAAI) (VA) (PH-Route)": {p: 400, z: "PH"}, "Appleton (IAAI) (WI)": {p: 750, z: "PH"}, "Madison South (Copart) (WI)": {p: 775, z: "PH"}, "Milwaukee (Copart/IAAI) (WI)": {p: 750, z: "PH"}, "Milwaukee South (Copart) (WI)": {p: 750, z: "PH"}, "Portage (IAAI) (WI)": {p: 750, z: "PH"}, "Buckhannon (IAAI) (WV)": {p: 600, z: "PH"}, "Charleston (Copart) (WV)": {p: 600, z: "PH"}, "Shady Spring (IAAI) (WV)": {p: 600, z: "PH"}
+        let navieraManual = false;
+        let ciudadSeleccionada = null;
+
+        function actualizarGruaManual() {
+            if (!ciudadSeleccionada) return;
+            const nav = document.getElementById('navieraSelect').value;
+            const cData = CIUDADES[ciudadSeleccionada];
+            if (cData[nav] !== null) {
+                document.getElementById('gruaValue').value = cData[nav];
+            } else {
+                document.getElementById('gruaValue').value = 0;
+            }
+        }
+
+        function optimizarNaviera() {
+            if (!ciudadSeleccionada) return;
+            const cData = CIUDADES[ciudadSeleccionada];
+            const tIdx = parseInt(document.getElementById('tamanoIdx').value);
+            const zona = cData.z;
+            
+            document.getElementById('zonaOrigen').value = zona;
+
+            if (navieraManual) {
+                actualizarGruaManual();
+                return;
+            }
+
+            let costMatus = Infinity;
+            let costMaverick = Infinity;
+
+            if (cData.matus !== null && NAVIERAS_MAR[zona]["matus"] && NAVIERAS_MAR[zona]["matus"][tIdx] > 0) {
+                costMatus = cData.matus + NAVIERAS_MAR[zona]["matus"][tIdx];
+            }
+            if (cData.maverick !== null && NAVIERAS_MAR[zona]["maverick"] && NAVIERAS_MAR[zona]["maverick"][tIdx] > 0) {
+                costMaverick = cData.maverick + NAVIERAS_MAR[zona]["maverick"][tIdx];
+            }
+
+            // Seleccionar la más barata
+            if (costMaverick < costMatus && costMaverick !== Infinity) {
+                document.getElementById('navieraSelect').value = "maverick";
+                document.getElementById('gruaValue').value = cData.maverick;
+            } else if (costMatus !== Infinity) {
+                document.getElementById('navieraSelect').value = "matus";
+                document.getElementById('gruaValue').value = cData.matus;
+            } else {
+                // Ambas nulas o 0
+                document.getElementById('gruaValue').value = 0;
+            }
+        }
+
+        // TARIFAS DE 3 NAVIERAS [Nav1, Nav2, Nav3] según categoría de vehículo [Sedán, Especial, SUV, Pickup, Extra Grande]
+        // Nav1 (Matus) ha sido actualizada con los precios especiales de la imagen enviada.
+        const NAVIERAS_MAR = {
+            "FL": {
+                "matus": [850, 900, 950, 1425, 1500],
+                "maverick": [800, 875, 925, 1350, 1425]
+            },
+            "PH": {
+                "matus": [900, 1000, 1125, 1395, 1495],
+                "maverick": [850, 925, 1050, 1350, 1435]
+            },
+            "CA": {
+                "matus": [1095, 1195, 1295, 1395, 1495],
+                "maverick": [1095, 1220, 1320, 1425, 1500]
+            },
+            "TX": {
+                "matus": [0, 0, 0, 0, 0],
+                "maverick": [950, 1000, 1050, 1300, 1450]
+            }
         };
 
-        const SALVAGE_FEES = { gate: 95, env: 15, title: 20, buyerFee: [{max: 49.99, val: 25}, {max: 99.99, val: 45}, {max: 199.99, val: 80}, {max: 299.99, val: 130}, {max: 349.99, val: 137.5}, {max: 399.99, val: 145}, {max: 449.99, val: 175}, {max: 499.99, val: 185}, {max: 549.99, val: 205}, {max: 599.99, val: 210}, {max: 699.99, val: 240}, {max: 799.99, val: 270}, {max: 899.99, val: 295}, {max: 999.99, val: 320}, {max: 1199.99, val: 375}, {max: 1299.99, val: 395}, {max: 1399.99, val: 410}, {max: 1499.99, val: 430}, {max: 1599.99, val: 445}, {max: 1699.99, val: 465}, {max: 1799.99, val: 485}, {max: 1999.99, val: 510}, {max: 2399.99, val: 535}, {max: 2499.99, val: 570}, {max: 2999.99, val: 610}, {max: 3499.99, val: 655}, {max: 3999.99, val: 705}, {max: 4499.99, val: 725}, {max: 4999.99, val: 750}, {max: 5499.99, val: 775}, {max: 5999.99, val: 800}, {max: 6499.99, val: 825}, {max: 6999.99, val: 845}, {max: 7499.99, val: 880}, {max: 7999.99, val: 900}, {max: 8499.99, val: 925}, {max: 9999.99, val: 945}, {max: 14999.99, val: 1000}, {max: Infinity, percent: 0.075}], liveBid: [{max: 99.99, val: 0}, {max: 499.99, val: 50}, {max: 999.99, val: 65}, {max: 1499.99, val: 85}, {max: 1999.99, val: 95}, {max: 3999.99, val: 110}, {max: 5999.99, val: 125}, {max: 7999.99, val: 145}, {max: Infinity, val: 160}] };
+        // BASE DE DATOS DE CIUDADES ACTUALIZADA CON PDF MATUS 02-03-26
+        const CIUDADES = {
+            "Birmingham (Copart/IAAI)": { z: "FL", matus: 485, maverick: null },
+            "Dothan (Copart/IAAI)": { z: "FL", matus: 485, maverick: null },
+            "Huntsville (IAAI)": { z: "FL", matus: 485, maverick: 500 },
+            "Mobile (Copart)": { z: "FL", matus: 475, maverick: null },
+            "Mobile South (Copart)": { z: "FL", matus: 495, maverick: null },
+            "Montgomery (Copart)": { z: "FL", matus: 475, maverick: null },
+            "Tanner (Copart)": { z: "FL", matus: 495, maverick: null },
+            "Chicago North(Copart/IAAI)": { z: "FL", matus: 725, maverick: null },
+            "Chicago South(Copart/IAAI)": { z: "FL", matus: 750, maverick: null },
+            "Chicago West (IAAI)": { z: "FL", matus: 725, maverick: null },
+            "Lincoln (IAAI)": { z: "FL", matus: 825, maverick: null },
+            "Peoria (Copart)": { z: "FL", matus: 825, maverick: null },
+            "Southem Illinois (Copart)": { z: "FL", matus: 675, maverick: null },
+            "St. Louis (IAAI)": { z: "FL", matus: 675, maverick: null },
+            "Wheeling (Copart)": { z: "FL", matus: 675, maverick: null },
+            "Grenada (IAAI)": { z: "FL", matus: 475, maverick: null },
+            "Gulf Coast (IAAI)": { z: "FL", matus: 495, maverick: null },
+            "Jackson (Copart/IAAI)": { z: "FL", matus: 475, maverick: null },
+            "Austin (Copart/IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Austin North (IAAI)": { z: "FL", matus: 550, maverick: null },
+            "Dallas (IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Dallas/Ft Worth (IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Dallas South (Copart)": { z: "FL", matus: 500, maverick: null },
+            "Fort Worth North (IAAI)": { z: "FL", matus: 600, maverick: 300 },
+            "Ft Worth (Copart)": { z: "FL", matus: 600, maverick: null },
+            "Houston (Copart/IAAI)": { z: "FL", matus: 550, maverick: 200 },
+            "Houston East (Copart)": { z: "FL", matus: 550, maverick: null },
+            "Houston North (IAAI)": { z: "FL", matus: 550, maverick: null },
+            "Houston South (IAAI)": { z: "FL", matus: 550, maverick: null },
+            "San Antonio (Copart/IAAI)": { z: "FL", matus: 500, maverick: null },
+            "San Antonio South (IAAI)": { z: "FL", matus: 500, maverick: 275 },
+            "Columbia (Copart)": { z: "FL", matus: 750, maverick: null },
+            "Kansas City East (IAAI)": { z: "FL", matus: 695, maverick: 725 },
+            "Springfield (Copart/IAAI)": { z: "FL", matus: 725, maverick: null },
+            "St. Louis (Copart)": { z: "FL", matus: 675, maverick: null },
+            "Fayetteville (Copart/IAAI)": { z: "FL", matus: 675, maverick: 525 },
+            "Little Rock (Copart/IAAI)": { z: "FL", matus: 700, maverick: null },
+            "Cicero (Copart)": { z: "FL", matus: 700, maverick: null },
+            "Dyer (Copart)": { z: "FL", matus: 700, maverick: null },
+            "Fort Wayne (Copart)": { z: "FL", matus: 900, maverick: null },
+            "Indianapolis (Copart/IAAI)": { z: "FL", matus: 670, maverick: null },
+            "Indianapolis South (IAAI)": { z: "FL", matus: 670, maverick: null },
+            "South Bend (IAAI)": { z: "FL", matus: 875, maverick: null },
+            "Asheville (IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Charlotte (IAAI)": { z: "FL", matus: 400, maverick: null },
+            "China Grove (Copart)": { z: "FL", matus: 400, maverick: null },
+            "Concord (Copart/IAAI)": { z: "FL", matus: 400, maverick: null },
+            "Gastonia (Copart)": { z: "FL", matus: 425, maverick: null },
+            "Greensboro (IAAI)": { z: "FL", matus: 400, maverick: null },
+            "High Point": { z: "FL", matus: 450, maverick: 450 },
+            "Lumberton (Copart,)": { z: "FL", matus: 400, maverick: null },
+            "Mebane (Copart)": { z: "FL", matus: 400, maverick: null },
+            "Mocksville (Copart)": { z: "FL", matus: 430, maverick: null },
+            "Raleigh (Copart/IAAI)": { z: "FL", matus: 395, maverick: null },
+            "Raleigh North (Copart)": { z: "FL", matus: 395, maverick: null },
+            "Wilmington (IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Clearwater (IAAI)": { z: "FL", matus: 225, maverick: null },
+            "Fort. Myers (IAAI)": { z: "FL", matus: 220, maverick: null },
+            "Fort. Pierce (Copart/IAAI)": { z: "FL", matus: 150, maverick: null },
+            "Jacksonville (IAAI)": { z: "FL", matus: 250, maverick: 250 },
+            "Jacksonville North (Copart)": { z: "FL", matus: 250, maverick: null },
+            "Miami Central (Copart)": { z: "FL", matus: 100, maverick: 100 },
+            "Miami North (Copart/IAAI)": { z: "FL", matus: 100, maverick: null },
+            "Miami South (Copart)": { z: "FL", matus: 100, maverick: null },
+            "Ocala (Copart)": { z: "FL", matus: 250, maverick: null },
+            "Orlando (IAAI)": { z: "FL", matus: 175, maverick: null },
+            "Orlando North (Copart/ (AAI)": { z: "FL", matus: 175, maverick: 200 },
+            "Orlando South (Copart)": { z: "FL", matus: 175, maverick: null },
+            "Pensacola (IAAI)": { z: "FL", matus: 350, maverick: null },
+            "Punta Gorda (Copart)": { z: "FL", matus: 220, maverick: null },
+            "Punta Gorda South (Copart)": { z: "FL", matus: 225, maverick: null },
+            "Tallahassee (Copart)": { z: "FL", matus: 320, maverick: null },
+            "Tampa (IAAI)": { z: "FL", matus: 225, maverick: null },
+            "Tampa North (IAAI)": { z: "FL", matus: 225, maverick: null },
+            "Tampa South (Copart)": { z: "FL", matus: 205, maverick: 275 },
+            "West Palm Beach (Copart)": { z: "FL", matus: 120, maverick: 140 },
+            "West Palm Beach (IAAI)": { z: "FL", matus: 145, maverick: 150 },
+            "Kansas City (Copart/IAAI)": { z: "FL", matus: 675, maverick: null },
+            "Wichita (Copart/IAAI)": { z: "FL", matus: 800, maverick: null },
+            "Oklahoma City (Copart/IAAI)": { z: "FL", matus: 750, maverick: null },
+            "Tulsa (Copart/IAAI)": { z: "FL", matus: 750, maverick: null },
+            "Bowling Green (IAAI)": { z: "FL", matus: 750, maverick: 750 },
+            "Earlington (Copart)": { z: "FL", matus: 800, maverick: null },
+            "Lexington East/West (Copart)": { z: "FL", matus: 675, maverick: 675 },
+            "Louisville (Copart/IAAI)": { z: "FL", matus: 675, maverick: 675 },
+            "Louisville North (IAAI)": { z: "FL", matus: 675, maverick: null },
+            "Paducah (IAAI)": { z: "FL", matus: 975, maverick: null },
+            "Walton (Copart)": { z: "FL", matus: 625, maverick: null },
+            "Charleston (IAAI)": { z: "FL", matus: 350, maverick: null },
+            "Columbia (Copart/IAAI)": { z: "FL", matus: 325, maverick: null },
+            "Greenville (IAAI)": { z: "FL", matus: 350, maverick: null },
+            "Lexington (IAAI)": { z: "FL", matus: 325, maverick: null },
+            "North Charleston (Copart)": { z: "FL", matus: 325, maverick: null },
+            "Spartanburg (Copart)": { z: "FL", matus: 360, maverick: null },
+            "Atlanta (IAAI)": { z: "FL", matus: 345, maverick: null },
+            "Atlanta Crashedtoys": { z: "FL", matus: 345, maverick: null },
+            "Atlanta East/North/ South (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
+            "Atlanta West (Copart)": { z: "FL", matus: 345, maverick: null },
+            "Augusta (Copart)": { z: "FL", matus: 395, maverick: null },
+            "Cartersville (Copart)": { z: "FL", matus: 345, maverick: null },
+            "Fairburn (Copart)": { z: "FL", matus: 345, maverick: null },
+            "Macon (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
+            "Savannah (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
+            "Titton (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
+            "Baton Rogue (Copart/IAAI)": { z: "FL", matus: 495, maverick: null },
+            "Lafayette (IAAI)": { z: "FL", matus: 525, maverick: null },
+            "New Orleans (Copart/IAAI)": { z: "FL", matus: 495, maverick: 350 },
+            "New Orleans East (IAAI)": { z: "FL", matus: 495, maverick: 350 },
+            "Chattanooga (IAAI)": { z: "FL", matus: 550, maverick: null },
+            "Knoxville (Copart/IAAI)": { z: "FL", matus: 480, maverick: null },
+            "Memphis (Copart/IAAI)": { z: "FL", matus: 480, maverick: null },
+            "Nashville (Copart/IAAI)": { z: "FL", matus: 480, maverick: null },
+            "Minneapolis (Copart)": { z: "FL", matus: 795, maverick: null },
+            "Minneapolis North (Copart)": { z: "FL", matus: 795, maverick: null },
+            "MinneapolisSt/. Paul (IAAI)": { z: "FL", matus: 795, maverick: 825 },
+            "St. Cloud (Copart)": { z: "FL", matus: 850, maverick: null },
+            "Avenel (IAAI)": { z: "PH", matus: 170, maverick: null },
+            "Central New Jersey (IAAI)": { z: "PH", matus: 170, maverick: null },
+            "Englishtown (IAAI)": { z: "PH", matus: 180, maverick: null },
+            "Glassboro EastWest /(Copart)": { z: "PH", matus: 145, maverick: null },
+            "Port Murray (IAAI)": { z: "PH", matus: 275, maverick: null },
+            "Sayreville (IAAI)": { z: "PH", matus: 235, maverick: null },
+            "Somerville (Copart)": { z: "PH", matus: 175, maverick: null },
+            "Southern New Jersey (IAAI)": { z: "PH", matus: 160, maverick: null },
+            "Trenton (Copart)": { z: "PH", matus: 170, maverick: null },
+            "Hartford (Copart)": { z: "PH", matus: 325, maverick: null },
+            "Hartford (IAAI)": { z: "PH", matus: 300, maverick: null },
+            "Hartford Springfield (Copart)": { z: "PH", matus: 325, maverick: 300 },
+            "Exeter (Copart)": { z: "PH", matus: 400, maverick: null },
+            "Providence (IAAI)": { z: "PH", matus: 375, maverick: null },
+            "Burlington (IAAI)": { z: "PH", matus: 700, maverick: null },
+            "Rutland (Copart)": { z: "PH", matus: 725, maverick: null },
+            "New Castle (IAAI)": { z: "PH", matus: 100, maverick: null },
+            "Seaford (Copart)": { z: "PH", matus: 200, maverick: null },
+            "Culpeper (IAAI)": { z: "PH", matus: 295, maverick: null },
+            "Danville (Copart)": { z: "PH", matus: 495, maverick: null },
+            "Fredericksburg (Copart)": { z: "PH", matus: 300, maverick: null },
+            "Hampton (Copart)": { z: "PH", matus: 375, maverick: null },
+            "Northem Virginia (IAAI)": { z: "PH", matus: 275, maverick: 325 },
+            "Pulaski (IAAI)": { z: "PH", matus: 525, maverick: null },
+            "Richmond (Copart/IAAI)": { z: "PH", matus: 295, maverick: null },
+            "Richmond East (Copart)": { z: "PH", matus: 350, maverick: null },
+            "Roanoke (IAAI)": { z: "PH", matus: 525, maverick: null },
+            "Suffolk (IAAI)": { z: "PH", matus: 450, maverick: null },
+            "Tidewater (IAAI)": { z: "PH", matus: 395, maverick: null },
+            "Albany (Copart/IAAI)": { z: "PH", matus: 300, maverick: null },
+            "Buffalo (Copart)": { z: "PH", matus: 575, maverick: 625 },
+            "Buffalo (IAAI)": { z: "PH", matus: 550, maverick: 600 },
+            "Long Island (Copart/IAAI)": { z: "PH", matus: 280, maverick: null },
+            "Newburgh (Copart/IAAl)": { z: "PH", matus: 260, maverick: null },
+            "Rochester (Copart/IAAI)": { z: "PH", matus: 415, maverick: null },
+            "Syracuse (IAAI/Copart)": { z: "PH", matus: 370, maverick: null },
+            "Lyman (Copart)": { z: "PH", matus: 570, maverick: null },
+            "Portland Gorham (IAAI)": { z: "PH", matus: 575, maverick: 625 },
+            "Windham (Copart)": { z: "PH", matus: 625, maverick: null },
+            "Baltimore (Copart/IAAI)": { z: "PH", matus: 185, maverick: null },
+            "Baltimore East (Copart)": { z: "PH", matus: 240, maverick: null },
+            "Dundalk (IAAI)": { z: "PH", matus: 195, maverick: null },
+            "Laurel (IAAI)": { z: "PH", matus: 230, maverick: null },
+            "Metro DC (IAAI)": { z: "PH", matus: 180, maverick: null },
+            "Washington DC (Copart)": { z: "PH", matus: 185, maverick: null },
+            "Elkton (IAAI)": { z: "PH", matus: 160, maverick: null },
+            "Akron-Canton (IAAI)": { z: "PH", matus: 575, maverick: null },
+            "Cincinnati (IAAI)": { z: "PH", matus: 575, maverick: null },
+            "Cincinnati South (IAAI)": { z: "PH", matus: 575, maverick: 600 },
+            "Cleveland (IAAI)": { z: "PH", matus: 575, maverick: null },
+            "Cleveland East/ West (Copart)": { z: "PH", matus: 575, maverick: null },
+            "Columbus (Copart/IAAI)": { z: "PH", matus: 575, maverick: null },
+            "Dayton (Copart/IAAI)": { z: "PH", matus: 575, maverick: null },
+            "Appleton (IAAI)": { z: "PH", matus: 775, maverick: null },
+            "Madison South (Copart)": { z: "PH", matus: 775, maverick: null },
+            "Milwaukee (IAAI)": { z: "PH", matus: 775, maverick: null },
+            "Milwaukee South (Copart)": { z: "PH", matus: 750, maverick: null },
+            "Portage (IAAI)": { z: "PH", matus: 775, maverick: null },
+            "Boston North (Copart)": { z: "PH", matus: 480, maverick: null },
+            "Boston-Shirley (IAAI)": { z: "PH", matus: 480, maverick: null },
+            "Boston South (Copart)": { z: "PH", matus: 450, maverick: null },
+            "Freetown (Copart)": { z: "PH", matus: 400, maverick: null },
+            "Taunton - IAAI": { z: "PH", matus: 400, maverick: null },
+            "Templeton (IAAI)": { z: "PH", matus: 500, maverick: null },
+            "West Warren (Copart)": { z: "PH", matus: 475, maverick: null },
+            "Buckhannon (IAAI)": { z: "PH", matus: 550, maverick: null },
+            "Charleston (Copart)": { z: "PH", matus: 550, maverick: null },
+            "Shady Spring (IAAI)": { z: "PH", matus: 550, maverick: 600 },
+            "Altoona (IAAI/Copart)": { z: "PH", matus: 330, maverick: null },
+            "Bridgeport (IAAI)": { z: "PH", matus: 120, maverick: null },
+            "Chambersburg (Copart)": { z: "PH", matus: 220, maverick: null },
+            "Erie (IAAI)": { z: "PH", matus: 540, maverick: null },
+            "Harrisburg (Copart)": { z: "PH", matus: 170, maverick: null },
+            "Philadelphia (Copart)": { z: "PH", matus: 145, maverick: null },
+            "Philadelphia (IAAI)": { z: "PH", matus: 120, maverick: 150 },
+            "Pittsburgh (IAAI)": { z: "PH", matus: 375, maverick: null },
+            "Pittsburgh East/SouthWest/": { z: "PH", matus: 375, maverick: null },
+            "Pittsburgh-North (IAAI/Copart)": { z: "PH", matus: 375, maverick: null },
+            "Scranton (IAAI/Copart)": { z: "PH", matus: 190, maverick: null },
+            "York Haven (Copart)": { z: "PH", matus: 175, maverick: null },
+            "York Springs (IAAI)": { z: "PH", matus: 190, maverick: null },
+            "Detroit (Copart/IAAI)": { z: "PH", matus: 725, maverick: null },
+            "Flint (Copart/IAAI)": { z: "PH", matus: 725, maverick: null },
+            "Grand Rapids (IAAI)": { z: "PH", matus: 750, maverick: null },
+            "Lansing (Copart)": { z: "PH", matus: 725, maverick: null },
+            "Wayland (Copart)": { z: "PH", matus: 725, maverick: null },
+            "Candia (Copart)": { z: "PH", matus: 500, maverick: null },
+            "Manchester (IAAI)": { z: "PH", matus: 475, maverick: null },
+            "Birmingham Sub lote (Copart)": { z: "FL", matus: 535, maverick: null },
+            "Chicago Heights (Copart)*": { z: "FL", matus: 800, maverick: null },
+            "Elk river Minneapolis North (Copart)": { z: "FL", matus: 850, maverick: null },
+            "Aurora Offsite (IAAI)": { z: "FL", matus: 775, maverick: null },
+            "Blame Minneapolis North (Copart)": { z: "FL", matus: 850, maverick: null },
+            "Centreville (IAAI)": { z: "FL", matus: 725, maverick: null },
+            "Rice (IAAI)": { z: "FL", matus: 850, maverick: null },
+            "Racehorse Drive (Copart) Sublote": { z: "FL", matus: 725, maverick: null },
+            "St. Cloud Avon (Copart)": { z: "FL", matus: 850, maverick: null },
+            "Little Rock Sub lote (Copart)": { z: "FL", matus: 750, maverick: null },
+            "Greenville Sublot (Copart)": { z: "FL", matus: 725, maverick: null },
+            "1619 S Golden Ave Springfield (Copart)": { z: "FL", matus: 775, maverick: null },
+            "Pembroke Pines (IAAI)": { z: "FL", matus: 100, maverick: null },
+            "Earlington Sublot (Copart)": { z: "FL", matus: 850, maverick: null },
+            "Taussing Avenue Bridgeton (Copart)": { z: "FL", matus: 725, maverick: null },
+            "Clewiston (Copart)": { z: "FL", matus: 175, maverick: null },
+            "Orlando Boggy Creek (IAAI)": { z: "FL", matus: 225, maverick: null },
+            "Mulberry Oriando South (Copart)-Sublate": { z: "FL", matus: 250, maverick: null },
+            "Indy Minnesota Street 46241 (Copart)": { z: "FL", matus: 725, maverick: null },
+            "Offsite-Indianapolis IN 47630 (IAAI)": { z: "FL", matus: 725, maverick: null },
+            "Palmetto (IAAIJ": { z: "FL", matus: 275, maverick: null },
+            "Okeechobee (Copart)": { z: "FL", matus: 275, maverick: null },
+            "Hudson Sublot (IAAI)*": { z: "FL", matus: 250, maverick: null },
+            "Thonotosassa (Copart)": { z: "FL", matus: 250, maverick: null },
+            "Mebane Sublot (Copart)": { z: "FL", matus: 450, maverick: null },
+            "Mulberry Tampa South (Copart)": { z: "FL", matus: 250, maverick: null },
+            "Davenport IA Sub Lot 169 (Copart)": { z: "FL", matus: 975, maverick: null },
+            "Metro Sublot (Copart)": { z: "FL", matus: 975, maverick: null },
+            "Madera Blvd (Copart)": { z: "FL", matus: 800, maverick: null },
+            "Vertia Augusta (Copart)": { z: "FL", matus: 450, maverick: null },
+            "Gibbs Road Kansas City, Kansas 66111 (Copart)": { z: "FL", matus: 725, maverick: null },
+            "Vertia Savannah (Copart)": { z: "FL", matus: 450, maverick: null },
+            "Tulsa Sublot (Copart)": { z: "FL", matus: 800, maverick: null },
+            "Kansas City, KS, Sublote Yard 17 (Copart)": { z: "FL", matus: 725, maverick: null },
+            "FT. Worth Sublat (Copart)*": { z: "FL", matus: 650, maverick: null },
+            "Columbia Gaston (Copart)": { z: "FL", matus: 400, maverick: null },
+            "Columbia Sha Liu (Copart)": { z: "FL", matus: 400, maverick: null },
+            "Hartford New Britain (Copart)": { z: "PH", matus: 275, maverick: null },
+            "Detroit off site (IAAI)*": { z: "PH", matus: 775, maverick: null },
+            "Albany Schenectady (IAAI)": { z: "PH", matus: 350, maverick: null },
+            "Alden Copart": { z: "PH", matus: 650, maverick: null },
+            "Amsterdan Copart": { z: "PH", matus: 425, maverick: null },
+            "Buffalo Vulcan IAAI": { z: "PH", matus: 550, maverick: null },
+            "Medford (IAAI)": { z: "PH", matus: 330, maverick: null },
+            "Monticello IAAI": { z: "PH", matus: 325, maverick: null },
+            "Newburgh Route Copart": { z: "PH", matus: 275, maverick: null },
+            "Staten Island IAAI": { z: "PH", matus: 325, maverick: null },
+            "Seaford Fruitland (Copart)": { z: "PH", matus: 300, maverick: null },
+            "White Plaine Somerville (Copart)": { z: "PH", matus: 250, maverick: null },
+            "White Plaine 8Copart)": { z: "PH", matus: 250, maverick: null },
+            "Coplay Copart)": { z: "PH", matus: 225, maverick: null },
+            "Jobstown Copart": { z: "PH", matus: 225, maverick: null },
+            "Baltimore East Laurel (Copart)": { z: "PH", matus: 230, maverick: null },
+            "Somerville Sublot York Haven Copart": { z: "PH", matus: 200, maverick: null },
+            "White Plaine Washington DC (Copan)": { z: "PH", matus: 225, maverick: null },
+            "Somerville Richlandtown Copart": { z: "PH", matus: 225, maverick: null },
+            "White Marsh (Copart)": { z: "PH", matus: 250, maverick: null },
+            "Philadelphia East sub lot Copart": { z: "PH", matus: 145, maverick: null },
+            "Philadelphia East Malvem Copart": { z: "PH", matus: 225, maverick: null },
+            "Pittsburgh West Adamsburg Copart": { z: "PH", matus: 425, maverick: null },
+            "Boston North Hudson (Copart)": { z: "PH", matus: 500, maverick: null },
+            "Taunton uxbridge (IAAI)": { z: "PH", matus: 450, maverick: null },
+            "Sarita Clarita (IAAI)": { z: "CA", matus: 300, maverick: null },
+            "Phoenix (Copart/IAAI)": { z: "CA", matus: 275, maverick: null },
+            "Phoenix North (Copart)": { z: "CA", matus: 325, maverick: null },
+            "Tucson (Copart/IAAI)": { z: "CA", matus: 400, maverick: null },
+            "Las Vegas (Copart/IAAI)": { z: "CA", matus: 325, maverick: 335 },
+            "Reno (Copart/ (AAI)": { z: "CA", matus: 525, maverick: 525 },
+            "Ace Carson (IAAI)": { z: "CA", matus: 150, maverick: null },
+            "Ace Perris (IAAI)": { z: "CA", matus: 300, maverick: null },
+            "Adelanto (Copart)": { z: "CA", matus: 300, maverick: null },
+            "Anaheim (IAAI)": { z: "CA", matus: 175, maverick: null },
+            "Antelope (Copart)": { z: "CA", matus: 350, maverick: null },
+            "Bakersfield (Copart)": { z: "CA", matus: 250, maverick: null },
+            "Colton (IAAI)": { z: "CA", matus: 200, maverick: null },
+            "East Bay (IAAI)": { z: "CA", matus: 400, maverick: null },
+            "Fontana (IAAI)": { z: "CA", matus: 200, maverick: 210 },
+            "Fremont (IAAI)": { z: "CA", matus: 400, maverick: 415 },
+            "Fresno (Copart/IAAI)": { z: "CA", matus: 300, maverick: null },
+            "Hayward (Copart)": { z: "CA", matus: 400, maverick: null },
+            "High Desert (IAAI)": { z: "CA", matus: 300, maverick: null },
+            "Long Beach (Copart)": { z: "CA", matus: 135, maverick: null },
+            "Los Angeles (Copart/IAAI)": { z: "CA", matus: 150, maverick: null },
+            "Los Angeles South (IAAI)": { z: "CA", matus: 150, maverick: 150 },
+            "Martinez (Copart)": { z: "CA", matus: 375, maverick: null },
+            "Mentone (Copart)": { z: "CA", matus: 325, maverick: null },
+            "N. Hollywood (IAAI)": { z: "CA", matus: 225, maverick: null },
+            "R.Cucamonga (Copart)": { z: "CA", matus: 200, maverick: null },
+            "Redding (Copart)": { z: "CA", matus: 550, maverick: null },
+            "Sacramento (Copart/IAAI)": { z: "CA", matus: 325, maverick: null },
+            "So Sacramento (Copart)": { z: "CA", matus: 325, maverick: null },
+            "Sun Valley (Copart)": { z: "CA", matus: 200, maverick: null },
+            "Vallejo (Copart)": { z: "CA", matus: 375, maverick: null },
+            "Van Nuys (Copart)": { z: "CA", matus: 175, maverick: null },
+            "San Bernardino (Copart)": { z: "CA", matus: 200, maverick: null },
+            "San Diego (Copart/IAAI)": { z: "CA", matus: 255, maverick: null },
+            "San Jose (Copart)": { z: "CA", matus: 400, maverick: null },
+            "Albuquerque (Copart/IAAI)": { z: "CA", matus: 795, maverick: null },
+            "Colorado Springs (Copart)": { z: "CA", matus: 695, maverick: null },
+            "Denver (Copart/IAAI)": { z: "CA", matus: 695, maverick: null },
+            "Denver Central (Copart)": { z: "CA", matus: 695, maverick: null },
+            "Denver East (Copart)": { z: "CA", matus: 695, maverick: null },
+            "Denver South (Copart)": { z: "CA", matus: 695, maverick: null },
+            "Eugene (Copart/IAAI)": { z: "CA", matus: 595, maverick: null },
+            "Portland (IAAI)": { z: "CA", matus: 595, maverick: null },
+            "Portland North (Copart)": { z: "CA", matus: 595, maverick: null },
+            "Portland South (Copart)": { z: "CA", matus: 595, maverick: null },
+            "Portland West (IAAI)": { z: "CA", matus: 595, maverick: null },
+            "Ogden (Copart)": { z: "CA", matus: 450, maverick: 515 },
+            "Provo (IAAI)": { z: "CA", matus: 525, maverick: 575 },
+            "Salt Lake City (Copart/IAAI)": { z: "CA", matus: 450, maverick: 520 },
+            "Boise (Copart/IAAI)": { z: "CA", matus: 775, maverick: null },
+            "Graham (Copart)": { z: "CA", matus: 695, maverick: 750 },
+            "North Seattle (Copart)": { z: "CA", matus: 750, maverick: 850 },
+            "Pasco (Copart)": { z: "CA", matus: 895, maverick: 895 },
+            "Puyallup (IAAI)": { z: "CA", matus: 695, maverick: 750 },
+            "Seattle (IAAI)": { z: "CA", matus: 695, maverick: 850 },
+            "Spokane (Copart/ IAAI)": { z: "CA", matus: 900, maverick: 825 },
+            "Lancaster (Copart)": { z: "CA", matus: 300, maverick: 450 },
+            "Napa (Copart)": { z: "CA", matus: 450, maverick: null },
+            "Modesto (Copart)": { z: "CA", matus: 450, maverick: 225 },
+            "Jurupa Valley(IAAI)": { z: "CA", matus: 225, maverick: 300 },
+            "Riverside (IAAI)": { z: "CA", matus: 225, maverick: 415 },
+            "Sacramento West (IAAI)": { z: "CA", matus: 500, maverick: null },
+            "San Jose / San Martin (Copart)": { z: "CA", matus: 400, maverick: 300 },
+            "Santa Paula (Copart)": { z: "CA", matus: 300, maverick: null },
+            "Stockton IAAI": { z: "CA", matus: 450, maverick: null },
+            "Auction lane (Copart)": { z: "CA", matus: 350, maverick: 350 },
+            "Tooele (Copart)": { z: "CA", matus: 550, maverick: null },
+            "Spanaway (Copart)": { z: "CA", matus: 725, maverick: 725 },
+            "North Seattle Avenue northeast Copart": { z: "CA", matus: 850, maverick: 850 },
+            "Vancouver (IAAI)": { z: "CA", matus: 650, maverick: 650 },
+            "Miami North IAAI": { z: "FL", matus: null, maverick: 100 },
+            "Miami South": { z: "FL", matus: null, maverick: 100 },
+            "Miami (IAAI Sublote)": { z: "FL", matus: null, maverick: 125 },
+            "Miami (Clewiston Sublote)": { z: "FL", matus: null, maverick: 175 },
+            "Punta Gorda": { z: "FL", matus: null, maverick: 225 },
+            "Punta Gorda South": { z: "FL", matus: null, maverick: 250 },
+            "Punta Gorda Sublote": { z: "FL", matus: null, maverick: 275 },
+            "Tampa East & South": { z: "FL", matus: null, maverick: 225 },
+            "Tampa Mulberry (Sublote)": { z: "FL", matus: null, maverick: 275 },
+            "Ft. Pierce": { z: "FL", matus: null, maverick: 150 },
+            "Clearwater": { z: "FL", matus: null, maverick: 230 },
+            "Ft. Myers": { z: "FL", matus: null, maverick: 230 },
+            "Ocala": { z: "FL", matus: null, maverick: 250 },
+            "Tallahassee": { z: "FL", matus: null, maverick: 330 },
+            "Pensacola": { z: "FL", matus: null, maverick: 375 },
+            "Birmingham": { z: "FL", matus: null, maverick: 500 },
+            "Dothan": { z: "FL", matus: null, maverick: 490 },
+            "Eight Mile": { z: "FL", matus: null, maverick: 500 },
+            "Hueytown": { z: "FL", matus: null, maverick: 500 },
+            "Mobile": { z: "FL", matus: null, maverick: 480 },
+            "Montgomery": { z: "FL", matus: null, maverick: 480 },
+            "Tanner": { z: "FL", matus: null, maverick: 500 },
+            "Peoria": { z: "FL", matus: null, maverick: 850 },
+            "Wheeling": { z: "FL", matus: null, maverick: 700 },
+            "Southern Illinois": { z: "FL", matus: null, maverick: 700 },
+            "St Louis": { z: "FL", matus: null, maverick: 650 },
+            "Chicago North": { z: "FL", matus: null, maverick: 725 },
+            "Chicago South": { z: "FL", matus: null, maverick: 750 },
+            "Chicago West": { z: "FL", matus: null, maverick: 725 },
+            "Fayettevile": { z: "TX", matus: null, maverick: 675 },
+            "Little Rock": { z: "TX", matus: null, maverick: 525 },
+            "Dyer": { z: "FL", matus: null, maverick: 725 },
+            "Hammond": { z: "FL", matus: null, maverick: 700 },
+            "Cicero": { z: "FL", matus: null, maverick: 725 },
+            "Indianapolis": { z: "FL", matus: null, maverick: 675 },
+            "Atlanta North, East, South West": { z: "FL", matus: null, maverick: 365 },
+            "Atlanta North Sublote": { z: "FL", matus: null, maverick: 370 },
+            "Cartersville": { z: "FL", matus: null, maverick: 360 },
+            "Macon": { z: "FL", matus: null, maverick: 360 },
+            "Fairburn": { z: "FL", matus: null, maverick: 360 },
+            "Savannah": { z: "FL", matus: null, maverick: 360 },
+            "Augusta": { z: "FL", matus: null, maverick: 450 },
+            "Tifton": { z: "FL", matus: null, maverick: 360 },
+            "Earlington": { z: "FL", matus: null, maverick: 800 },
+            "Walton": { z: "FL", matus: null, maverick: 650 },
+            "Elbridge": { z: "FL", matus: null, maverick: 975 },
+            "Davenport": { z: "FL", matus: null, maverick: 975 },
+            "Des Moines": { z: "FL", matus: null, maverick: 975 },
+            "Minneapolis": { z: "FL", matus: null, maverick: 800 },
+            "St. Cloud": { z: "FL", matus: null, maverick: 850 },
+            "Columbia": { z: "TX", matus: null, maverick: 650 },
+            "North Charleston": { z: "FL", matus: null, maverick: 350 },
+            "Charleston": { z: "PH", matus: null, maverick: 600 },
+            "Lexington": { z: "FL", matus: null, maverick: 330 },
+            "Greenville": { z: "FL", matus: null, maverick: 350 },
+            "Spartanburg": { z: "FL", matus: null, maverick: 375 },
+            "Gaston": { z: "FL", matus: null, maverick: 425 },
+            "Sha Lui": { z: "FL", matus: null, maverick: 400 },
+            "Florence": { z: "FL", matus: null, maverick: 500 },
+            "Grenada": { z: "FL", matus: null, maverick: 500 },
+            "Gulfport": { z: "FL", matus: null, maverick: 500 },
+            "Hattiesburg": { z: "FL", matus: null, maverick: 500 },
+            "Gulf Coast": { z: "FL", matus: null, maverick: 500 },
+            "Jackson": { z: "FL", matus: null, maverick: 500 },
+            "Charlotte": { z: "FL", matus: null, maverick: 400 },
+            "China Grove": { z: "FL", matus: null, maverick: 400 },
+            "Raleigh": { z: "FL", matus: null, maverick: 400 },
+            "Raleigh North": { z: "FL", matus: null, maverick: 450 },
+            "Lumberton": { z: "FL", matus: null, maverick: 400 },
+            "Concord": { z: "FL", matus: null, maverick: 400 },
+            "Mocksville": { z: "FL", matus: null, maverick: 430 },
+            "Greensboro": { z: "FL", matus: null, maverick: 400 },
+            "Mebane": { z: "FL", matus: null, maverick: 400 },
+            "Asheville": { z: "FL", matus: null, maverick: 500 },
+            "Wilmington": { z: "PH", matus: null, maverick: 125 },
+            "Springville": { z: "TX", matus: null, maverick: 725 },
+            "Knoxville": { z: "FL", matus: null, maverick: 500 },
+            "Memphis": { z: "FL", matus: null, maverick: 500 },
+            "Chattanooga": { z: "FL", matus: null, maverick: 500 },
+            "Buckhannon": { z: "PH", matus: null, maverick: 600 },
+            "Shady Spring": { z: "PH", matus: null, maverick: 675 },
+            "Hartford": { z: "PH", matus: null, maverick: 300 },
+            "Cleveland": { z: "PH", matus: null, maverick: 600 },
+            "Columbus": { z: "PH", matus: null, maverick: 700 },
+            "Dayton": { z: "PH", matus: null, maverick: 600 },
+            "Akron": { z: "PH", matus: null, maverick: 625 },
+            "Albany": { z: "PH", matus: null, maverick: 325 },
+            "Long Island C": { z: "PH", matus: null, maverick: 325 },
+            "Newburgh": { z: "PH", matus: null, maverick: 300 },
+            "St. Staten Island": { z: "PH", matus: null, maverick: 350 },
+            "Rochester": { z: "PH", matus: null, maverick: 450 },
+            "Syracuse ": { z: "PH", matus: null, maverick: 385 },
+            "Burlington": { z: "PH", matus: null, maverick: 725 },
+            "Rutland": { z: "PH", matus: null, maverick: 750 },
+            "West Warren (Orleans Sublote)": { z: "PH", matus: null, maverick: 775 },
+            "Culpeper": { z: "PH", matus: null, maverick: 325 },
+            "Danville": { z: "PH", matus: null, maverick: 525 },
+            "Fredericksburg South": { z: "PH", matus: null, maverick: 375 },
+            "Fredericksburg": { z: "PH", matus: null, maverick: 325 },
+            "Hampton": { z: "PH", matus: null, maverick: 425 },
+            "Pulaski": { z: "PH", matus: null, maverick: 525 },
+            "Richmond East": { z: "PH", matus: null, maverick: 375 },
+            "Richmond": { z: "PH", matus: null, maverick: 350 },
+            "Roanoke": { z: "PH", matus: null, maverick: 550 },
+            "Suffolk": { z: "PH", matus: null, maverick: 475 },
+            "Tidewater": { z: "PH", matus: null, maverick: 400 },
+            "Manchester/Salem": { z: "PH", matus: null, maverick: 525 },
+            "Candia": { z: "PH", matus: null, maverick: 600 },
+            "Washington": { z: "PH", matus: null, maverick: 225 },
+            "Metro": { z: "PH", matus: null, maverick: 225 },
+            "Glassboro": { z: "PH", matus: null, maverick: 150 },
+            "South Jersey": { z: "PH", matus: null, maverick: 175 },
+            "Trenton": { z: "PH", matus: null, maverick: 200 },
+            "Somerville": { z: "PH", matus: null, maverick: 185 },
+            "Avenel": { z: "PH", matus: null, maverick: 200 },
+            "Central Jersey": { z: "PH", matus: null, maverick: 200 },
+            "North Jersey": { z: "PH", matus: null, maverick: 215 },
+            "Port Murray": { z: "PH", matus: null, maverick: 275 },
+            "Sayreville": { z: "PH", matus: null, maverick: 250 },
+            "Englishtown": { z: "PH", matus: null, maverick: 200 },
+            "Exeter": { z: "PH", matus: null, maverick: 430 },
+            "Providence": { z: "PH", matus: null, maverick: 430 },
+            "Appleton": { z: "PH", matus: null, maverick: 750 },
+            "Madison": { z: "PH", matus: null, maverick: 775 },
+            "Milwaukee": { z: "PH", matus: null, maverick: 750 },
+            "Portage": { z: "PH", matus: null, maverick: 750 },
+            "Baltimore": { z: "PH", matus: null, maverick: 210 },
+            "Laurel": { z: "PH", matus: null, maverick: 235 },
+            "Elkton": { z: "PH", matus: null, maverick: 175 },
+            "Dundalk": { z: "PH", matus: null, maverick: 200 },
+            "Baltimore East (Pataspco)": { z: "PH", matus: null, maverick: 275 },
+            "Philadelphia East": { z: "PH", matus: null, maverick: 170 },
+            "Bridgeport": { z: "PH", matus: null, maverick: 145 },
+            "York Haven": { z: "PH", matus: null, maverick: 180 },
+            "Harrisburg": { z: "PH", matus: null, maverick: 200 },
+            "York Springs": { z: "PH", matus: null, maverick: 200 },
+            "Chambersburg": { z: "PH", matus: null, maverick: 225 },
+            "Pittsburgh": { z: "PH", matus: null, maverick: 375 },
+            "Scranton": { z: "PH", matus: null, maverick: 225 },
+            "Altoona": { z: "PH", matus: null, maverick: 350 },
+            "Erie": { z: "PH", matus: null, maverick: 550 },
+            "New Castle": { z: "PH", matus: null, maverick: 125 },
+            "Seaford": { z: "PH", matus: null, maverick: 225 },
+            "Boston": { z: "PH", matus: null, maverick: 500 },
+            "North Boston": { z: "PH", matus: null, maverick: 500 },
+            "South Boston": { z: "PH", matus: null, maverick: 500 },
+            "Taunton": { z: "PH", matus: null, maverick: 450 },
+            "Templeton": { z: "PH", matus: null, maverick: 525 },
+            "Freetown": { z: "PH", matus: null, maverick: 500 },
+            "West Warren": { z: "PH", matus: null, maverick: 500 },
+            "Lyman": { z: "PH", matus: null, maverick: 650 },
+            "Windham": { z: "PH", matus: null, maverick: 650 },
+            "Detroit": { z: "PH", matus: null, maverick: 775 },
+            "Flint": { z: "PH", matus: null, maverick: 750 },
+            "Lansing": { z: "PH", matus: null, maverick: 750 },
+            "Baton Rouge": { z: "TX", matus: null, maverick: 350 },
+            "Lafayette": { z: "TX", matus: null, maverick: 325 },
+            "Shreveport": { z: "TX", matus: null, maverick: 350 },
+            "Houston East/Copart Sublote": { z: "TX", matus: null, maverick: 175 },
+            "Austin": { z: "TX", matus: null, maverick: 250 },
+            "Lufkin": { z: "TX", matus: null, maverick: 250 },
+            "San Antonio": { z: "TX", matus: null, maverick: 250 },
+            "Waco": { z: "TX", matus: null, maverick: 325 },
+            "Corpus Christi": { z: "TX", matus: null, maverick: 275 },
+            "Dallas,": { z: "TX", matus: null, maverick: 300 },
+            "Fort Worth,": { z: "TX", matus: null, maverick: 275 },
+            "Longview": { z: "TX", matus: null, maverick: 275 },
+            "McAllen": { z: "TX", matus: null, maverick: 275 },
+            "Lubbock": { z: "TX", matus: null, maverick: 450 },
+            "Abilene": { z: "TX", matus: null, maverick: 350 },
+            "El Paso": { z: "TX", matus: null, maverick: 425 },
+            "Amarillo": { z: "TX", matus: null, maverick: 450 },
+            "Permian Basin": { z: "TX", matus: null, maverick: 500 },
+            "Andrews": { z: "TX", matus: null, maverick: 450 },
+            "Fayetteville Copart Praire Grove": { z: "TX", matus: null, maverick: 525 },
+            "Oklahoma City": { z: "TX", matus: null, maverick: 475 },
+            "Tulsa": { z: "TX", matus: null, maverick: 475 },
+            "Kansas City": { z: "TX", matus: null, maverick: 575 },
+            "Wichita": { z: "TX", matus: null, maverick: 575 },
+            "Albuquerque": { z: "CA", matus: null, maverick: 795 },
+            "Phoenix": { z: "CA", matus: null, maverick: 350 },
+            "Tucson": { z: "CA", matus: null, maverick: 400 },
+            "Denver ": { z: "TX", matus: null, maverick: 690 },
+            "Denver South": { z: "TX", matus: null, maverick: 690 },
+            "Brighton": { z: "TX", matus: null, maverick: 690 },
+            "Colorado Springs": { z: "TX", matus: null, maverick: 700 },
+            "Sikeston": { z: "TX", matus: null, maverick: 650 },
+            "Springfield": { z: "TX", matus: null, maverick: 650 },
+            "Ace Carson": { z: "CA", matus: null, maverick: 185 },
+            "Ace Perris": { z: "CA", matus: null, maverick: 300 },
+            "Adelanto": { z: "CA", matus: null, maverick: 300 },
+            "Anaheim": { z: "CA", matus: null, maverick: 175 },
+            "Antelope": { z: "CA", matus: null, maverick: 450 },
+            "Bakersfield": { z: "CA", matus: null, maverick: 300 },
+            "Colton": { z: "CA", matus: null, maverick: 210 },
+            "East Bay": { z: "CA", matus: null, maverick: 415 },
+            "Fresno": { z: "CA", matus: null, maverick: 305 },
+            "Hayward": { z: "CA", matus: null, maverick: 415 },
+            "High Desert": { z: "CA", matus: null, maverick: 300 },
+            "Long Beach": { z: "CA", matus: null, maverick: 140 },
+            "Los Angeles": { z: "CA", matus: null, maverick: 150 },
+            "Martinez": { z: "CA", matus: null, maverick: 395 },
+            "Mentone": { z: "CA", matus: null, maverick: 325 },
+            "N. Hollywood": { z: "CA", matus: null, maverick: 250 },
+            "Napa": { z: "CA", matus: null, maverick: 510 },
+            "R. Cucamonga": { z: "CA", matus: null, maverick: 225 },
+            "Redding": { z: "CA", matus: null, maverick: 575 },
+            "Sacramento": { z: "CA", matus: null, maverick: 390 },
+            "San Bernardino": { z: "CA", matus: null, maverick: 210 },
+            "San Diego": { z: "CA", matus: null, maverick: 270 },
+            "San Jose": { z: "CA", matus: null, maverick: 415 },
+            "Santa Clarita": { z: "CA", matus: null, maverick: 300 },
+            "Stockton": { z: "CA", matus: null, maverick: 450 },
+            "Sun Valley": { z: "CA", matus: null, maverick: 230 },
+            "Vallejo": { z: "CA", matus: null, maverick: 390 },
+            "Van Nuys": { z: "CA", matus: null, maverick: 225 },
+            "Anaheim Consolidated(IAAI)": { z: "CA", matus: null, maverick: 225 },
+            "Phoenix North": { z: "CA", matus: null, maverick: 400 },
+            "Apex Power (Copart)": { z: "CA", matus: null, maverick: 400 },
+        };
 
-        function getFee(a, t) { for (let f of t) if (a <= f.max) return f.percent ? a * f.percent : f.val; return 0; }
-        
+        const SALVAGE_FEES = { 
+            gate: 95, env: 15, title: 20, 
+            buyerFee: [
+                {max: 49.99, val: 25}, {max: 99.99, val: 45}, {max: 199.99, val: 80}, {max: 299.99, val: 130}, 
+                {max: 349.99, val: 137.5}, {max: 399.99, val: 145}, {max: 449.99, val: 175}, {max: 499.99, val: 185}, 
+                {max: 549.99, val: 205}, {max: 599.99, val: 210}, {max: 699.99, val: 240}, {max: 799.99, val: 270}, 
+                {max: 899.99, val: 295}, {max: 999.99, val: 320}, {max: 1199.99, val: 375}, {max: 1299.99, val: 395}, 
+                {max: 1399.99, val: 410}, {max: 1499.99, val: 430}, {max: 1599.99, val: 445}, {max: 1699.99, val: 465}, 
+                {max: 1799.99, val: 485}, {max: 1999.99, val: 510}, {max: 2399.99, val: 535}, {max: 2499.99, val: 570}, 
+                {max: 2999.99, val: 610}, {max: 3499.99, val: 655}, {max: 3999.99, val: 705}, {max: 4499.99, val: 725}, 
+                {max: 4999.99, val: 750}, {max: 5499.99, val: 775}, {max: 5999.99, val: 800}, {max: 6499.99, val: 825}, 
+                {max: 6999.99, val: 845}, {max: 7499.99, val: 880}, {max: 7999.99, val: 900}, {max: 8499.99, val: 925}, 
+                {max: 9999.99, val: 945}, {max: 14999.99, val: 1000}, {max: Infinity, percent: 0.075}
+            ], 
+            liveBid: [
+                {max: 99.99, val: 0}, {max: 499.99, val: 50}, {max: 999.99, val: 65}, {max: 1499.99, val: 85}, 
+                {max: 1999.99, val: 95}, {max: 3999.99, val: 110}, {max: 5999.99, val: 125}, {max: 7999.99, val: 145}, {max: Infinity, val: 160}
+            ] 
+        };
+
+        function getFee(a, t) { 
+            for (let f of t) if (a <= f.max) return f.percent ? a * f.percent : f.val; 
+            return 0; 
+        }
+
         function filtrarCiudades() {
             const input = document.getElementById('searchCiudad').value.toLowerCase();
             const sug = document.getElementById('listaSug');
             sug.innerHTML = '';
             if (input.length < 1) { sug.classList.add('hidden'); return; }
             Object.keys(CIUDADES).filter(c => c.toLowerCase().includes(input)).forEach(c => {
+                const cData = CIUDADES[c];
                 const div = document.createElement('div');
-                div.className = 'p-4 hover:bg-pink-50 cursor-pointer border-b font-bold text-sm flex justify-between';
-                div.innerHTML = `<span>${c}</span> <span class="text-pink-600 font-black">$${CIUDADES[c].p}</span>`;
+                div.className = 'p-4 hover:bg-pink-50 cursor-pointer border-b text-sm flex flex-col gap-1';
+                
+                let textPrices = "";
+                if(cData.matus !== null) textPrices += `<span class="text-xs font-bold text-slate-500">Matus: $${cData.matus}</span>`;
+                if(cData.maverick !== null) textPrices += `<span class="text-xs font-bold text-slate-500">Maverick: $${cData.maverick}</span>`;
+
+                div.innerHTML = `<span class="font-black text-slate-800">${c}</span> <div class="flex gap-3">${textPrices}</div>`;
                 div.onclick = () => {
                     document.getElementById('searchCiudad').value = c;
-                    document.getElementById('gruaValue').value = CIUDADES[c].p;
-                    document.getElementById('zonaOrigen').value = CIUDADES[c].z;
+                    ciudadSeleccionada = c;
+                    navieraManual = false; // Reset to auto-optimize
                     sug.classList.add('hidden');
+                    optimizarNaviera();
                     calcular();
                 };
                 sug.appendChild(div);
@@ -245,47 +962,161 @@
             document.getElementById('dispCiudad').innerText = document.getElementById('searchCiudad').value || "---";
         }
 
+        
+
+        
+
+        function toggleTransferencia() {
+            const metodo = document.querySelector('input[name="pagoUSA"]:checked').value;
+            const container = document.getElementById('dividirTransfContainer');
+            if (metodo === 'transferencia') {
+                container.style.display = 'flex';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+        
         function calcular() {
             const bid = parseFloat(document.getElementById('inputBid').value) || 0;
             const grua = parseFloat(document.getElementById('gruaValue').value) || 0;
             const zona = document.getElementById('zonaOrigen').value;
+            const naviera = document.getElementById('navieraSelect').value;
+            const subasta = document.getElementById('subastaSelect').value;
+            const version = document.getElementById('versionSelect').value;
             const tIdx = parseInt(document.getElementById('tamanoIdx').value);
             const aduData = document.getElementById('aduanaIdx').value.split('|');
             const ganancia = parseFloat(document.getElementById('inputGanancia').value) || 0;
 
             if (bid > 0) {
-                let feeSubasta = getFee(bid, SALVAGE_FEES.buyerFee) + getFee(bid, SALVAGE_FEES.liveBid) + 130;
-                let logistica = grua + TARIFAS_MAR[zona][tIdx];
-                let impuestos = 0;
-
-                const daiPorc = parseFloat(aduData[0]);
-                const matPorc = parseFloat(aduData[1]);
-                const tipoRuta = aduData[2];
-
-                if (tipoRuta === "nejapa") {
-                    const seguro = (bid + feeSubasta) * 0.02;
-                    const vCif = bid + logistica + seguro + feeSubasta;
-                    impuestos = (vCif * daiPorc) + ((vCif + (vCif * daiPorc)) * 0.13) + (vCif * 0.01) + ((vCif + (vCif * daiPorc)) * matPorc) + 43;
+                // Las tablas base de Buyer y Live Bid aplican igual para licencias estándar en Copart y IAAI
+                let f_buyer = getFee(bid, SALVAGE_FEES.buyerFee);
+                let f_virtual = getFee(bid, SALVAGE_FEES.liveBid);
+                
+                let f_service = 0;
+                let f_env_title = 0;
+                
+                if (subasta === 'copart') {
+                    f_service = 95; // Copart Gate Fee aprox
+                    f_env_title = 35; // Env + Title aprox
                 } else {
-                    const cif = bid + feeSubasta + logistica;
-                    impuestos = (cif * daiPorc) + ((cif + (cif * daiPorc)) * 0.13) + (cif * 0.01) + (cif * matPorc) + 40;
+                    f_service = 105; // IAAI Service Fee
+                    f_env_title = 35; // Env (15) + Title (20)
                 }
 
-                let costoReal = bid + feeSubasta + logistica + impuestos + 350;
-                let totalCliente = Math.round(costoReal + ganancia);
+                let feeSubasta = f_buyer + f_virtual + f_service + f_env_title;
                 
-                const f = (n) => '$' + n.toLocaleString('en-US', {minimumFractionDigits: 2});
-                document.getElementById('intSubasta').innerText = f(feeSubasta);
+                // NUEVA LÓGICA DE FORMAS DE PAGO
+                const metodoPago = document.querySelector('input[name="pagoUSA"]:checked').value;
+                const divsTransf = parseInt(document.getElementById('dividirPago').value);
+                
+                let feePago = 0;
+                let feePagoAduana = 0; // Afecta aduana solo tarjeta + copart
+
+                if (metodoPago === 'tarjeta' && subasta === 'copart') {
+                    feePago = 85;
+                    feePagoAduana = 85;
+                } else if (metodoPago === 'transferencia') {
+                    feePago = (28.25 + 15) / divsTransf; // $43.25 dividido entre N carros
+                }
+                
+                // OBTENER TARIFA MARÍTIMA DE LA NAVIERA SELECCIONADA Y SUMAR LA GRÚA COMO FLETE TOTAL
+                let tarifaMaritima = NAVIERAS_MAR[zona][naviera][tIdx];
+                let fleteTotal = grua + tarifaMaritima;
+                let logistica = fleteTotal; 
+                
+                const daiPorc = parseFloat(aduData[0]);
+                const pmPorc = parseFloat(aduData[1]);
+                
+                // CIF TOMA EL VALOR DE COMPRA (BID + FEES + PAGO TARJETA SI APLICA)
+                const valorCompra = bid + feeSubasta;
+                const valorCompraAduana = valorCompra + feePagoAduana;
+                const seguro = valorCompraAduana * 0.02; 
+                const cif = valorCompraAduana + fleteTotal + seguro;
+                
+                const dai = cif * daiPorc;
+                const iva = (cif + dai) * 0.13;
+                const aiv = cif * 0.01;
+                const pe = 43.00;
+                const pm = cif * pmPorc;
+                const fijosAduana = 113 + 18; // Constantes $131
+                
+                const impuestos = dai + iva + aiv + pm + pe + fijosAduana;
+                
+                // NUEVOS GASTOS OPERATIVOS (Reemplazando los $350)
+                // Jurídico $25 + Grúa $20 + Revisión $20 = $65
+                const gastosOperativos = 65; 
+                
+                let cesarExtra = 0;
+                if (version === 'cesar') {
+                    cesarExtra = 100;
+                    document.getElementById('rowCesarFee').classList.remove('hidden');
+                } else {
+                    document.getElementById('rowCesarFee').classList.add('hidden');
+                }
+
+                // COSTO REAL DEL AUTO
+                let costoReal = bid + feeSubasta + feePago + logistica + impuestos + gastosOperativos + cesarExtra;
+                
+                // CÁLCULO INVERSO DE GANANCIA NETA LÍQUIDA
+                // El input "ganancia" es lo que debe quedar libre.
+                // Ecuación: G_Neta = G_Bruta - (G_Bruta * 0.13) - ((Costo_Real + G_Bruta) * 0.0175)
+                // Despejando: G_Bruta = (G_Neta + Costo_Real * 0.0175) / 0.8525
+                let gananciaBruta = (ganancia > 0) ? (ganancia + (costoReal * 0.0175)) / 0.8525 : 0;
+                let totalCliente = costoReal + gananciaBruta;
+                
+                // RENTABILIDAD Y TRIBUTOS LOCALES (VENTA)
+                let ivaVentaLocal = gananciaBruta * 0.13;
+                let pagoCuentaVenta = totalCliente * 0.0175;
+                let gananciaNeta = gananciaBruta - ivaVentaLocal - pagoCuentaVenta;
+                
+                const f = (n) => '$' + n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                
+                // Desglose extendido
+                document.getElementById('detBid').innerText = f(bid);
+                document.getElementById('detBuyer').innerText = f(f_buyer);
+                document.getElementById('detVirtual').innerText = f(f_virtual);
+                document.getElementById('detService').innerText = f(f_service);
+                document.getElementById('detEnvTitle').innerText = f(f_env_title);
+                document.getElementById('intSubasta').innerText = f(valorCompra);
+                
+                document.getElementById('detGrua').innerText = f(grua);
+                document.getElementById('detMaritimo').innerText = f(tarifaMaritima);
                 document.getElementById('intLogistica').innerText = f(logistica);
+                
+                document.getElementById('detSeguro').innerText = f(seguro);
+                document.getElementById('detCif').innerText = f(cif);
+                
+                document.getElementById('detDai').innerText = f(dai);
+                document.getElementById('detIva').innerText = f(iva);
+                document.getElementById('detPm').innerText = f(pm);
+                document.getElementById('detOtrosImp').innerText = f(aiv + pe);
                 document.getElementById('intImpuestos').innerText = f(impuestos);
+                
+                document.getElementById('detFeePago').innerText = f(feePago);
+                if (version === 'cesar') {
+                    document.getElementById('detCesarFee').innerText = f(100);
+                }
+                
+                // Costo previo sin tributos de venta (Costo Real + Ganancia Bruta)
+                let costoPrevioTributos = costoReal; // Solo el costo real puro en El Salvador antes de ganancia y tributos
+
+                // Outputs Rentabilidad
+                document.getElementById('detCostoPrevio').innerText = f(costoPrevioTributos);
+                document.getElementById('detGananciaBruta').innerText = f(gananciaBruta);
+                document.getElementById('detIvaVenta').innerText = f(ivaVentaLocal);
+                document.getElementById('detPagoCuentaVenta').innerText = f(pagoCuentaVenta);
+                document.getElementById('detGananciaNeta').innerText = f(gananciaNeta);
+
                 document.getElementById('intTotalCosto').innerText = f(costoReal);
-                document.getElementById('resPresupuesto').innerText = '$' + totalCliente.toLocaleString('en-US');
+                document.getElementById('detVenta').innerText = f(totalCliente);
+
+                document.getElementById('resPresupuesto').innerText = '$' + Math.round(totalCliente).toLocaleString('en-US');
             }
             actualizar();
         }
 
         document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-SV', { day: 'numeric', month: 'long', year: 'numeric' });
-        window.onload = calcular;
+        window.onload = function() { toggleTransferencia(); calcular(); };
     </script>
 </body>
 </html>
