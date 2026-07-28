@@ -2,12 +2,15 @@
         /* Contenedor del Reporte */
         #reporteFinal { 
             background: white; border: 4px solid #be185d; 
-            width: 100%; max-width: 800px; min-height: 1050px; 
-            padding: 45px; position: relative; display: flex; flex-direction: column;
+            width: 100%; max-width: 800px; min-height: 950px; 
+            padding: 25px; position: relative; display: flex; flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             margin: 0 auto;
             box-sizing: border-box;
+        }
+        @media (min-width: 768px) {
+            #reporteFinal { padding: 45px; min-height: 1050px; }
         }
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8rem; font-weight: 900; color: rgba(190, 24, 93, 0.03); pointer-events: none; text-transform: uppercase; white-space: nowrap; }
         
@@ -30,7 +33,7 @@
             z-index: 50;
             -webkit-print-color-adjust: exact;
         }
-        #resPresupuesto { font-size: 95px; font-weight: 900; line-height: 1; letter-spacing: -4px; }
+        #resPresupuesto { font-size: clamp(55px, 14vw, 95px); font-weight: 900; line-height: 1; letter-spacing: -2px; }
 
         /* CONFIGURACIÓN DE IMPRESIÓN */
         @media print {
@@ -229,7 +232,7 @@
                     
                     <div class="flex justify-between items-start border-b-8 border-pink-600 pb-6 mb-10">
                         <div>
-                            <h2 class="text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
+                            <h2 class="text-3xl md:text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
                             <p class="text-sm font-bold text-slate-800 mt-2 tracking-[0.2em] uppercase">Cotización de Referencia de Importación</p>
                         </div>
                         <div class="text-right">
@@ -240,7 +243,7 @@
                     <div class="flex-grow space-y-12">
                         <div class="bg-slate-50 p-10 rounded-[2rem] border-2 border-slate-100 relative">
                             <span class="absolute -top-3 left-10 bg-slate-900 text-white text-[10px] font-black px-4 py-1 rounded uppercase tracking-widest italic">Unidad de Referencia</span>
-                            <h3 id="dispVehiculo" class="text-5xl font-black text-slate-900 uppercase italic leading-tight">---</h3>
+                            <h3 id="dispVehiculo" class="text-3xl md:text-5xl font-black text-slate-900 uppercase italic leading-tight">---</h3>
                             <div class="flex justify-between mt-10 border-t pt-6 border-slate-200 text-xl font-bold text-slate-500 uppercase">
                                 <p>LOTE #: <span id="dispLote" class="text-slate-900 font-black">---</span></p>
                                 <p>ORIGEN: <span id="dispCiudad" class="text-slate-900 font-black">---</span></p>
@@ -1119,4 +1122,4 @@
         window.onload = function() { toggleTransferencia(); calcular(); };
     </script>
 </body>
-</html>
+</html>      
