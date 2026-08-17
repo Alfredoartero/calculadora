@@ -1,4 +1,18 @@
-<!DOCTYPE html><html lang="es"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Importaciones Yesica - Cotizador Maestro Profesional</title>    <script src="https://cdn.tailwindcss.com"></script>    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap" rel="stylesheet">    <style>        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 0; overflow-x: hidden; }        .header-pink { color: #be185d; }        .card { background: white; border-radius: 1.2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }        .input-style { width: 100%; padding: 0.9rem; border-radius: 0.75rem; border: 2px solid #cbd5e1; font-weight: 700; font-size: 1rem; outline: none; transition: all 0.2s; }        .input-style:focus { border-color: #be185d; box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.1); }        
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importaciones Yesica - Cotizador Maestro Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 0; overflow-x: hidden; }
+        .header-pink { color: #be185d; }
+        .card { background: white; border-radius: 1.2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .input-style { width: 100%; padding: 0.9rem; border-radius: 0.75rem; border: 2px solid #cbd5e1; font-weight: 700; font-size: 1rem; outline: none; transition: all 0.2s; }
+        .input-style:focus { border-color: #be185d; box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.1); }
+        
         /* Contenedor del Reporte */
         #reporteFinal { 
             background: white; border: 4px solid #be185d; 
@@ -62,7 +76,7 @@
 
         <div class="flex flex-wrap lg:flex-nowrap gap-8 justify-center items-start">
             
-            <!-- PANEL DE CONFIGURACIÓN ORIGINAL -->
+            <!-- PANEL DE CONFIGURACIÓN -->
             <div class="w-full lg:w-[480px] space-y-6 no-print flex-shrink-0">
                 <div class="card p-6 space-y-5 border-t-8 border-slate-900 shadow-xl">
                     <h2 class="text-lg font-black text-slate-800 uppercase italic border-b pb-2">1. Configuración de Unidad</h2>
@@ -87,6 +101,14 @@
                                 <option value="cesar">Versión César</option>
                             </select>
                         </div>
+                    </div>
+
+                    <!-- NUEVO SELECTOR INDEPENDIENTE PARA DEALER -->
+                    <div class="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="checkDealer" onchange="calcular()" class="w-5 h-5 accent-pink-600 rounded">
+                            <span class="text-xs font-black uppercase text-slate-700">Aplicar Fee Dealer (+$100.00 al final)</span>
+                        </label>
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
@@ -204,6 +226,7 @@
                         <div class="flex justify-between text-slate-400 pt-1"><span>Operativos (Jurídico, Grúa, Revisión):</span><span class="text-white">$65.00</span></div>
                         <div class="flex justify-between text-slate-400"><span>Fee Pago USA:</span><span id="detFeePago" class="text-white">$0.00</span></div>
                         <div id="rowCesarFee" class="flex justify-between text-pink-400 font-bold hidden"><span>Ganancia Dueña (César):</span><span id="detCesarFee">$100.00</span></div>
+                        <div id="rowDealerFee" class="flex justify-between text-pink-400 font-bold hidden"><span>Fee Dealer:</span><span id="detDealerFee">$100.00</span></div>
 
                         <div class="mt-2 pt-2 border-t border-slate-700">
                             <div class="flex justify-between text-slate-300 font-bold mb-1"><span>Costo Total (Antes de Tributos Venta):</span><span id="detCostoPrevio" class="text-white">$0.00</span></div>
@@ -225,7 +248,7 @@
                 </div>
             </div>
 
-            <!-- REPORTE FINAL ORIGINAL -->
+            <!-- REPORTE FINAL -->
             <div class="w-full flex justify-center flex-grow">
                 <div id="reporteFinal">
                     <div class="watermark">YESICA</div>
@@ -313,7 +336,6 @@
                 costMaverick = cData.maverick + NAVIERAS_MAR[zona]["maverick"][tIdx];
             }
 
-            // Seleccionar la más barata
             if (costMaverick < costMatus && costMaverick !== Infinity) {
                 document.getElementById('navieraSelect').value = "maverick";
                 document.getElementById('gruaValue').value = cData.maverick;
@@ -321,24 +343,21 @@
                 document.getElementById('navieraSelect').value = "matus";
                 document.getElementById('gruaValue').value = cData.matus;
             } else {
-                // Ambas nulas o 0
                 document.getElementById('gruaValue').value = 0;
             }
         }
 
-        // TARIFAS DE 3 NAVIERAS [Nav1, Nav2, Nav3] según categoría de vehículo [Sedán, Especial, SUV, Pickup, Extra Grande]
-        // Nav1 (Matus) ha sido actualizada con los precios especiales de la imagen enviada.
         const NAVIERAS_MAR = {
             "FL": {
-                "matus": [850, 900, 950, 1425, 1500],
+                "matus": [800, 825, 900, 1350, 1395],
                 "maverick": [800, 875, 925, 1350, 1425]
             },
             "PH": {
-                "matus": [900, 1000, 1125, 1395, 1495],
+                "matus": [825, 900, 1025, 1350, 1395],
                 "maverick": [850, 925, 1050, 1350, 1435]
             },
             "CA": {
-                "matus": [1095, 1195, 1295, 1395, 1495],
+                "matus": [995, 1195, 1295, 1350, 1450],
                 "maverick": [1095, 1220, 1320, 1425, 1500]
             },
             "TX": {
@@ -347,563 +366,260 @@
             }
         };
 
-        // BASE DE DATOS DE CIUDADES ACTUALIZADA CON PDF MATUS 02-03-26
         const CIUDADES = {
-            "Birmingham (Copart/IAAI)": { z: "FL", matus: 485, maverick: null },
-            "Dothan (Copart/IAAI)": { z: "FL", matus: 485, maverick: null },
+            "Birmingham (Copart/IAAI)": { z: "FL", matus: 475, maverick: 500 },
+            "Dothan (Copart/IAAI)": { z: "FL", matus: 475, maverick: 490 },
             "Huntsville (IAAI)": { z: "FL", matus: 485, maverick: 500 },
-            "Mobile (Copart)": { z: "FL", matus: 475, maverick: null },
+            "Mobile (Copart)": { z: "FL", matus: 450, maverick: 480 },
             "Mobile South (Copart)": { z: "FL", matus: 495, maverick: null },
-            "Montgomery (Copart)": { z: "FL", matus: 475, maverick: null },
-            "Tanner (Copart)": { z: "FL", matus: 495, maverick: null },
-            "Chicago North(Copart/IAAI)": { z: "FL", matus: 725, maverick: null },
-            "Chicago South(Copart/IAAI)": { z: "FL", matus: 750, maverick: null },
-            "Chicago West (IAAI)": { z: "FL", matus: 725, maverick: null },
+            "Montgomery (Copart)": { z: "FL", matus: 450, maverick: 480 },
+            "Tanner (Copart)": { z: "FL", matus: 495, maverick: 500 },
+            "Chicago North(Copart/IAAI)": { z: "FL", matus: 695, maverick: 725 },
+            "Chicago South(Copart/IAAI)": { z: "FL", matus: 695, maverick: 750 },
+            "Chicago West (IAAI)": { z: "FL", matus: 695, maverick: 725 },
             "Lincoln (IAAI)": { z: "FL", matus: 825, maverick: null },
-            "Peoria (Copart)": { z: "FL", matus: 825, maverick: null },
-            "Southem Illinois (Copart)": { z: "FL", matus: 675, maverick: null },
-            "St. Louis (IAAI)": { z: "FL", matus: 675, maverick: null },
-            "Wheeling (Copart)": { z: "FL", matus: 675, maverick: null },
-            "Grenada (IAAI)": { z: "FL", matus: 475, maverick: null },
-            "Gulf Coast (IAAI)": { z: "FL", matus: 495, maverick: null },
-            "Jackson (Copart/IAAI)": { z: "FL", matus: 475, maverick: null },
-            "Austin (Copart/IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Peoria (Copart)": { z: "FL", matus: 825, maverick: 850 },
+            "Southern Illinois (Copart)": { z: "FL", matus: 675, maverick: 700 },
+            "St. Louis (IAAI)": { z: "FL", matus: 675, maverick: 650 },
+            "Wheeling (Copart)": { z: "FL", matus: 675, maverick: 700 },
+            "Grenada (IAAI)": { z: "FL", matus: 475, maverick: 500 },
+            "Gulf Coast (IAAI)": { z: "FL", matus: 485, maverick: 500 },
+            "Jackson (Copart/IAAI)": { z: "FL", matus: 475, maverick: 500 },
+            "Austin (Copart/IAAI)": { z: "FL", matus: 500, maverick: 250 },
             "Austin North (IAAI)": { z: "FL", matus: 550, maverick: null },
-            "Dallas (IAAI)": { z: "FL", matus: 500, maverick: null },
-            "Dallas/Ft Worth (IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Dallas (IAAI)": { z: "FL", matus: 500, maverick: 300 },
+            "Dallas/Ft Worth (IAAI)": { z: "FL", matus: 500, maverick: 300 },
             "Dallas South (Copart)": { z: "FL", matus: 500, maverick: null },
             "Fort Worth North (IAAI)": { z: "FL", matus: 600, maverick: 300 },
-            "Ft Worth (Copart)": { z: "FL", matus: 600, maverick: null },
-            "Houston (Copart/IAAI)": { z: "FL", matus: 550, maverick: 200 },
-            "Houston East (Copart)": { z: "FL", matus: 550, maverick: null },
-            "Houston North (IAAI)": { z: "FL", matus: 550, maverick: null },
-            "Houston South (IAAI)": { z: "FL", matus: 550, maverick: null },
-            "San Antonio (Copart/IAAI)": { z: "FL", matus: 500, maverick: null },
+            "Ft Worth (Copart)": { z: "FL", matus: 600, maverick: 275 },
+            "Houston (Copart/IAAI)": { z: "FL", matus: 565, maverick: 200 },
+            "Houston East (Copart)": { z: "FL", matus: 565, maverick: 175 },
+            "Houston North (IAAI)": { z: "FL", matus: 565, maverick: null },
+            "Houston South (IAAI)": { z: "FL", matus: 565, maverick: null },
+            "San Antonio (Copart/IAAI)": { z: "FL", matus: 500, maverick: 250 },
             "San Antonio South (IAAI)": { z: "FL", matus: 500, maverick: 275 },
-            "Columbia (Copart)": { z: "FL", matus: 750, maverick: null },
+            "Columbia (Copart)": { z: "FL", matus: 750, maverick: 650 },
             "Kansas City East (IAAI)": { z: "FL", matus: 695, maverick: 725 },
-            "Springfield (Copart/IAAI)": { z: "FL", matus: 725, maverick: null },
-            "St. Louis (Copart)": { z: "FL", matus: 675, maverick: null },
-            "Fayetteville (Copart/IAAI)": { z: "FL", matus: 675, maverick: 525 },
-            "Little Rock (Copart/IAAI)": { z: "FL", matus: 700, maverick: null },
-            "Cicero (Copart)": { z: "FL", matus: 700, maverick: null },
-            "Dyer (Copart)": { z: "FL", matus: 700, maverick: null },
+            "Springfield (Copart/IAAI)": { z: "FL", matus: 725, maverick: 650 },
+            "St. Louis (Copart)": { z: "FL", matus: 675, maverick: 650 },
+            "Fayetteville (Copart/IAAI)": { z: "FL", matus: 725, maverick: 525 },
+            "Little Rock (Copart/IAAI)": { z: "FL", matus: 750, maverick: 525 },
+            "Cicero (Copart)": { z: "FL", matus: 700, maverick: 725 },
+            "Dyer (Copart)": { z: "FL", matus: 700, maverick: 725 },
             "Fort Wayne (Copart)": { z: "FL", matus: 900, maverick: null },
-            "Indianapolis (Copart/IAAI)": { z: "FL", matus: 670, maverick: null },
-            "Indianapolis South (IAAI)": { z: "FL", matus: 670, maverick: null },
+            "Indianapolis (Copart/IAAI)": { z: "FL", matus: 645, maverick: 675 },
+            "Indianapolis South (IAAI)": { z: "FL", matus: 650, maverick: null },
             "South Bend (IAAI)": { z: "FL", matus: 875, maverick: null },
-            "Asheville (IAAI)": { z: "FL", matus: 500, maverick: null },
-            "Charlotte (IAAI)": { z: "FL", matus: 400, maverick: null },
-            "China Grove (Copart)": { z: "FL", matus: 400, maverick: null },
-            "Concord (Copart/IAAI)": { z: "FL", matus: 400, maverick: null },
-            "Gastonia (Copart)": { z: "FL", matus: 425, maverick: null },
-            "Greensboro (IAAI)": { z: "FL", matus: 400, maverick: null },
-            "High Point": { z: "FL", matus: 450, maverick: 450 },
-            "Lumberton (Copart,)": { z: "FL", matus: 400, maverick: null },
-            "Mebane (Copart)": { z: "FL", matus: 400, maverick: null },
-            "Mocksville (Copart)": { z: "FL", matus: 430, maverick: null },
-            "Raleigh (Copart/IAAI)": { z: "FL", matus: 395, maverick: null },
-            "Raleigh North (Copart)": { z: "FL", matus: 395, maverick: null },
-            "Wilmington (IAAI)": { z: "FL", matus: 500, maverick: null },
-            "Clearwater (IAAI)": { z: "FL", matus: 225, maverick: null },
-            "Fort. Myers (IAAI)": { z: "FL", matus: 220, maverick: null },
-            "Fort. Pierce (Copart/IAAI)": { z: "FL", matus: 150, maverick: null },
+            "Asheville (IAAI)": { z: "FL", matus: 515, maverick: 500 },
+            "Charlotte (IAAI)": { z: "FL", matus: 400, maverick: 400 },
+            "China Grove (Copart)": { z: "FL", matus: 400, maverick: 400 },
+            "Concord (Copart/IAAI)": { z: "FL", matus: 400, maverick: 400 },
+            "Gastonia (Copart)": { z: "FL", matus: 425, maverick: 425 },
+            "Greensboro (IAAI)": { z: "FL", matus: 400, maverick: 400 },
+            "High Point": { z: "FL", matus: 465, maverick: 450 },
+            "Lumberton (Copart)": { z: "FL", matus: 400, maverick: 400 },
+            "Mebane (Copart)": { z: "FL", matus: 400, maverick: 400 },
+            "Mocksville (Copart)": { z: "FL", matus: 430, maverick: 430 },
+            "Raleigh (Copart/IAAI)": { z: "FL", matus: 395, maverick: 400 },
+            "Raleigh North (Copart)": { z: "FL", matus: 395, maverick: 450 },
+            "Wilmington (IAAI)": { z: "FL", matus: 515, maverick: 125 },
+            "Clearwater (IAAI)": { z: "FL", matus: 220, maverick: 230 },
+            "Fort. Myers (IAAI)": { z: "FL", matus: 220, maverick: 230 },
+            "Fort. Pierce (Copart/IAAI)": { z: "FL", matus: 150, maverick: 150 },
             "Jacksonville (IAAI)": { z: "FL", matus: 250, maverick: 250 },
             "Jacksonville North (Copart)": { z: "FL", matus: 250, maverick: null },
             "Miami Central (Copart)": { z: "FL", matus: 100, maverick: 100 },
-            "Miami North (Copart/IAAI)": { z: "FL", matus: 100, maverick: null },
-            "Miami South (Copart)": { z: "FL", matus: 100, maverick: null },
-            "Ocala (Copart)": { z: "FL", matus: 250, maverick: null },
-            "Orlando (IAAI)": { z: "FL", matus: 175, maverick: null },
-            "Orlando North (Copart/ (AAI)": { z: "FL", matus: 175, maverick: 200 },
-            "Orlando South (Copart)": { z: "FL", matus: 175, maverick: null },
-            "Pensacola (IAAI)": { z: "FL", matus: 350, maverick: null },
-            "Punta Gorda (Copart)": { z: "FL", matus: 220, maverick: null },
-            "Punta Gorda South (Copart)": { z: "FL", matus: 225, maverick: null },
-            "Tallahassee (Copart)": { z: "FL", matus: 320, maverick: null },
-            "Tampa (IAAI)": { z: "FL", matus: 225, maverick: null },
+            "Miami North (Copart/IAAI)": { z: "FL", matus: 100, maverick: 100 },
+            "Miami South (Copart)": { z: "FL", matus: 100, maverick: 100 },
+            "Ocala (Copart)": { z: "FL", matus: 250, maverick: 250 },
+            "Orlando (IAAI)": { z: "FL", matus: 185, maverick: null },
+            "Orlando North (Copart/IAAI)": { z: "FL", matus: 185, maverick: 200 },
+            "Orlando South (Copart)": { z: "FL", matus: 185, maverick: null },
+            "Pensacola (IAAI)": { z: "FL", matus: 350, maverick: 375 },
+            "Punta Gorda (Copart)": { z: "FL", matus: 220, maverick: 225 },
+            "Punta Gorda South (Copart)": { z: "FL", matus: 225, maverick: 250 },
+            "Tallahassee (Copart)": { z: "FL", matus: 320, maverick: 330 },
+            "Tampa (IAAI)": { z: "FL", matus: 225, maverick: 225 },
             "Tampa North (IAAI)": { z: "FL", matus: 225, maverick: null },
-            "Tampa South (Copart)": { z: "FL", matus: 205, maverick: 275 },
+            "Tampa South (Copart)": { z: "FL", matus: 205, maverick: 225 },
             "West Palm Beach (Copart)": { z: "FL", matus: 120, maverick: 140 },
             "West Palm Beach (IAAI)": { z: "FL", matus: 145, maverick: 150 },
-            "Kansas City (Copart/IAAI)": { z: "FL", matus: 675, maverick: null },
-            "Wichita (Copart/IAAI)": { z: "FL", matus: 800, maverick: null },
-            "Oklahoma City (Copart/IAAI)": { z: "FL", matus: 750, maverick: null },
-            "Tulsa (Copart/IAAI)": { z: "FL", matus: 750, maverick: null },
+            "Kansas City (Copart/IAAI)": { z: "FL", matus: 675, maverick: 575 },
+            "Wichita (Copart/IAAI)": { z: "FL", matus: 800, maverick: 575 },
+            "Oklahoma City (Copart/IAAI)": { z: "FL", matus: 750, maverick: 475 },
+            "Tulsa (Copart/IAAI)": { z: "FL", matus: 750, maverick: 475 },
             "Bowling Green (IAAI)": { z: "FL", matus: 750, maverick: 750 },
-            "Earlington (Copart)": { z: "FL", matus: 800, maverick: null },
-            "Lexington East/West (Copart)": { z: "FL", matus: 675, maverick: 675 },
-            "Louisville (Copart/IAAI)": { z: "FL", matus: 675, maverick: 675 },
+            "Earlington (Copart)": { z: "FL", matus: 800, maverick: 800 },
+            "Lexington East/West (Copart)": { z: "FL", matus: 650, maverick: 675 },
+            "Louisville (Copart/IAAI)": { z: "FL", matus: 650, maverick: 675 },
             "Louisville North (IAAI)": { z: "FL", matus: 675, maverick: null },
             "Paducah (IAAI)": { z: "FL", matus: 975, maverick: null },
-            "Walton (Copart)": { z: "FL", matus: 625, maverick: null },
-            "Charleston (IAAI)": { z: "FL", matus: 350, maverick: null },
-            "Columbia (Copart/IAAI)": { z: "FL", matus: 325, maverick: null },
-            "Greenville (IAAI)": { z: "FL", matus: 350, maverick: null },
-            "Lexington (IAAI)": { z: "FL", matus: 325, maverick: null },
-            "North Charleston (Copart)": { z: "FL", matus: 325, maverick: null },
-            "Spartanburg (Copart)": { z: "FL", matus: 360, maverick: null },
+            "Walton (Copart)": { z: "FL", matus: 650, maverick: 650 },
+            "Charleston (IAAI)": { z: "FL", matus: 350, maverick: 600 },
+            "Columbia (Copart/IAAI)": { z: "FL", matus: 335, maverick: null },
+            "Greenville (IAAI)": { z: "FL", matus: 365, maverick: 350 },
+            "Lexington (IAAI)": { z: "FL", matus: 335, maverick: 330 },
+            "North Charleston (Copart)": { z: "FL", matus: 335, maverick: 350 },
+            "Spartanburg (Copart)": { z: "FL", matus: 375, maverick: 375 },
             "Atlanta (IAAI)": { z: "FL", matus: 345, maverick: null },
             "Atlanta Crashedtoys": { z: "FL", matus: 345, maverick: null },
-            "Atlanta East/North/ South (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
+            "Atlanta East/North/South (Copart/IAAI)": { z: "FL", matus: 345, maverick: 365 },
             "Atlanta West (Copart)": { z: "FL", matus: 345, maverick: null },
-            "Augusta (Copart)": { z: "FL", matus: 395, maverick: null },
-            "Cartersville (Copart)": { z: "FL", matus: 345, maverick: null },
-            "Fairburn (Copart)": { z: "FL", matus: 345, maverick: null },
-            "Macon (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
-            "Savannah (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
-            "Titton (Copart/IAAI)": { z: "FL", matus: 345, maverick: null },
-            "Baton Rogue (Copart/IAAI)": { z: "FL", matus: 495, maverick: null },
-            "Lafayette (IAAI)": { z: "FL", matus: 525, maverick: null },
+            "Augusta (Copart)": { z: "FL", matus: 395, maverick: 450 },
+            "Cartersville (Copart)": { z: "FL", matus: 345, maverick: 360 },
+            "Fairburn (Copart)": { z: "FL", matus: 345, maverick: 360 },
+            "Macon (Copart/IAAI)": { z: "FL", matus: 345, maverick: 360 },
+            "Savannah (Copart/IAAI)": { z: "FL", matus: 345, maverick: 360 },
+            "Tifton (Copart/IAAI)": { z: "FL", matus: 345, maverick: 360 },
+            "Baton Rouge (Copart/IAAI)": { z: "FL", matus: 495, maverick: 350 },
+            "Lafayette (IAAI)": { z: "FL", matus: 525, maverick: 325 },
             "New Orleans (Copart/IAAI)": { z: "FL", matus: 495, maverick: 350 },
             "New Orleans East (IAAI)": { z: "FL", matus: 495, maverick: 350 },
-            "Chattanooga (IAAI)": { z: "FL", matus: 550, maverick: null },
-            "Knoxville (Copart/IAAI)": { z: "FL", matus: 480, maverick: null },
-            "Memphis (Copart/IAAI)": { z: "FL", matus: 480, maverick: null },
-            "Nashville (Copart/IAAI)": { z: "FL", matus: 480, maverick: null },
-            "Minneapolis (Copart)": { z: "FL", matus: 795, maverick: null },
+            "Chattanooga (IAAI)": { z: "FL", matus: 550, maverick: 500 },
+            "Knoxville (Copart/IAAI)": { z: "FL", matus: 480, maverick: 500 },
+            "Memphis (Copart/IAAI)": { z: "FL", matus: 480, maverick: 500 },
+            "Nashville (Copart/IAAI)": { z: "FL", matus: 480, maverick: 500 },
+            "Minneapolis (Copart)": { z: "FL", matus: 795, maverick: 800 },
             "Minneapolis North (Copart)": { z: "FL", matus: 795, maverick: null },
-            "MinneapolisSt/. Paul (IAAI)": { z: "FL", matus: 795, maverick: 825 },
-            "St. Cloud (Copart)": { z: "FL", matus: 850, maverick: null },
-            "Avenel (IAAI)": { z: "PH", matus: 170, maverick: null },
-            "Central New Jersey (IAAI)": { z: "PH", matus: 170, maverick: null },
-            "Englishtown (IAAI)": { z: "PH", matus: 180, maverick: null },
-            "Glassboro EastWest /(Copart)": { z: "PH", matus: 145, maverick: null },
-            "Port Murray (IAAI)": { z: "PH", matus: 275, maverick: null },
-            "Sayreville (IAAI)": { z: "PH", matus: 235, maverick: null },
-            "Somerville (Copart)": { z: "PH", matus: 175, maverick: null },
-            "Southern New Jersey (IAAI)": { z: "PH", matus: 160, maverick: null },
-            "Trenton (Copart)": { z: "PH", matus: 170, maverick: null },
-            "Hartford (Copart)": { z: "PH", matus: 325, maverick: null },
-            "Hartford (IAAI)": { z: "PH", matus: 300, maverick: null },
+            "Minneapolis/St. Paul (IAAI)": { z: "FL", matus: 795, maverick: 825 },
+            "St. Cloud (Copart)": { z: "FL", matus: 850, maverick: 850 },
+            "Avenel (IAAI)": { z: "PH", matus: 170, maverick: 200 },
+            "Central New Jersey (IAAI)": { z: "PH", matus: 170, maverick: 200 },
+            "Englishtown (IAAI)": { z: "PH", matus: 180, maverick: 200 },
+            "Glassboro East/West (Copart)": { z: "PH", matus: 145, maverick: 150 },
+            "Port Murray (IAAI)": { z: "PH", matus: 275, maverick: 275 },
+            "Sayreville (IAAI)": { z: "PH", matus: 235, maverick: 250 },
+            "Somerville (Copart)": { z: "PH", matus: 175, maverick: 185 },
+            "Southern New Jersey (IAAI)": { z: "PH", matus: 160, maverick: 175 },
+            "Trenton (Copart)": { z: "PH", matus: 170, maverick: 200 },
+            "Hartford (Copart)": { z: "PH", matus: 300, maverick: 300 },
+            "Hartford (IAAI)": { z: "PH", matus: 300, maverick: 300 },
             "Hartford Springfield (Copart)": { z: "PH", matus: 325, maverick: 300 },
-            "Exeter (Copart)": { z: "PH", matus: 400, maverick: null },
-            "Providence (IAAI)": { z: "PH", matus: 375, maverick: null },
-            "Burlington (IAAI)": { z: "PH", matus: 700, maverick: null },
-            "Rutland (Copart)": { z: "PH", matus: 725, maverick: null },
-            "New Castle (IAAI)": { z: "PH", matus: 100, maverick: null },
-            "Seaford (Copart)": { z: "PH", matus: 200, maverick: null },
-            "Culpeper (IAAI)": { z: "PH", matus: 295, maverick: null },
-            "Danville (Copart)": { z: "PH", matus: 495, maverick: null },
-            "Fredericksburg (Copart)": { z: "PH", matus: 300, maverick: null },
-            "Hampton (Copart)": { z: "PH", matus: 375, maverick: null },
-            "Northem Virginia (IAAI)": { z: "PH", matus: 275, maverick: 325 },
-            "Pulaski (IAAI)": { z: "PH", matus: 525, maverick: null },
-            "Richmond (Copart/IAAI)": { z: "PH", matus: 295, maverick: null },
-            "Richmond East (Copart)": { z: "PH", matus: 350, maverick: null },
-            "Roanoke (IAAI)": { z: "PH", matus: 525, maverick: null },
-            "Suffolk (IAAI)": { z: "PH", matus: 450, maverick: null },
-            "Tidewater (IAAI)": { z: "PH", matus: 395, maverick: null },
-            "Albany (Copart/IAAI)": { z: "PH", matus: 300, maverick: null },
+            "Exeter (Copart)": { z: "PH", matus: 410, maverick: 430 },
+            "Providence (IAAI)": { z: "PH", matus: 400, maverick: 430 },
+            "Burlington (IAAI)": { z: "PH", matus: 725, maverick: 725 },
+            "Rutland (Copart)": { z: "PH", matus: 700, maverick: 750 },
+            "New Castle (IAAI)": { z: "PH", matus: 120, maverick: 125 },
+            "Seaford (Copart)": { z: "PH", matus: 200, maverick: 225 },
+            "Culpeper (IAAI)": { z: "PH", matus: 285, maverick: 325 },
+            "Danville (Copart)": { z: "PH", matus: 480, maverick: 525 },
+            "Fredericksburg (Copart)": { z: "PH", matus: 310, maverick: 325 },
+            "Hampton (Copart)": { z: "PH", matus: 395, maverick: 425 },
+            "Northern Virginia (IAAI)": { z: "PH", matus: 275, maverick: 325 },
+            "Pulaski (IAAI)": { z: "PH", matus: 525, maverick: 525 },
+            "Richmond (Copart/IAAI)": { z: "PH", matus: 295, maverick: 350 },
+            "Richmond East (Copart)": { z: "PH", matus: 350, maverick: 375 },
+            "Roanoke (IAAI)": { z: "PH", matus: 525, maverick: 550 },
+            "Suffolk (IAAI)": { z: "PH", matus: 470, maverick: 475 },
+            "Tidewater (IAAI)": { z: "PH", matus: 375, maverick: 400 },
+            "Albany (Copart/IAAI)": { z: "PH", matus: 300, maverick: 325 },
             "Buffalo (Copart)": { z: "PH", matus: 575, maverick: 625 },
             "Buffalo (IAAI)": { z: "PH", matus: 550, maverick: 600 },
-            "Long Island (Copart/IAAI)": { z: "PH", matus: 280, maverick: null },
-            "Newburgh (Copart/IAAl)": { z: "PH", matus: 260, maverick: null },
-            "Rochester (Copart/IAAI)": { z: "PH", matus: 415, maverick: null },
-            "Syracuse (IAAI/Copart)": { z: "PH", matus: 370, maverick: null },
-            "Lyman (Copart)": { z: "PH", matus: 570, maverick: null },
-            "Portland Gorham (IAAI)": { z: "PH", matus: 575, maverick: 625 },
-            "Windham (Copart)": { z: "PH", matus: 625, maverick: null },
-            "Baltimore (Copart/IAAI)": { z: "PH", matus: 185, maverick: null },
-            "Baltimore East (Copart)": { z: "PH", matus: 240, maverick: null },
-            "Dundalk (IAAI)": { z: "PH", matus: 195, maverick: null },
-            "Laurel (IAAI)": { z: "PH", matus: 230, maverick: null },
-            "Metro DC (IAAI)": { z: "PH", matus: 180, maverick: null },
-            "Washington DC (Copart)": { z: "PH", matus: 185, maverick: null },
-            "Elkton (IAAI)": { z: "PH", matus: 160, maverick: null },
-            "Akron-Canton (IAAI)": { z: "PH", matus: 575, maverick: null },
-            "Cincinnati (IAAI)": { z: "PH", matus: 575, maverick: null },
+            "Long Island (Copart/IAAI)": { z: "PH", matus: 280, maverick: 325 },
+            "Newburgh (Copart/IAAI)": { z: "PH", matus: 255, maverick: 300 },
+            "Rochester (Copart/IAAI)": { z: "PH", matus: 415, maverick: 450 },
+            "Syracuse (IAAI/Copart)": { z: "PH", matus: 370, maverick: 385 },
+            "Lyman (Copart)": { z: "PH", matus: 560, maverick: 650 },
+            "Portland Gorham (IAAI)": { z: "PH", matus: 560, maverick: 625 },
+            "Windham (Copart)": { z: "PH", matus: 600, maverick: 650 },
+            "Baltimore (Copart/IAAI)": { z: "PH", matus: 185, maverick: 210 },
+            "Baltimore East (Copart)": { z: "PH", matus: 240, maverick: 275 },
+            "Dundalk (IAAI)": { z: "PH", matus: 195, maverick: 200 },
+            "Laurel (IAAI)": { z: "PH", matus: 230, maverick: 235 },
+            "Metro DC (IAAI)": { z: "PH", matus: 195, maverick: 225 },
+            "Washington DC (Copart)": { z: "PH", matus: 195, maverick: 225 },
+            "Elkton (IAAI)": { z: "PH", matus: 175, maverick: 175 },
+            "Akron-Canton (IAAI)": { z: "PH", matus: 575, maverick: 625 },
+            "Cincinnati (IAAI)": { z: "PH", matus: 575, maverick: 600 },
             "Cincinnati South (IAAI)": { z: "PH", matus: 575, maverick: 600 },
-            "Cleveland (IAAI)": { z: "PH", matus: 575, maverick: null },
-            "Cleveland East/ West (Copart)": { z: "PH", matus: 575, maverick: null },
-            "Columbus (Copart/IAAI)": { z: "PH", matus: 575, maverick: null },
-            "Dayton (Copart/IAAI)": { z: "PH", matus: 575, maverick: null },
-            "Appleton (IAAI)": { z: "PH", matus: 775, maverick: null },
-            "Madison South (Copart)": { z: "PH", matus: 775, maverick: null },
-            "Milwaukee (IAAI)": { z: "PH", matus: 775, maverick: null },
-            "Milwaukee South (Copart)": { z: "PH", matus: 750, maverick: null },
-            "Portage (IAAI)": { z: "PH", matus: 775, maverick: null },
-            "Boston North (Copart)": { z: "PH", matus: 480, maverick: null },
-            "Boston-Shirley (IAAI)": { z: "PH", matus: 480, maverick: null },
-            "Boston South (Copart)": { z: "PH", matus: 450, maverick: null },
-            "Freetown (Copart)": { z: "PH", matus: 400, maverick: null },
-            "Taunton - IAAI": { z: "PH", matus: 400, maverick: null },
-            "Templeton (IAAI)": { z: "PH", matus: 500, maverick: null },
-            "West Warren (Copart)": { z: "PH", matus: 475, maverick: null },
-            "Buckhannon (IAAI)": { z: "PH", matus: 550, maverick: null },
-            "Charleston (Copart)": { z: "PH", matus: 550, maverick: null },
+            "Cleveland (IAAI)": { z: "PH", matus: 575, maverick: 600 },
+            "Cleveland East/West (Copart)": { z: "PH", matus: 575, maverick: 600 },
+            "Columbus (Copart/IAAI)": { z: "PH", matus: 575, maverick: 700 },
+            "Dayton (Copart/IAAI)": { z: "PH", matus: 575, maverick: 600 },
+            "Appleton (IAAI)": { z: "PH", matus: 825, maverick: 750 },
+            "Madison South (Copart)": { z: "PH", matus: 825, maverick: 775 },
+            "Milwaukee (IAAI)": { z: "PH", matus: 825, maverick: 750 },
+            "Milwaukee South (Copart)": { z: "PH", matus: 825, maverick: 750 },
+            "Portage (IAAI)": { z: "PH", matus: 825, maverick: 750 },
+            "Boston North (Copart)": { z: "PH", matus: 445, maverick: 500 },
+            "Boston-Shirley (IAAI)": { z: "PH", matus: 460, maverick: 500 },
+            "Boston South (Copart)": { z: "PH", matus: 435, maverick: 500 },
+            "Freetown (Copart)": { z: "PH", matus: 425, maverick: 500 },
+            "Taunton - IAAI": { z: "PH", matus: 400, maverick: 450 },
+            "Templeton (IAAI)": { z: "PH", matus: 485, maverick: 525 },
+            "West Warren (Copart)": { z: "PH", matus: 435, maverick: 500 },
+            "Buckhannon (IAAI)": { z: "PH", matus: 550, maverick: 600 },
+            "Charleston (Copart)": { z: "PH", matus: 550, maverick: 600 },
             "Shady Spring (IAAI)": { z: "PH", matus: 550, maverick: 600 },
-            "Altoona (IAAI/Copart)": { z: "PH", matus: 330, maverick: null },
-            "Bridgeport (IAAI)": { z: "PH", matus: 120, maverick: null },
-            "Chambersburg (Copart)": { z: "PH", matus: 220, maverick: null },
-            "Erie (IAAI)": { z: "PH", matus: 540, maverick: null },
-            "Harrisburg (Copart)": { z: "PH", matus: 170, maverick: null },
-            "Philadelphia (Copart)": { z: "PH", matus: 145, maverick: null },
+            "Altoona (IAAI/Copart)": { z: "PH", matus: 330, maverick: 350 },
+            "Bridgeport (IAAI)": { z: "PH", matus: 120, maverick: 145 },
+            "Chambersburg (Copart)": { z: "PH", matus: 220, maverick: 225 },
+            "Erie (IAAI)": { z: "PH", matus: 540, maverick: 550 },
+            "Harrisburg (Copart)": { z: "PH", matus: 170, maverick: 200 },
+            "Philadelphia (Copart)": { z: "PH", matus: 145, maverick: 150 },
             "Philadelphia (IAAI)": { z: "PH", matus: 120, maverick: 150 },
-            "Pittsburgh (IAAI)": { z: "PH", matus: 375, maverick: null },
-            "Pittsburgh East/SouthWest/": { z: "PH", matus: 375, maverick: null },
-            "Pittsburgh-North (IAAI/Copart)": { z: "PH", matus: 375, maverick: null },
-            "Scranton (IAAI/Copart)": { z: "PH", matus: 190, maverick: null },
-            "York Haven (Copart)": { z: "PH", matus: 175, maverick: null },
-            "York Springs (IAAI)": { z: "PH", matus: 190, maverick: null },
-            "Detroit (Copart/IAAI)": { z: "PH", matus: 725, maverick: null },
-            "Flint (Copart/IAAI)": { z: "PH", matus: 725, maverick: null },
-            "Grand Rapids (IAAI)": { z: "PH", matus: 750, maverick: null },
-            "Lansing (Copart)": { z: "PH", matus: 725, maverick: null },
-            "Wayland (Copart)": { z: "PH", matus: 725, maverick: null },
-            "Candia (Copart)": { z: "PH", matus: 500, maverick: null },
-            "Manchester (IAAI)": { z: "PH", matus: 475, maverick: null },
-            "Birmingham Sub lote (Copart)": { z: "FL", matus: 535, maverick: null },
-            "Chicago Heights (Copart)*": { z: "FL", matus: 800, maverick: null },
-            "Elk river Minneapolis North (Copart)": { z: "FL", matus: 850, maverick: null },
-            "Aurora Offsite (IAAI)": { z: "FL", matus: 775, maverick: null },
-            "Blame Minneapolis North (Copart)": { z: "FL", matus: 850, maverick: null },
-            "Centreville (IAAI)": { z: "FL", matus: 725, maverick: null },
-            "Rice (IAAI)": { z: "FL", matus: 850, maverick: null },
-            "Racehorse Drive (Copart) Sublote": { z: "FL", matus: 725, maverick: null },
-            "St. Cloud Avon (Copart)": { z: "FL", matus: 850, maverick: null },
-            "Little Rock Sub lote (Copart)": { z: "FL", matus: 750, maverick: null },
-            "Greenville Sublot (Copart)": { z: "FL", matus: 725, maverick: null },
-            "1619 S Golden Ave Springfield (Copart)": { z: "FL", matus: 775, maverick: null },
-            "Pembroke Pines (IAAI)": { z: "FL", matus: 100, maverick: null },
-            "Earlington Sublot (Copart)": { z: "FL", matus: 850, maverick: null },
-            "Taussing Avenue Bridgeton (Copart)": { z: "FL", matus: 725, maverick: null },
-            "Clewiston (Copart)": { z: "FL", matus: 175, maverick: null },
-            "Orlando Boggy Creek (IAAI)": { z: "FL", matus: 225, maverick: null },
-            "Mulberry Oriando South (Copart)-Sublate": { z: "FL", matus: 250, maverick: null },
-            "Indy Minnesota Street 46241 (Copart)": { z: "FL", matus: 725, maverick: null },
-            "Offsite-Indianapolis IN 47630 (IAAI)": { z: "FL", matus: 725, maverick: null },
-            "Palmetto (IAAIJ": { z: "FL", matus: 275, maverick: null },
-            "Okeechobee (Copart)": { z: "FL", matus: 275, maverick: null },
-            "Hudson Sublot (IAAI)*": { z: "FL", matus: 250, maverick: null },
-            "Thonotosassa (Copart)": { z: "FL", matus: 250, maverick: null },
-            "Mebane Sublot (Copart)": { z: "FL", matus: 450, maverick: null },
-            "Mulberry Tampa South (Copart)": { z: "FL", matus: 250, maverick: null },
-            "Davenport IA Sub Lot 169 (Copart)": { z: "FL", matus: 975, maverick: null },
-            "Metro Sublot (Copart)": { z: "FL", matus: 975, maverick: null },
-            "Madera Blvd (Copart)": { z: "FL", matus: 800, maverick: null },
-            "Vertia Augusta (Copart)": { z: "FL", matus: 450, maverick: null },
-            "Gibbs Road Kansas City, Kansas 66111 (Copart)": { z: "FL", matus: 725, maverick: null },
-            "Vertia Savannah (Copart)": { z: "FL", matus: 450, maverick: null },
-            "Tulsa Sublot (Copart)": { z: "FL", matus: 800, maverick: null },
-            "Kansas City, KS, Sublote Yard 17 (Copart)": { z: "FL", matus: 725, maverick: null },
-            "FT. Worth Sublat (Copart)*": { z: "FL", matus: 650, maverick: null },
-            "Columbia Gaston (Copart)": { z: "FL", matus: 400, maverick: null },
-            "Columbia Sha Liu (Copart)": { z: "FL", matus: 400, maverick: null },
-            "Hartford New Britain (Copart)": { z: "PH", matus: 275, maverick: null },
-            "Detroit off site (IAAI)*": { z: "PH", matus: 775, maverick: null },
-            "Albany Schenectady (IAAI)": { z: "PH", matus: 350, maverick: null },
-            "Alden Copart": { z: "PH", matus: 650, maverick: null },
-            "Amsterdan Copart": { z: "PH", matus: 425, maverick: null },
-            "Buffalo Vulcan IAAI": { z: "PH", matus: 550, maverick: null },
-            "Medford (IAAI)": { z: "PH", matus: 330, maverick: null },
-            "Monticello IAAI": { z: "PH", matus: 325, maverick: null },
-            "Newburgh Route Copart": { z: "PH", matus: 275, maverick: null },
-            "Staten Island IAAI": { z: "PH", matus: 325, maverick: null },
-            "Seaford Fruitland (Copart)": { z: "PH", matus: 300, maverick: null },
-            "White Plaine Somerville (Copart)": { z: "PH", matus: 250, maverick: null },
-            "White Plaine 8Copart)": { z: "PH", matus: 250, maverick: null },
-            "Coplay Copart)": { z: "PH", matus: 225, maverick: null },
-            "Jobstown Copart": { z: "PH", matus: 225, maverick: null },
-            "Baltimore East Laurel (Copart)": { z: "PH", matus: 230, maverick: null },
-            "Somerville Sublot York Haven Copart": { z: "PH", matus: 200, maverick: null },
-            "White Plaine Washington DC (Copan)": { z: "PH", matus: 225, maverick: null },
-            "Somerville Richlandtown Copart": { z: "PH", matus: 225, maverick: null },
-            "White Marsh (Copart)": { z: "PH", matus: 250, maverick: null },
-            "Philadelphia East sub lot Copart": { z: "PH", matus: 145, maverick: null },
-            "Philadelphia East Malvem Copart": { z: "PH", matus: 225, maverick: null },
-            "Pittsburgh West Adamsburg Copart": { z: "PH", matus: 425, maverick: null },
-            "Boston North Hudson (Copart)": { z: "PH", matus: 500, maverick: null },
-            "Taunton uxbridge (IAAI)": { z: "PH", matus: 450, maverick: null },
-            "Sarita Clarita (IAAI)": { z: "CA", matus: 300, maverick: null },
-            "Phoenix (Copart/IAAI)": { z: "CA", matus: 275, maverick: null },
-            "Phoenix North (Copart)": { z: "CA", matus: 325, maverick: null },
-            "Tucson (Copart/IAAI)": { z: "CA", matus: 400, maverick: null },
+            "Pittsburgh (IAAI)": { z: "PH", matus: 375, maverick: 375 },
+            "Scranton (IAAI/Copart)": { z: "PH", matus: 190, maverick: 225 },
+            "York Haven (Copart)": { z: "PH", matus: 175, maverick: 180 },
+            "York Springs (IAAI)": { z: "PH", matus: 190, maverick: 200 },
+            "Detroit (Copart/IAAI)": { z: "PH", matus: 775, maverick: 775 },
+            "Flint (Copart/IAAI)": { z: "PH", matus: 775, maverick: 750 },
+            "Grand Rapids (IAAI)": { z: "PH", matus: 800, maverick: 750 },
+            "Lansing (Copart)": { z: "PH", matus: 775, maverick: 750 },
+            "Candia (Copart)": { z: "PH", matus: 500, maverick: 600 },
+            "Manchester (IAAI)": { z: "PH", matus: 450, maverick: 525 },
+            "Phoenix (Copart/IAAI)": { z: "CA", matus: 150, maverick: 350 },
+            "Phoenix North (Copart)": { z: "CA", matus: 300, maverick: 400 },
+            "Tucson (Copart/IAAI)": { z: "CA", matus: 300, maverick: 400 },
             "Las Vegas (Copart/IAAI)": { z: "CA", matus: 325, maverick: 335 },
-            "Reno (Copart/ (AAI)": { z: "CA", matus: 525, maverick: 525 },
-            "Ace Carson (IAAI)": { z: "CA", matus: 150, maverick: null },
-            "Ace Perris (IAAI)": { z: "CA", matus: 300, maverick: null },
-            "Adelanto (Copart)": { z: "CA", matus: 300, maverick: null },
-            "Anaheim (IAAI)": { z: "CA", matus: 175, maverick: null },
-            "Antelope (Copart)": { z: "CA", matus: 350, maverick: null },
-            "Bakersfield (Copart)": { z: "CA", matus: 250, maverick: null },
-            "Colton (IAAI)": { z: "CA", matus: 200, maverick: null },
-            "East Bay (IAAI)": { z: "CA", matus: 400, maverick: null },
-            "Fontana (IAAI)": { z: "CA", matus: 200, maverick: 210 },
-            "Fremont (IAAI)": { z: "CA", matus: 400, maverick: 415 },
-            "Fresno (Copart/IAAI)": { z: "CA", matus: 300, maverick: null },
-            "Hayward (Copart)": { z: "CA", matus: 400, maverick: null },
-            "High Desert (IAAI)": { z: "CA", matus: 300, maverick: null },
-            "Long Beach (Copart)": { z: "CA", matus: 135, maverick: null },
-            "Los Angeles (Copart/IAAI)": { z: "CA", matus: 150, maverick: null },
-            "Los Angeles South (IAAI)": { z: "CA", matus: 150, maverick: 150 },
-            "Martinez (Copart)": { z: "CA", matus: 375, maverick: null },
-            "Mentone (Copart)": { z: "CA", matus: 325, maverick: null },
-            "N. Hollywood (IAAI)": { z: "CA", matus: 225, maverick: null },
-            "R.Cucamonga (Copart)": { z: "CA", matus: 200, maverick: null },
-            "Redding (Copart)": { z: "CA", matus: 550, maverick: null },
-            "Sacramento (Copart/IAAI)": { z: "CA", matus: 325, maverick: null },
-            "So Sacramento (Copart)": { z: "CA", matus: 325, maverick: null },
-            "Sun Valley (Copart)": { z: "CA", matus: 200, maverick: null },
-            "Vallejo (Copart)": { z: "CA", matus: 375, maverick: null },
-            "Van Nuys (Copart)": { z: "CA", matus: 175, maverick: null },
-            "San Bernardino (Copart)": { z: "CA", matus: 200, maverick: null },
-            "San Diego (Copart/IAAI)": { z: "CA", matus: 255, maverick: null },
-            "San Jose (Copart)": { z: "CA", matus: 400, maverick: null },
-            "Albuquerque (Copart/IAAI)": { z: "CA", matus: 795, maverick: null },
-            "Colorado Springs (Copart)": { z: "CA", matus: 695, maverick: null },
-            "Denver (Copart/IAAI)": { z: "CA", matus: 695, maverick: null },
-            "Denver Central (Copart)": { z: "CA", matus: 695, maverick: null },
-            "Denver East (Copart)": { z: "CA", matus: 695, maverick: null },
-            "Denver South (Copart)": { z: "CA", matus: 695, maverick: null },
-            "Eugene (Copart/IAAI)": { z: "CA", matus: 595, maverick: null },
-            "Portland (IAAI)": { z: "CA", matus: 595, maverick: null },
-            "Portland North (Copart)": { z: "CA", matus: 595, maverick: null },
-            "Portland South (Copart)": { z: "CA", matus: 595, maverick: null },
-            "Portland West (IAAI)": { z: "CA", matus: 595, maverick: null },
-            "Ogden (Copart)": { z: "CA", matus: 450, maverick: 515 },
+            "Reno (Copart/IAAI)": { z: "CA", matus: 525, maverick: 525 },
+            "Ace Carson (IAAI)": { z: "CA", matus: 175, maverick: 185 },
+            "Ace Perris (IAAI)": { z: "CA", matus: 350, maverick: 300 },
+            "Adelanto (Copart)": { z: "CA", matus: 250, maverick: 300 },
+            "Anaheim (IAAI)": { z: "CA", matus: 200, maverick: 175 },
+            "Antelope (Copart)": { z: "CA", matus: 385, maverick: 450 },
+            "Bakersfield (Copart)": { z: "CA", matus: 200, maverick: 300 },
+            "Colton (IAAI)": { z: "CA", matus: 385, maverick: 210 },
+            "East Bay (IAAI)": { z: "CA", matus: 300, maverick: 415 },
+            "Fontana (IAAI)": { z: "CA", matus: 385, maverick: 210 },
+            "Fremont (IAAI)": { z: "CA", matus: 275, maverick: 415 },
+            "Fresno (Copart/IAAI)": { z: "CA", matus: 150, maverick: 305 },
+            "Hayward (Copart)": { z: "CA", matus: 150, maverick: 415 },
+            "High Desert (IAAI)": { z: "CA", matus: 150, maverick: 300 },
+            "Long Beach (Copart)": { z: "CA", matus: 375, maverick: 140 },
+            "Los Angeles (Copart/IAAI)": { z: "CA", matus: 325, maverick: 150 },
+            "Los Angeles South (IAAI)": { z: "CA", matus: 225, maverick: 150 },
+            "Martinez (Copart)": { z: "CA", matus: 450, maverick: 395 },
+            "Mentone (Copart)": { z: "CA", matus: 200, maverick: 325 },
+            "N. Hollywood (IAAI)": { z: "CA", matus: 550, maverick: 250 },
+            "Napa (Copart)": { z: "CA", matus: 325, maverick: 510 },
+            "R. Cucamonga (Copart)": { z: "CA", matus: 500, maverick: 225 },
+            "Redding (Copart)": { z: "CA", matus: 190, maverick: 575 },
+            "Sacramento (Copart/IAAI)": { z: "CA", matus: 235, maverick: 390 },
+            "San Bernardino (Copart)": { z: "CA", matus: 190, maverick: 210 },
+            "San Diego (Copart/IAAI)": { z: "CA", matus: 235, maverick: 270 },
+            "San Jose (Copart)": { z: "CA", matus: 385, maverick: 415 },
+            "Santa Clarita (IAAI)": { z: "CA", matus: 300, maverick: 300 },
+            "So Sacramento (Copart)": { z: "CA", matus: 325, maverick: 390 },
+            "Stockton (IAAI)": { z: "CA", matus: 450, maverick: 450 },
+            "Sun Valley (Copart)": { z: "CA", matus: 200, maverick: 230 },
+            "Vallejo (Copart)": { z: "CA", matus: 375, maverick: 390 },
+            "Van Nuys (Copart)": { z: "CA", matus: 195, maverick: 225 },
+            "Colorado Springs (Copart)": { z: "CA", matus: 695, maverick: 700 },
+            "Denver (Copart/IAAI)": { z: "CA", matus: 695, maverick: 690 },
+            "Boise (Copart/IAAI)": { z: "CA", matus: 775, maverick: 775 },
+            "Albuquerque (Copart/IAAI)": { z: "CA", matus: 795, maverick: 795 },
+            "Eugene (Copart/IAAI)": { z: "CA", matus: 595, maverick: 600 },
+            "Portland (IAAI)": { z: "CA", matus: 595, maverick: 600 },
+            "Ogden (Copart)": { z: "CA", matus: 435, maverick: 515 },
             "Provo (IAAI)": { z: "CA", matus: 525, maverick: 575 },
-            "Salt Lake City (Copart/IAAI)": { z: "CA", matus: 450, maverick: 520 },
-            "Boise (Copart/IAAI)": { z: "CA", matus: 775, maverick: null },
+            "Salt Lake City (Copart/IAAI)": { z: "CA", matus: 435, maverick: 520 },
             "Graham (Copart)": { z: "CA", matus: 695, maverick: 750 },
             "North Seattle (Copart)": { z: "CA", matus: 750, maverick: 850 },
-            "Pasco (Copart)": { z: "CA", matus: 895, maverick: 895 },
+            "Pasco (Copart)": { z: "CA", matus: 850, maverick: 895 },
             "Puyallup (IAAI)": { z: "CA", matus: 695, maverick: 750 },
             "Seattle (IAAI)": { z: "CA", matus: 695, maverick: 850 },
-            "Spokane (Copart/ IAAI)": { z: "CA", matus: 900, maverick: 825 },
-            "Lancaster (Copart)": { z: "CA", matus: 300, maverick: 450 },
-            "Napa (Copart)": { z: "CA", matus: 450, maverick: null },
-            "Modesto (Copart)": { z: "CA", matus: 450, maverick: 225 },
-            "Jurupa Valley(IAAI)": { z: "CA", matus: 225, maverick: 300 },
-            "Riverside (IAAI)": { z: "CA", matus: 225, maverick: 415 },
-            "Sacramento West (IAAI)": { z: "CA", matus: 500, maverick: null },
-            "San Jose / San Martin (Copart)": { z: "CA", matus: 400, maverick: 300 },
-            "Santa Paula (Copart)": { z: "CA", matus: 300, maverick: null },
-            "Stockton IAAI": { z: "CA", matus: 450, maverick: null },
-            "Auction lane (Copart)": { z: "CA", matus: 350, maverick: 350 },
-            "Tooele (Copart)": { z: "CA", matus: 550, maverick: null },
-            "Spanaway (Copart)": { z: "CA", matus: 725, maverick: 725 },
-            "North Seattle Avenue northeast Copart": { z: "CA", matus: 850, maverick: 850 },
-            "Vancouver (IAAI)": { z: "CA", matus: 650, maverick: 650 },
-            "Miami North IAAI": { z: "FL", matus: null, maverick: 100 },
-            "Miami South": { z: "FL", matus: null, maverick: 100 },
-            "Miami (IAAI Sublote)": { z: "FL", matus: null, maverick: 125 },
-            "Miami (Clewiston Sublote)": { z: "FL", matus: null, maverick: 175 },
-            "Punta Gorda": { z: "FL", matus: null, maverick: 225 },
-            "Punta Gorda South": { z: "FL", matus: null, maverick: 250 },
-            "Punta Gorda Sublote": { z: "FL", matus: null, maverick: 275 },
-            "Tampa East & South": { z: "FL", matus: null, maverick: 225 },
-            "Tampa Mulberry (Sublote)": { z: "FL", matus: null, maverick: 275 },
-            "Ft. Pierce": { z: "FL", matus: null, maverick: 150 },
-            "Clearwater": { z: "FL", matus: null, maverick: 230 },
-            "Ft. Myers": { z: "FL", matus: null, maverick: 230 },
-            "Ocala": { z: "FL", matus: null, maverick: 250 },
-            "Tallahassee": { z: "FL", matus: null, maverick: 330 },
-            "Pensacola": { z: "FL", matus: null, maverick: 375 },
-            "Birmingham": { z: "FL", matus: null, maverick: 500 },
-            "Dothan": { z: "FL", matus: null, maverick: 490 },
-            "Eight Mile": { z: "FL", matus: null, maverick: 500 },
-            "Hueytown": { z: "FL", matus: null, maverick: 500 },
-            "Mobile": { z: "FL", matus: null, maverick: 480 },
-            "Montgomery": { z: "FL", matus: null, maverick: 480 },
-            "Tanner": { z: "FL", matus: null, maverick: 500 },
-            "Peoria": { z: "FL", matus: null, maverick: 850 },
-            "Wheeling": { z: "FL", matus: null, maverick: 700 },
-            "Southern Illinois": { z: "FL", matus: null, maverick: 700 },
-            "St Louis": { z: "FL", matus: null, maverick: 650 },
-            "Chicago North": { z: "FL", matus: null, maverick: 725 },
-            "Chicago South": { z: "FL", matus: null, maverick: 750 },
-            "Chicago West": { z: "FL", matus: null, maverick: 725 },
-            "Fayettevile": { z: "TX", matus: null, maverick: 675 },
-            "Little Rock": { z: "TX", matus: null, maverick: 525 },
-            "Dyer": { z: "FL", matus: null, maverick: 725 },
-            "Hammond": { z: "FL", matus: null, maverick: 700 },
-            "Cicero": { z: "FL", matus: null, maverick: 725 },
-            "Indianapolis": { z: "FL", matus: null, maverick: 675 },
-            "Atlanta North, East, South West": { z: "FL", matus: null, maverick: 365 },
-            "Atlanta North Sublote": { z: "FL", matus: null, maverick: 370 },
-            "Cartersville": { z: "FL", matus: null, maverick: 360 },
-            "Macon": { z: "FL", matus: null, maverick: 360 },
-            "Fairburn": { z: "FL", matus: null, maverick: 360 },
-            "Savannah": { z: "FL", matus: null, maverick: 360 },
-            "Augusta": { z: "FL", matus: null, maverick: 450 },
-            "Tifton": { z: "FL", matus: null, maverick: 360 },
-            "Earlington": { z: "FL", matus: null, maverick: 800 },
-            "Walton": { z: "FL", matus: null, maverick: 650 },
-            "Elbridge": { z: "FL", matus: null, maverick: 975 },
-            "Davenport": { z: "FL", matus: null, maverick: 975 },
-            "Des Moines": { z: "FL", matus: null, maverick: 975 },
-            "Minneapolis": { z: "FL", matus: null, maverick: 800 },
-            "St. Cloud": { z: "FL", matus: null, maverick: 850 },
-            "Columbia": { z: "TX", matus: null, maverick: 650 },
-            "North Charleston": { z: "FL", matus: null, maverick: 350 },
-            "Charleston": { z: "PH", matus: null, maverick: 600 },
-            "Lexington": { z: "FL", matus: null, maverick: 330 },
-            "Greenville": { z: "FL", matus: null, maverick: 350 },
-            "Spartanburg": { z: "FL", matus: null, maverick: 375 },
-            "Gaston": { z: "FL", matus: null, maverick: 425 },
-            "Sha Lui": { z: "FL", matus: null, maverick: 400 },
-            "Florence": { z: "FL", matus: null, maverick: 500 },
-            "Grenada": { z: "FL", matus: null, maverick: 500 },
-            "Gulfport": { z: "FL", matus: null, maverick: 500 },
-            "Hattiesburg": { z: "FL", matus: null, maverick: 500 },
-            "Gulf Coast": { z: "FL", matus: null, maverick: 500 },
-            "Jackson": { z: "FL", matus: null, maverick: 500 },
-            "Charlotte": { z: "FL", matus: null, maverick: 400 },
-            "China Grove": { z: "FL", matus: null, maverick: 400 },
-            "Raleigh": { z: "FL", matus: null, maverick: 400 },
-            "Raleigh North": { z: "FL", matus: null, maverick: 450 },
-            "Lumberton": { z: "FL", matus: null, maverick: 400 },
-            "Concord": { z: "FL", matus: null, maverick: 400 },
-            "Mocksville": { z: "FL", matus: null, maverick: 430 },
-            "Greensboro": { z: "FL", matus: null, maverick: 400 },
-            "Mebane": { z: "FL", matus: null, maverick: 400 },
-            "Asheville": { z: "FL", matus: null, maverick: 500 },
-            "Wilmington": { z: "PH", matus: null, maverick: 125 },
-            "Springville": { z: "TX", matus: null, maverick: 725 },
-            "Knoxville": { z: "FL", matus: null, maverick: 500 },
-            "Memphis": { z: "FL", matus: null, maverick: 500 },
-            "Chattanooga": { z: "FL", matus: null, maverick: 500 },
-            "Buckhannon": { z: "PH", matus: null, maverick: 600 },
-            "Shady Spring": { z: "PH", matus: null, maverick: 675 },
-            "Hartford": { z: "PH", matus: null, maverick: 300 },
-            "Cleveland": { z: "PH", matus: null, maverick: 600 },
-            "Columbus": { z: "PH", matus: null, maverick: 700 },
-            "Dayton": { z: "PH", matus: null, maverick: 600 },
-            "Akron": { z: "PH", matus: null, maverick: 625 },
-            "Albany": { z: "PH", matus: null, maverick: 325 },
-            "Long Island C": { z: "PH", matus: null, maverick: 325 },
-            "Newburgh": { z: "PH", matus: null, maverick: 300 },
-            "St. Staten Island": { z: "PH", matus: null, maverick: 350 },
-            "Rochester": { z: "PH", matus: null, maverick: 450 },
-            "Syracuse ": { z: "PH", matus: null, maverick: 385 },
-            "Burlington": { z: "PH", matus: null, maverick: 725 },
-            "Rutland": { z: "PH", matus: null, maverick: 750 },
-            "West Warren (Orleans Sublote)": { z: "PH", matus: null, maverick: 775 },
-            "Culpeper": { z: "PH", matus: null, maverick: 325 },
-            "Danville": { z: "PH", matus: null, maverick: 525 },
-            "Fredericksburg South": { z: "PH", matus: null, maverick: 375 },
-            "Fredericksburg": { z: "PH", matus: null, maverick: 325 },
-            "Hampton": { z: "PH", matus: null, maverick: 425 },
-            "Pulaski": { z: "PH", matus: null, maverick: 525 },
-            "Richmond East": { z: "PH", matus: null, maverick: 375 },
-            "Richmond": { z: "PH", matus: null, maverick: 350 },
-            "Roanoke": { z: "PH", matus: null, maverick: 550 },
-            "Suffolk": { z: "PH", matus: null, maverick: 475 },
-            "Tidewater": { z: "PH", matus: null, maverick: 400 },
-            "Manchester/Salem": { z: "PH", matus: null, maverick: 525 },
-            "Candia": { z: "PH", matus: null, maverick: 600 },
-            "Washington": { z: "PH", matus: null, maverick: 225 },
-            "Metro": { z: "PH", matus: null, maverick: 225 },
-            "Glassboro": { z: "PH", matus: null, maverick: 150 },
-            "South Jersey": { z: "PH", matus: null, maverick: 175 },
-            "Trenton": { z: "PH", matus: null, maverick: 200 },
-            "Somerville": { z: "PH", matus: null, maverick: 185 },
-            "Avenel": { z: "PH", matus: null, maverick: 200 },
-            "Central Jersey": { z: "PH", matus: null, maverick: 200 },
-            "North Jersey": { z: "PH", matus: null, maverick: 215 },
-            "Port Murray": { z: "PH", matus: null, maverick: 275 },
-            "Sayreville": { z: "PH", matus: null, maverick: 250 },
-            "Englishtown": { z: "PH", matus: null, maverick: 200 },
-            "Exeter": { z: "PH", matus: null, maverick: 430 },
-            "Providence": { z: "PH", matus: null, maverick: 430 },
-            "Appleton": { z: "PH", matus: null, maverick: 750 },
-            "Madison": { z: "PH", matus: null, maverick: 775 },
-            "Milwaukee": { z: "PH", matus: null, maverick: 750 },
-            "Portage": { z: "PH", matus: null, maverick: 750 },
-            "Baltimore": { z: "PH", matus: null, maverick: 210 },
-            "Laurel": { z: "PH", matus: null, maverick: 235 },
-            "Elkton": { z: "PH", matus: null, maverick: 175 },
-            "Dundalk": { z: "PH", matus: null, maverick: 200 },
-            "Baltimore East (Pataspco)": { z: "PH", matus: null, maverick: 275 },
-            "Philadelphia East": { z: "PH", matus: null, maverick: 170 },
-            "Bridgeport": { z: "PH", matus: null, maverick: 145 },
-            "York Haven": { z: "PH", matus: null, maverick: 180 },
-            "Harrisburg": { z: "PH", matus: null, maverick: 200 },
-            "York Springs": { z: "PH", matus: null, maverick: 200 },
-            "Chambersburg": { z: "PH", matus: null, maverick: 225 },
-            "Pittsburgh": { z: "PH", matus: null, maverick: 375 },
-            "Scranton": { z: "PH", matus: null, maverick: 225 },
-            "Altoona": { z: "PH", matus: null, maverick: 350 },
-            "Erie": { z: "PH", matus: null, maverick: 550 },
-            "New Castle": { z: "PH", matus: null, maverick: 125 },
-            "Seaford": { z: "PH", matus: null, maverick: 225 },
-            "Boston": { z: "PH", matus: null, maverick: 500 },
-            "North Boston": { z: "PH", matus: null, maverick: 500 },
-            "South Boston": { z: "PH", matus: null, maverick: 500 },
-            "Taunton": { z: "PH", matus: null, maverick: 450 },
-            "Templeton": { z: "PH", matus: null, maverick: 525 },
-            "Freetown": { z: "PH", matus: null, maverick: 500 },
-            "West Warren": { z: "PH", matus: null, maverick: 500 },
-            "Lyman": { z: "PH", matus: null, maverick: 650 },
-            "Windham": { z: "PH", matus: null, maverick: 650 },
-            "Detroit": { z: "PH", matus: null, maverick: 775 },
-            "Flint": { z: "PH", matus: null, maverick: 750 },
-            "Lansing": { z: "PH", matus: null, maverick: 750 },
-            "Baton Rouge": { z: "TX", matus: null, maverick: 350 },
-            "Lafayette": { z: "TX", matus: null, maverick: 325 },
-            "Shreveport": { z: "TX", matus: null, maverick: 350 },
-            "Houston East/Copart Sublote": { z: "TX", matus: null, maverick: 175 },
-            "Austin": { z: "TX", matus: null, maverick: 250 },
-            "Lufkin": { z: "TX", matus: null, maverick: 250 },
-            "San Antonio": { z: "TX", matus: null, maverick: 250 },
-            "Waco": { z: "TX", matus: null, maverick: 325 },
-            "Corpus Christi": { z: "TX", matus: null, maverick: 275 },
-            "Dallas,": { z: "TX", matus: null, maverick: 300 },
-            "Fort Worth,": { z: "TX", matus: null, maverick: 275 },
-            "Longview": { z: "TX", matus: null, maverick: 275 },
-            "McAllen": { z: "TX", matus: null, maverick: 275 },
-            "Lubbock": { z: "TX", matus: null, maverick: 450 },
-            "Abilene": { z: "TX", matus: null, maverick: 350 },
-            "El Paso": { z: "TX", matus: null, maverick: 425 },
-            "Amarillo": { z: "TX", matus: null, maverick: 450 },
-            "Permian Basin": { z: "TX", matus: null, maverick: 500 },
-            "Andrews": { z: "TX", matus: null, maverick: 450 },
-            "Fayetteville Copart Praire Grove": { z: "TX", matus: null, maverick: 525 },
-            "Oklahoma City": { z: "TX", matus: null, maverick: 475 },
-            "Tulsa": { z: "TX", matus: null, maverick: 475 },
-            "Kansas City": { z: "TX", matus: null, maverick: 575 },
-            "Wichita": { z: "TX", matus: null, maverick: 575 },
-            "Albuquerque": { z: "CA", matus: null, maverick: 795 },
-            "Phoenix": { z: "CA", matus: null, maverick: 350 },
-            "Tucson": { z: "CA", matus: null, maverick: 400 },
-            "Denver ": { z: "TX", matus: null, maverick: 690 },
-            "Denver South": { z: "TX", matus: null, maverick: 690 },
-            "Brighton": { z: "TX", matus: null, maverick: 690 },
-            "Colorado Springs": { z: "TX", matus: null, maverick: 700 },
-            "Sikeston": { z: "TX", matus: null, maverick: 650 },
-            "Springfield": { z: "TX", matus: null, maverick: 650 },
-            "Ace Carson": { z: "CA", matus: null, maverick: 185 },
-            "Ace Perris": { z: "CA", matus: null, maverick: 300 },
-            "Adelanto": { z: "CA", matus: null, maverick: 300 },
-            "Anaheim": { z: "CA", matus: null, maverick: 175 },
-            "Antelope": { z: "CA", matus: null, maverick: 450 },
-            "Bakersfield": { z: "CA", matus: null, maverick: 300 },
-            "Colton": { z: "CA", matus: null, maverick: 210 },
-            "East Bay": { z: "CA", matus: null, maverick: 415 },
-            "Fresno": { z: "CA", matus: null, maverick: 305 },
-            "Hayward": { z: "CA", matus: null, maverick: 415 },
-            "High Desert": { z: "CA", matus: null, maverick: 300 },
-            "Long Beach": { z: "CA", matus: null, maverick: 140 },
-            "Los Angeles": { z: "CA", matus: null, maverick: 150 },
-            "Martinez": { z: "CA", matus: null, maverick: 395 },
-            "Mentone": { z: "CA", matus: null, maverick: 325 },
-            "N. Hollywood": { z: "CA", matus: null, maverick: 250 },
-            "Napa": { z: "CA", matus: null, maverick: 510 },
-            "R. Cucamonga": { z: "CA", matus: null, maverick: 225 },
-            "Redding": { z: "CA", matus: null, maverick: 575 },
-            "Sacramento": { z: "CA", matus: null, maverick: 390 },
-            "San Bernardino": { z: "CA", matus: null, maverick: 210 },
-            "San Diego": { z: "CA", matus: null, maverick: 270 },
-            "San Jose": { z: "CA", matus: null, maverick: 415 },
-            "Santa Clarita": { z: "CA", matus: null, maverick: 300 },
-            "Stockton": { z: "CA", matus: null, maverick: 450 },
-            "Sun Valley": { z: "CA", matus: null, maverick: 230 },
-            "Vallejo": { z: "CA", matus: null, maverick: 390 },
-            "Van Nuys": { z: "CA", matus: null, maverick: 225 },
-            "Anaheim Consolidated(IAAI)": { z: "CA", matus: null, maverick: 225 },
-            "Phoenix North": { z: "CA", matus: null, maverick: 400 },
-            "Apex Power (Copart)": { z: "CA", matus: null, maverick: 400 },
+            "Spokane (Copart/IAAI)": { z: "CA", matus: 850, maverick: 825 }
         };
 
         const SALVAGE_FEES = { 
@@ -949,7 +665,7 @@
                 div.onclick = () => {
                     document.getElementById('searchCiudad').value = c;
                     ciudadSeleccionada = c;
-                    navieraManual = false; // Reset to auto-optimize
+                    navieraManual = false;
                     sug.classList.add('hidden');
                     optimizarNaviera();
                     calcular();
@@ -964,10 +680,6 @@
             document.getElementById('dispLote').innerText = document.getElementById('infoLote').value || "---";
             document.getElementById('dispCiudad').innerText = document.getElementById('searchCiudad').value || "---";
         }
-
-        
-
-        
 
         function toggleTransferencia() {
             const metodo = document.querySelector('input[name="pagoUSA"]:checked').value;
@@ -986,12 +698,12 @@
             const naviera = document.getElementById('navieraSelect').value;
             const subasta = document.getElementById('subastaSelect').value;
             const version = document.getElementById('versionSelect').value;
+            const isDealer = document.getElementById('checkDealer').checked;
             const tIdx = parseInt(document.getElementById('tamanoIdx').value);
             const aduData = document.getElementById('aduanaIdx').value.split('|');
             const ganancia = parseFloat(document.getElementById('inputGanancia').value) || 0;
 
             if (bid > 0) {
-                // Las tablas base de Buyer y Live Bid aplican igual para licencias estándar en Copart y IAAI
                 let f_buyer = getFee(bid, SALVAGE_FEES.buyerFee);
                 let f_virtual = getFee(bid, SALVAGE_FEES.liveBid);
                 
@@ -999,30 +711,28 @@
                 let f_env_title = 0;
                 
                 if (subasta === 'copart') {
-                    f_service = 95; // Copart Gate Fee aprox
-                    f_env_title = 35; // Env + Title aprox
+                    f_service = 95;
+                    f_env_title = 35;
                 } else {
-                    f_service = 105; // IAAI Service Fee
-                    f_env_title = 35; // Env (15) + Title (20)
+                    f_service = 105;
+                    f_env_title = 35;
                 }
 
                 let feeSubasta = f_buyer + f_virtual + f_service + f_env_title;
                 
-                // NUEVA LÓGICA DE FORMAS DE PAGO
                 const metodoPago = document.querySelector('input[name="pagoUSA"]:checked').value;
                 const divsTransf = parseInt(document.getElementById('dividirPago').value);
                 
                 let feePago = 0;
-                let feePagoAduana = 0; // Afecta aduana solo tarjeta + copart
+                let feePagoAduana = 0;
 
                 if (metodoPago === 'tarjeta' && subasta === 'copart') {
                     feePago = 85;
                     feePagoAduana = 85;
                 } else if (metodoPago === 'transferencia') {
-                    feePago = (28.25 + 15) / divsTransf; // $43.25 dividido entre N carros
+                    feePago = (28.25 + 15) / divsTransf;
                 }
                 
-                // OBTENER TARIFA MARÍTIMA DE LA NAVIERA SELECCIONADA Y SUMAR LA GRÚA COMO FLETE TOTAL
                 let tarifaMaritima = NAVIERAS_MAR[zona][naviera][tIdx];
                 let fleteTotal = grua + tarifaMaritima;
                 let logistica = fleteTotal; 
@@ -1030,7 +740,6 @@
                 const daiPorc = parseFloat(aduData[0]);
                 const pmPorc = parseFloat(aduData[1]);
                 
-                // CIF TOMA EL VALOR DE COMPRA (BID + FEES + PAGO TARJETA SI APLICA)
                 const valorCompra = bid + feeSubasta;
                 const valorCompraAduana = valorCompra + feePagoAduana;
                 const seguro = valorCompraAduana * 0.02; 
@@ -1041,12 +750,9 @@
                 const aiv = cif * 0.01;
                 const pe = 43.00;
                 const pm = cif * pmPorc;
-                const fijosAduana = 113 + 18; // Constantes $131
+                const fijosAduana = 113 + 18;
                 
                 const impuestos = dai + iva + aiv + pm + pe + fijosAduana;
-                
-                // NUEVOS GASTOS OPERATIVOS (Reemplazando los $350)
-                // Jurídico $25 + Grúa $20 + Revisión $20 = $65
                 const gastosOperativos = 65; 
                 
                 let cesarExtra = 0;
@@ -1057,24 +763,25 @@
                     document.getElementById('rowCesarFee').classList.add('hidden');
                 }
 
-                // COSTO REAL DEL AUTO
-                let costoReal = bid + feeSubasta + feePago + logistica + impuestos + gastosOperativos + cesarExtra;
+                let dealerExtra = 0;
+                if (isDealer) {
+                    dealerExtra = 100;
+                    document.getElementById('rowDealerFee').classList.remove('hidden');
+                } else {
+                    document.getElementById('rowDealerFee').classList.add('hidden');
+                }
+
+                let costoReal = bid + feeSubasta + feePago + logistica + impuestos + gastosOperativos + cesarExtra + dealerExtra;
                 
-                // CÁLCULO INVERSO DE GANANCIA NETA LÍQUIDA
-                // El input "ganancia" es lo que debe quedar libre.
-                // Ecuación: G_Neta = G_Bruta - (G_Bruta * 0.13) - ((Costo_Real + G_Bruta) * 0.0175)
-                // Despejando: G_Bruta = (G_Neta + Costo_Real * 0.0175) / 0.8525
                 let gananciaBruta = (ganancia > 0) ? (ganancia + (costoReal * 0.0175)) / 0.8525 : 0;
                 let totalCliente = costoReal + gananciaBruta;
                 
-                // RENTABILIDAD Y TRIBUTOS LOCALES (VENTA)
                 let ivaVentaLocal = gananciaBruta * 0.13;
                 let pagoCuentaVenta = totalCliente * 0.0175;
                 let gananciaNeta = gananciaBruta - ivaVentaLocal - pagoCuentaVenta;
                 
                 const f = (n) => '$' + n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 
-                // Desglose extendido
                 document.getElementById('detBid').innerText = f(bid);
                 document.getElementById('detBuyer').innerText = f(f_buyer);
                 document.getElementById('detVirtual').innerText = f(f_virtual);
@@ -1099,11 +806,12 @@
                 if (version === 'cesar') {
                     document.getElementById('detCesarFee').innerText = f(100);
                 }
+                if (isDealer) {
+                    document.getElementById('detDealerFee').innerText = f(100);
+                }
                 
-                // Costo previo sin tributos de venta (Costo Real + Ganancia Bruta)
-                let costoPrevioTributos = costoReal; // Solo el costo real puro en El Salvador antes de ganancia y tributos
+                let costoPrevioTributos = costoReal;
 
-                // Outputs Rentabilidad
                 document.getElementById('detCostoPrevio').innerText = f(costoPrevioTributos);
                 document.getElementById('detGananciaBruta').innerText = f(gananciaBruta);
                 document.getElementById('detIvaVenta').innerText = f(ivaVentaLocal);
@@ -1122,4 +830,4 @@
         window.onload = function() { toggleTransferencia(); calcular(); };
     </script>
 </body>
-</html>      
+</html>
