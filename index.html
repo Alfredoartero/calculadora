@@ -166,6 +166,10 @@
             font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
             text-transform: uppercase; padding: 10px 18px; border-radius: 0.6rem; color: var(--txt-soft);
             background: transparent; border: none; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+            min-width: 0;
+        }
+        @media (max-width: 480px) {
+            .tab-btn { padding: 8px 4px; font-size: 8.5px; white-space: normal; line-height: 1.25; letter-spacing: 0.02em; }
         }
         .tab-btn:hover { color: var(--txt); }
         .tab-btn.active { background: linear-gradient(90deg, var(--brand), #ff5fa3); color: #05070c; box-shadow: 0 4px 16px -4px rgba(255,46,136,0.5); }
@@ -188,7 +192,7 @@
 
         <!-- SELECTOR DE MODO -->
         <div class="no-print flex justify-center mb-7 px-2">
-            <div class="inline-flex gap-1 p-1 rounded-xl w-full sm:w-auto" style="background:#0a0f1c; border:1px solid var(--line);">
+            <div class="inline-flex flex-wrap gap-1 p-1 rounded-xl w-full sm:w-auto" style="background:#0a0f1c; border:1px solid var(--line);">
                 <button id="tabBtnRapido" onclick="mostrarModo('rapido')" class="tab-btn flex-1 sm:flex-none">⚡ Cálculo Rápido</button>
                 <button id="tabBtnGanado" onclick="mostrarModo('ganado')" class="tab-btn flex-1 sm:flex-none">🏆 Ya Ganado</button>
                 <button id="tabBtnCotizacion" onclick="mostrarModo('cotizacion')" class="tab-btn flex-1 sm:flex-none">📄 Generar Cotización</button>
