@@ -5,28 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Importaciones Yesica - Cotizador Maestro Profesional</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 0; overflow-x: hidden; }
-        .header-pink { color: #be185d; }
-        .card { background: white; border-radius: 1.2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .input-style { width: 100%; padding: 0.9rem; border-radius: 0.75rem; border: 2px solid #cbd5e1; font-weight: 700; font-size: 1rem; outline: none; transition: all 0.2s; }
-        .input-style:focus { border-color: #be185d; box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.1); }
-        
-        /* Contenedor del Reporte */
-        #reporteFinal { 
-            background: white; border: 4px solid #be185d; 
-            width: 100%; max-width: 800px; min-height: 950px; 
-            padding: 25px; position: relative; display: flex; flex-direction: column;
+        :root {
+            --brand: #ff2e88;
+            --brand-dark: #c8106a;
+            --brand-soft: rgba(255,46,136,0.12);
+            --cyan: #22e2e2;
+            --bg: #070b14;
+            --bg2: #0c1220;
+            --panel: #0e1524;
+            --panel-hi: #131b2e;
+            --line: rgba(148,163,184,0.14);
+            --line-strong: rgba(148,163,184,0.28);
+            --txt: #e7ecf5;
+            --txt-soft: #8a95ab;
+
+            /* Reporte: por defecto pantalla (tech), se sobreescribe en impresión */
+            --rep-bg: #0b1220;
+            --rep-card: #111a2c;
+            --rep-card2: #0e1626;
+            --rep-border: rgba(255,255,255,0.10);
+            --rep-ink: #e9edf5;
+            --rep-ink-soft: #8b96ac;
+        }
+        @media print {
+            :root {
+                --rep-bg: #ffffff; --rep-card: #ffffff; --rep-card2: #fafafa;
+                --rep-border: #e2e8f0; --rep-ink: #0f172a; --rep-ink-soft: #64748b;
+            }
+        }
+        body {
+            font-family: 'Inter', sans-serif; color: var(--txt); margin: 0; padding: 0; overflow-x: hidden;
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(rgba(34,226,226,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34,226,226,0.05) 1px, transparent 1px);
+            background-size: 34px 34px;
+        }
+        .brand-logo { font-family: 'Montserrat', sans-serif; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .header-pink { color: var(--brand); }
+        .glow-dot { box-shadow: 0 0 10px 2px var(--cyan); animation: pulse 2.2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+        .card { background: linear-gradient(180deg, var(--panel-hi), var(--panel)); border-radius: 1rem; border: 1px solid var(--line); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6); }
+        .step-eyebrow { display: flex; align-items: center; gap: .6rem; }
+        .step-eyebrow .step-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg, var(--brand), var(--cyan)); color: #05070c; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+
+        .input-style {
+            width: 100%; padding: 0.85rem 0.95rem; border-radius: 0.6rem;
+            border: 1px solid var(--line-strong); background: #0a0f1c; color: var(--txt);
+            font-weight: 600; font-size: 0.95rem; outline: none; transition: all 0.15s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .input-style::placeholder { color: #4b5670; font-family: 'Inter', sans-serif; font-weight: 500; }
+        .input-style:hover { border-color: var(--cyan); }
+        .input-style:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34,226,226,0.18); }
+
+        .panel-box { background: #0a0f1c; border: 1px solid var(--line); border-radius: 0.85rem; }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--brand), #ff5fa3);
+            box-shadow: 0 0 0 1px rgba(255,46,136,0.4), 0 10px 30px -8px rgba(255,46,136,0.55);
+        }
+        .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 0 0 1px rgba(34,226,226,0.5), 0 10px 34px -6px rgba(255,46,136,0.7); }
+        .ledger-row { display: flex; justify-content: space-between; padding: 3px 0; font-family: 'JetBrains Mono', monospace; }
+        .ledger-total { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+        /* Contenedor del Reporte: HUD en pantalla, documento limpio al imprimir */
+        #reporteFinal {
+            background: var(--rep-bg);
+            background-image:
+                linear-gradient(rgba(34,226,226,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34,226,226,0.05) 1px, transparent 1px);
+            background-size: 28px 28px;
+            border: 1px solid var(--rep-border);
+            width: 100%; max-width: 800px; min-height: 640px;
+            padding: 20px; position: relative; display: flex; flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            box-shadow: 0 0 0 1px rgba(255,46,136,0.15), 0 30px 70px -20px rgba(0,0,0,0.65);
             margin: 0 auto;
             box-sizing: border-box;
+        }
+        @media print { #reporteFinal { background-image: none; box-shadow: none; } }
+        .hud-corner { position: absolute; width: 16px; height: 16px; border-color: var(--cyan); }
+        .hud-corner.tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+        .hud-corner.tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+        .hud-corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+        .hud-corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+        @media (min-width: 640px) {
+            #reporteFinal { padding: 30px; min-height: 850px; }
         }
         @media (min-width: 768px) {
             #reporteFinal { padding: 45px; min-height: 1050px; }
         }
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8rem; font-weight: 900; color: rgba(190, 24, 93, 0.03); pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'JetBrains Mono', monospace; font-size: 5.5rem; font-weight: 700; color: rgba(34,226,226,0.035); pointer-events: none; text-transform: uppercase; white-space: nowrap; letter-spacing: 0.35em; }
+        @media print { .watermark { color: rgba(15,23,42,0.04) !important; } }
+        #resPresupuesto { text-shadow: 0 0 40px rgba(255,46,136,0.35); }
+        @media print { #resPresupuesto { text-shadow: none !important; } }
+
+        /* Etiqueta "Todo Incluido" estilo tag de sistema */
+        .status-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px solid var(--cyan); color: var(--cyan);
+            background: rgba(34,226,226,0.07);
+            font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+            letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px;
+        }
+        .status-tag .ping { width: 6px; height: 6px; border-radius: 999px; background: var(--cyan); box-shadow: 0 0 8px 2px var(--cyan); }
+
+        /* Linea de ruta EEUU -> El Salvador */
+        .route-line { display: flex; align-items: center; gap: 10px; }
+        .route-line .node { width: 6px; height: 6px; background: var(--cyan); flex-shrink: 0; transform: rotate(45deg); }
+        .route-line .line { flex-grow: 1; height: 0; border-top: 1px dashed rgba(34,226,226,0.4); }
         
         /* SELLO TODO INCLUIDO */
         .badge-container { position: relative; display: inline-flex; align-items: center; justify-content: center; }
@@ -52,7 +145,7 @@
         /* CONFIGURACIÓN DE IMPRESIÓN */
         @media print {
             @page { size: letter; margin: 0mm; }
-            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+            body { background: white !important; padding: 0 !important; margin: 0 !important; background-image: none !important; }
             .no-print { display: none !important; }
             #reporteFinal { 
                 margin: 0 !important; width: 100% !important; max-width: 100% !important; 
@@ -62,89 +155,143 @@
                 justify-content: space-around !important; 
             }
             .header-pink { color: #be185d !important; -webkit-print-color-adjust: exact; }
-            .badge-todo { background: #be185d !important; -webkit-print-color-adjust: exact; }
-            .watermark { opacity: 0.1 !important; }
+            .hud-corner { border-color: #cbd5e1 !important; }
+            .status-tag { color: #be185d !important; border-color: #be185d !important; background: #fdf1f6 !important; -webkit-print-color-adjust: exact; }
+            .status-tag .ping { background: #be185d !important; box-shadow: none !important; }
+            #tabRapido { display: none !important; }
+            #tabCotizacion { display: block !important; }
         }
+        .tab-btn {
+            font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; padding: 10px 18px; border-radius: 0.6rem; color: var(--txt-soft);
+            background: transparent; border: none; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--txt); }
+        .tab-btn.active { background: linear-gradient(90deg, var(--brand), #ff5fa3); color: #05070c; box-shadow: 0 4px 16px -4px rgba(255,46,136,0.5); }
     </style>
 </head>
 <body class="p-3 md:p-6">
     <div class="max-w-[1450px] mx-auto">
-        <div class="text-center mb-8 no-print">
-            <h1 class="text-5xl font-black header-pink italic tracking-tighter uppercase">IMPORTACIONES YESICA</h1>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.4em]">Cotizador Maestro Profesional</p>
+        <div class="flex items-center justify-center gap-2 sm:gap-3 mb-8 no-print pt-2 px-2">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 relative" style="background:linear-gradient(135deg, var(--brand), var(--cyan));">
+                <span class="font-mono text-[#05070c] font-bold text-sm sm:text-lg">IY</span>
+                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[var(--cyan)] glow-dot"></span>
+            </div>
+            <div class="text-center">
+                <h1 class="brand-logo text-2xl sm:text-3xl md:text-4xl font-black header-pink italic tracking-tighter uppercase leading-none">IMPORTACIONES YESICA</h1>
+                <p class="font-mono text-[9px] sm:text-[10px] font-bold text-[var(--txt-soft)] uppercase tracking-[0.25em] sm:tracking-[0.35em] mt-1">// Cotizador Maestro Profesional</p>
+            </div>
         </div>
 
-        <div class="flex flex-wrap lg:flex-nowrap gap-8 justify-center items-start">
+        <!-- SELECTOR DE MODO -->
+        <div class="no-print flex justify-center mb-7 px-2">
+            <div class="inline-flex gap-1 p-1 rounded-xl w-full sm:w-auto" style="background:#0a0f1c; border:1px solid var(--line);">
+                <button id="tabBtnRapido" onclick="mostrarModo('rapido')" class="tab-btn flex-1 sm:flex-none">⚡ Cálculo Rápido</button>
+                <button id="tabBtnCotizacion" onclick="mostrarModo('cotizacion')" class="tab-btn flex-1 sm:flex-none">📄 Generar Cotización</button>
+            </div>
+        </div>
+
+        <div id="tabRapido" class="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 items-start">
             
             <!-- PANEL DE CONFIGURACIÓN -->
-            <div class="w-full lg:w-[480px] space-y-6 no-print flex-shrink-0">
-                <div class="card p-6 space-y-5 border-t-8 border-slate-900 shadow-xl">
-                    <h2 class="text-lg font-black text-slate-800 uppercase italic border-b pb-2">1. Configuración de Unidad</h2>
-                    
-                    <div class="grid grid-cols-1 gap-4">
-                        <input type="text" id="infoVehiculo" placeholder="Vehículo (Año Marca Modelo)" class="input-style" oninput="actualizar()">
-                        <input type="text" id="infoLote" placeholder="Número de Lote (Subasta)" class="input-style" oninput="actualizar()">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 no-print">
+
+                <div class="card p-6 space-y-4" style="border-top:2px solid var(--cyan);">
+                    <div class="step-eyebrow border-b pb-3" style="border-color:var(--line);">
+                        <span class="step-num">1</span>
+                        <h2 class="font-mono text-xs font-bold text-[var(--txt)] uppercase tracking-[0.15em]">Unidad y Versión</h2>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[10px] font-black uppercase text-slate-600 mb-1 block">Subasta</label>
+                            <label class="font-mono text-[10px] font-bold uppercase text-[var(--txt-soft)] mb-1 block tracking-wide">Subasta</label>
                             <select id="subastaSelect" class="input-style text-xs" onchange="calcular()">
                                 <option value="copart">Copart</option>
                                 <option value="iaai">IAAI</option>
                             </select>
                         </div>
                         <div>
-                            <label class="text-[10px] font-black uppercase text-pink-600 mb-1 block">Versión / Usuario</label>
-                            <select id="versionSelect" class="input-style text-xs font-black text-pink-700" onchange="calcular()">
+                            <label class="font-mono text-[10px] font-bold uppercase text-[var(--brand)] mb-1 block tracking-wide">Versión / Usuario</label>
+                            <select id="versionSelect" class="input-style text-xs font-bold" style="color:var(--brand);" onchange="calcular()">
                                 <option value="yesica">Versión Yesica</option>
                                 <option value="cesar">Versión César</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="font-mono text-[10px] font-bold uppercase text-[var(--txt-soft)] mb-1 block tracking-wide">Categoría</label>
+                        <select id="tamanoIdx" class="input-style text-sm" onchange="if(!navieraManual) optimizarNaviera(); calcular()">
+                            <option value="0">Sedán / Pequeño</option>
+                            <option value="1">Especial</option>
+                            <option value="2">Mediano</option>
+                            <option value="3">Grande</option>
+                            <option value="4">Extra Grande</option>
+                        </select>
+                    </div>
+
+                    <div class="panel-box p-4" style="border-color:var(--brand); background:var(--brand-soft);">
                         <label class="flex items-center gap-3 cursor-pointer">
                             <input type="checkbox" id="checkDealer" onchange="calcular()" class="w-5 h-5 accent-pink-600 rounded">
-                            <span class="text-xs font-black uppercase text-slate-700">Aplicar Fee Dealer (+$100.00 al final)</span>
+                            <span class="font-mono text-xs font-bold uppercase text-[var(--txt)] tracking-wide">Aplicar Fee Dealer (+$100.00)</span>
                         </label>
                     </div>
+                </div>
 
-                    <div class="grid grid-cols-3 gap-3">
+                <div class="card p-6 space-y-4" style="border-top:2px solid var(--brand);">
+                    <div class="step-eyebrow border-b pb-3" style="border-color:var(--line);">
+                        <span class="step-num">2</span>
+                        <h2 class="font-mono text-xs font-bold text-[var(--txt)] uppercase tracking-[0.15em]">Oferta y Ganancia</h2>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[10px] font-black uppercase text-pink-600 mb-1 block">Oferta $</label>
-                            <input type="number" id="inputBid" placeholder="0.00" class="input-style border-pink-200" oninput="calcular()">
+                            <label class="font-mono text-[10px] font-bold uppercase text-[var(--brand)] mb-1 block tracking-wide">Oferta $</label>
+                            <input type="number" id="inputBid" placeholder="0.00" class="input-style" style="border-color:rgba(255,46,136,0.4);" oninput="calcular()">
                         </div>
                         <div>
-                            <label class="text-[10px] font-black uppercase text-green-600 mb-1 block" title="Monto exacto libre">Ganancia Neta $</label>
-                            <input type="number" id="inputGanancia" placeholder="0.00" class="input-style border-green-200" oninput="calcular()">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-black uppercase text-slate-500 mb-1 block">Categoría</label>
-                            <select id="tamanoIdx" class="input-style text-sm" onchange="if(!navieraManual) optimizarNaviera(); calcular()">
-                                <option value="0">Sedán / Pequeño</option>
-                                <option value="1">Especial</option>
-                                <option value="2">Mediano</option>
-                                <option value="3">Grande</option>
-                                <option value="4">Extra Grande</option>
-                            </select>
+                            <label class="font-mono text-[10px] font-bold uppercase text-emerald-400 mb-1 block tracking-wide" title="Monto exacto libre">Ganancia Neta $</label>
+                            <input type="number" id="inputGanancia" placeholder="0.00" class="input-style" style="border-color:rgba(52,211,153,0.4);" oninput="calcular()">
                         </div>
                     </div>
 
-                    <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 mt-2">
-                        <label class="text-[10px] font-black uppercase text-slate-600 mb-2 block">Forma de Pago en USA</label>
-                        <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
-                            <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                    <div class="rounded-xl p-4 flex items-center justify-between gap-3" style="background:linear-gradient(90deg, rgba(255,46,136,0.1), rgba(34,226,226,0.06)); border:1px solid var(--line-strong);">
+                        <div>
+                            <p class="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--txt-soft)]">Costo Final SV</p>
+                            <p id="quickCostoFinal" class="font-mono text-2xl font-bold" style="color:var(--txt);">$0.00</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--txt-soft)]">Ganancia Neta</p>
+                            <p id="quickGananciaNeta" class="font-mono text-base font-bold text-emerald-400">$0.00</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="font-mono text-[10px] font-bold uppercase text-[var(--cyan)] mb-1 block tracking-wide">Aduana</label>
+                        <select id="aduanaIdx" class="input-style text-xs" style="border-color:var(--cyan); color:var(--cyan);" onchange="calcular()">
+                            <option value="0.20|0.048">Motor Menor 1300 cc</option>
+                            <option value="0.25|0.05">Motor desde 1301 a 2000 cc</option>
+                            <option value="0.30|0.052">Motor desde 2001 a 3000 cc</option>
+                            <option value="0.25|0.075">Motor Menor a 2000 cc AWD</option>
+                            <option value="0.30|0.078">Motor Mayor 2000 cc AWD</option>
+                            <option value="0.05|0.0105">Pickups</option>
+                        </select>
+                    </div>
+
+                    <div class="panel-box p-4">
+                        <label class="font-mono text-[10px] font-bold uppercase text-[var(--txt-soft)] mb-2 block tracking-wide">Forma de Pago en USA</label>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-2 text-xs font-bold text-[var(--txt)] cursor-pointer">
                                 <input type="radio" name="pagoUSA" value="transferencia" checked onchange="toggleTransferencia(); calcular()" class="accent-pink-600">
                                 Transferencia Int.
                             </label>
-                            <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                            <label class="flex items-center gap-2 text-xs font-bold text-[var(--txt)] cursor-pointer">
                                 <input type="radio" name="pagoUSA" value="tarjeta" onchange="toggleTransferencia(); calcular()" class="accent-pink-600">
                                 Tarjeta Crédito/Débito
                             </label>
-                            <div id="dividirTransfContainer" class="flex items-center gap-2 ml-0 sm:ml-auto">
-                                <span class="text-[10px] uppercase font-bold text-slate-500">Dividir cobro entre:</span>
-                                <select id="dividirPago" class="p-1.5 text-xs border border-slate-300 rounded font-bold" onchange="calcular()">
+                            <div id="dividirTransfContainer" class="flex items-center gap-2">
+                                <span class="font-mono text-[10px] uppercase font-bold text-[var(--txt-soft)]">Dividir entre:</span>
+                                <select id="dividirPago" class="text-xs border rounded font-bold input-style w-auto" style="padding:0.4rem 0.6rem;" onchange="calcular()">
                                     <option value="1">1 Vehículo</option>
                                     <option value="2">2 Vehículos</option>
                                     <option value="3">3 Vehículos</option>
@@ -154,27 +301,31 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="bg-slate-50 p-5 rounded-2xl border-2 border-dashed border-slate-300 relative">
-                        <label class="text-xs font-black uppercase text-slate-500 mb-3 block text-center italic">--- Puerto, Grúa y Naviera ---</label>
-                        <input type="text" id="searchCiudad" placeholder="Buscar Ciudad/Sub-Lote..." class="input-style w-full mb-3 border-slate-400" oninput="filtrarCiudades()">
-                        <div id="listaSug" class="absolute z-50 bg-white border-2 border-slate-300 shadow-2xl rounded-xl max-h-72 overflow-y-auto hidden w-full left-0 mt-[-10px]"></div>
-                        
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <div>
-                                <label class="text-[9px] font-black uppercase text-slate-500 mb-1 block">Precio Grúa $</label>
-                                <input type="number" id="gruaValue" placeholder="0.00" class="input-style text-sm" oninput="calcular()">
-                            </div>
-                            <div>
-                                <label class="text-[9px] font-black uppercase text-slate-500 mb-1 block">Naviera</label>
-                                <select id="navieraSelect" class="input-style text-xs" onchange="navieraManual = true; actualizarGruaManual(); calcular();">
-                                    <option value="matus">Matus International</option>
-                                    <option value="maverick">Maverick International</option>
-                                </select>
-                            </div>
+                <div class="card p-6 space-y-4 sm:col-span-2 relative" style="border-top:2px solid var(--cyan);">
+                    <div class="step-eyebrow border-b pb-3" style="border-color:var(--line);">
+                        <span class="step-num">3</span>
+                        <h2 class="font-mono text-xs font-bold text-[var(--txt)] uppercase tracking-[0.15em]">Puerto, Grúa y Naviera</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-3 relative">
+                        <div class="md:col-span-3 relative">
+                            <input type="text" id="searchCiudad" placeholder="Buscar Ciudad/Sub-Lote..." class="input-style w-full" oninput="filtrarCiudades()">
+                            <div id="listaSug" class="absolute z-50 border shadow-2xl rounded-xl max-h-72 overflow-y-auto hidden w-full left-0 mt-1" style="background:var(--panel-hi); border-color:var(--line-strong);"></div>
                         </div>
-
-                        <div class="flex gap-4">
+                        <div>
+                            <label class="font-mono text-[9px] font-bold uppercase text-[var(--txt-soft)] mb-1 block tracking-wide">Precio Grúa $</label>
+                            <input type="number" id="gruaValue" placeholder="0.00" class="input-style text-sm" oninput="calcular()">
+                        </div>
+                        <div>
+                            <label class="font-mono text-[9px] font-bold uppercase text-[var(--txt-soft)] mb-1 block tracking-wide">Naviera</label>
+                            <select id="navieraSelect" class="input-style text-xs" onchange="navieraManual = true; actualizarGruaManual(); calcular();">
+                                <option value="matus">Matus International</option>
+                                <option value="maverick">Maverick International</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-mono text-[9px] font-bold uppercase text-[var(--txt-soft)] mb-1 block tracking-wide">Puerto / Zona</label>
                             <select id="zonaOrigen" class="input-style w-full text-xs" onchange="calcular()">
                                 <option value="FL">Florida (FL)</option>
                                 <option value="PH">Philadelphia/Delaware (PH)</option>
@@ -183,113 +334,132 @@
                             </select>
                         </div>
                     </div>
-
-                    <select id="aduanaIdx" class="input-style bg-slate-900 text-white" onchange="calcular()">
-                        <option value="0.20|0.048">Aduana: Motor Menor 1300 cc</option>
-                        <option value="0.25|0.05">Aduana: Motor desde 1301 a 2000 cc</option>
-                        <option value="0.30|0.052">Aduana: Motor desde 2001 a 3000 cc</option>
-                        <option value="0.25|0.075">Aduana: Motor Menor a 2000 cc AWD</option>
-                        <option value="0.30|0.078">Aduana: Motor Mayor 2000 cc AWD</option>
-                        <option value="0.05|0.0105">Aduana: Pickups</option>
-                    </select>
-
-                    <button onclick="window.print()" class="w-full bg-pink-600 text-white font-black py-5 rounded-2xl shadow-xl text-xl hover:bg-pink-700 active:scale-95 transition-all uppercase italic">
-                        🖨️ GENERAR PDF
-                    </button>
                 </div>
+            </div>
 
-                <div class="card p-5 bg-slate-900 text-white border-l-[10px] border-pink-600 shadow-xl no-print">
-                    <h3 class="text-sm font-black uppercase text-pink-400 mb-3 italic text-center border-b border-slate-800 pb-2">Desglose Detallado (Interno)</h3>
-                    <div class="space-y-1 text-[11px]">
-                        <div class="flex justify-between text-slate-400"><span>Valor Oferta (Bid):</span><span id="detBid" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Buyer Fee:</span><span id="detBuyer" class="text-slate-300">$0.00</span></div>
-                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Virtual/Internet Fee:</span><span id="detVirtual" class="text-slate-300">$0.00</span></div>
-                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Gate/Service Fee:</span><span id="detService" class="text-slate-300">$0.00</span></div>
-                        <div class="flex justify-between text-slate-500 pl-3"><span>↳ Env & Title Fee:</span><span id="detEnvTitle" class="text-slate-300">$0.00</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-1 mb-1 font-bold"><span>Total Compra USA:</span><span id="intSubasta" class="text-pink-300">$0.00</span></div>
+            <!-- DESGLOSE (fijo al lado en desktop) -->
+            <div class="no-print lg:sticky lg:top-4">
+                <div class="card p-5" style="border-left:2px solid var(--brand); font-variant-numeric: tabular-nums;">
+                    <h3 class="font-mono text-[11px] font-bold uppercase text-[var(--cyan)] mb-3 tracking-[0.2em] text-center border-b pb-3" style="border-color:var(--line);">Desglose Detallado · Interno</h3>
+                    <div class="space-y-0.5 text-[11px]">
+                        <div class="ledger-row text-slate-400"><span>Valor Oferta (Bid):</span><span id="detBid" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-500 pl-3"><span>↳ Buyer Fee:</span><span id="detBuyer" class="text-slate-300">$0.00</span></div>
+                        <div class="ledger-row text-slate-500 pl-3"><span>↳ Virtual/Internet Fee:</span><span id="detVirtual" class="text-slate-300">$0.00</span></div>
+                        <div class="ledger-row text-slate-500 pl-3"><span>↳ Gate/Service Fee:</span><span id="detService" class="text-slate-300">$0.00</span></div>
+                        <div class="ledger-row text-slate-500 pl-3"><span>↳ Env & Title Fee:</span><span id="detEnvTitle" class="text-slate-300">$0.00</span></div>
+                        <div class="ledger-total"><span>Total Compra USA:</span><span id="intSubasta" class="text-pink-300">$0.00</span></div>
 
-                        <div class="flex justify-between text-slate-400 pt-1"><span>Grúa Terrestre:</span><span id="detGrua" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>Flete Marítimo (BL 0.00):</span><span id="detMaritimo" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-1 mb-1 font-bold"><span>Total Logística:</span><span id="intLogistica" class="text-pink-300">$0.00</span></div>
+                        <div class="ledger-row text-slate-400 pt-1"><span>Grúa Terrestre:</span><span id="detGrua" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>Flete Marítimo (BL 0.00):</span><span id="detMaritimo" class="text-white">$0.00</span></div>
+                        <div class="ledger-total"><span>Total Logística:</span><span id="intLogistica" class="text-pink-300">$0.00</span></div>
 
-                        <div class="flex justify-between text-slate-400 pt-1"><span>Valor Seguro (2%):</span><span id="detSeguro" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>Valor CIF Base:</span><span id="detCif" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400 pt-1"><span>Valor Seguro (2%):</span><span id="detSeguro" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>Valor CIF Base:</span><span id="detCif" class="text-white">$0.00</span></div>
                         
-                        <div class="flex justify-between text-slate-400 pt-1"><span>- DAI:</span><span id="detDai" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>- IVA (13%):</span><span id="detIva" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>- Pago a Cuenta (PM):</span><span id="detPm" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>- AIV / Porterea:</span><span id="detOtrosImp" class="text-white">$0.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>- Constantes ($113 + $18):</span><span class="text-white">$131.00</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-1 mb-1 font-bold"><span>Total Impuestos:</span><span id="intImpuestos" class="text-pink-300">$0.00</span></div>
+                        <div class="ledger-row text-slate-400 pt-1"><span>- DAI:</span><span id="detDai" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>- IVA (13%):</span><span id="detIva" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>- Pago a Cuenta (PM):</span><span id="detPm" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>- AIV / Porterea:</span><span id="detOtrosImp" class="text-white">$0.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>- Constantes ($113 + $18):</span><span class="text-white">$131.00</span></div>
+                        <div class="ledger-total"><span>Total Impuestos:</span><span id="intImpuestos" class="text-pink-300">$0.00</span></div>
 
-                        <div class="flex justify-between text-slate-400 pt-1"><span>Operativos (Jurídico, Grúa, Revisión):</span><span class="text-white">$65.00</span></div>
-                        <div class="flex justify-between text-slate-400"><span>Fee Pago USA:</span><span id="detFeePago" class="text-white">$0.00</span></div>
-                        <div id="rowCesarFee" class="flex justify-between text-pink-400 font-bold hidden"><span>Ganancia Dueña (César):</span><span id="detCesarFee">$100.00</span></div>
-                        <div id="rowDealerFee" class="flex justify-between text-pink-400 font-bold hidden"><span>Fee Dealer:</span><span id="detDealerFee">$100.00</span></div>
+                        <div class="ledger-row text-slate-400 pt-1"><span>Operativos (Jurídico, Grúa, Revisión):</span><span class="text-white">$65.00</span></div>
+                        <div class="ledger-row text-slate-400"><span>Fee Pago USA:</span><span id="detFeePago" class="text-white">$0.00</span></div>
+                        <div id="rowCesarFee" class="ledger-row text-pink-300 font-bold hidden"><span>Ganancia Dueña (César):</span><span id="detCesarFee">$100.00</span></div>
+                        <div id="rowDealerFee" class="ledger-row text-pink-300 font-bold hidden"><span>Fee Dealer:</span><span id="detDealerFee">$100.00</span></div>
 
-                        <div class="mt-2 pt-2 border-t border-slate-700">
-                            <div class="flex justify-between text-slate-300 font-bold mb-1"><span>Costo Total (Antes de Tributos Venta):</span><span id="detCostoPrevio" class="text-white">$0.00</span></div>
-                            <span class="text-[10px] uppercase font-black text-amber-400 block mb-1">Rentabilidad Final (Local SV):</span>
-                            <div class="flex justify-between text-slate-400 pl-2"><span>Ganancia Bruta (Requerida):</span><span id="detGananciaBruta" class="text-white">$0.00</span></div>
-                            <div class="flex justify-between text-slate-400 pl-2"><span>- IVA Venta (13% s/ Ganancia):</span><span id="detIvaVenta" class="text-red-300">$0.00</span></div>
-                            <div class="flex justify-between text-slate-400 pl-2"><span>- Pago a Cuenta (1.75% s/ Venta Total):</span><span id="detPagoCuentaVenta" class="text-red-300">$0.00</span></div>
-                            <div class="flex justify-between font-bold text-green-400 pt-1 border-t border-slate-700 mt-1"><span>GANANCIA NETA LÍQUIDA:</span><span id="detGananciaNeta">$0.00</span></div>
+                        <div class="mt-2 pt-2 border-t border-white/10">
+                            <div class="ledger-row text-slate-300 font-bold mb-1"><span>Costo Total (Antes de Tributos Venta):</span><span id="detCostoPrevio" class="text-white">$0.00</span></div>
+                            <span class="text-[10px] uppercase font-black text-[var(--cyan)] block mb-1 tracking-wide">Rentabilidad Final (Local SV):</span>
+                            <div class="ledger-row text-slate-400 pl-2"><span>Ganancia Bruta (Requerida):</span><span id="detGananciaBruta" class="text-white">$0.00</span></div>
+                            <div class="ledger-row text-slate-400 pl-2"><span>- IVA Venta (13% s/ Ganancia):</span><span id="detIvaVenta" class="text-red-300">$0.00</span></div>
+                            <div class="ledger-row text-slate-400 pl-2"><span>- Pago a Cuenta (1.75% s/ Venta Total):</span><span id="detPagoCuentaVenta" class="text-red-300">$0.00</span></div>
+                            <div class="ledger-row font-bold text-emerald-400 pt-1 border-t border-white/10 mt-1"><span>GANANCIA NETA LÍQUIDA:</span><span id="detGananciaNeta">$0.00</span></div>
                         </div>
                     </div>
-                    <div class="mt-3 flex justify-between items-center pt-2 border-t border-slate-800">
+                    <div class="mt-3 flex justify-between items-center pt-3 border-t border-white/10">
                         <span class="text-xs uppercase font-black text-slate-400">Costo Final SV:</span>
                         <span id="intTotalCosto" class="text-lg font-black text-white">$0.00</span>
                     </div>
                     <div class="mt-1 flex justify-between items-center">
-                        <span class="text-[10px] uppercase font-black text-green-400">Venta Cliente (Inversión + Ganancia):</span>
-                        <span id="detVenta" class="text-sm font-black text-green-400">$0.00</span>
+                        <span class="text-[10px] uppercase font-black text-emerald-400">Venta Cliente (Inversión + Ganancia):</span>
+                        <span id="detVenta" class="text-sm font-black text-emerald-400">$0.00</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabCotizacion" class="hidden">
+            <div class="max-w-[560px] mx-auto mb-6 no-print">
+                <div class="card p-6 space-y-4" style="border-top:2px solid var(--brand);">
+                    <div class="step-eyebrow border-b pb-3" style="border-color:var(--line);">
+                        <span class="step-num">2</span>
+                        <h2 class="font-mono text-xs font-bold text-[var(--txt)] uppercase tracking-[0.15em]">Datos para la Hoja de Cotización</h2>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4">
+                        <input type="text" id="infoVehiculo" placeholder="Vehículo (Año Marca Modelo)" class="input-style" oninput="actualizar()">
+                        <input type="text" id="infoLote" placeholder="Número de Lote (Subasta)" class="input-style" oninput="actualizar()">
+                    </div>
+                    <button onclick="window.print()" class="btn-primary w-full text-[#05070c] font-black py-4 rounded-xl text-lg active:scale-[0.98] transition-all uppercase tracking-wide flex items-center justify-center gap-2 font-mono">
+                        <span>🖨️</span> Generar PDF
+                    </button>
                 </div>
             </div>
 
             <!-- REPORTE FINAL -->
             <div class="w-full flex justify-center flex-grow">
                 <div id="reporteFinal">
-                    <div class="watermark">YESICA</div>
+                    <div class="hud-corner tl"></div>
+                    <div class="hud-corner tr"></div>
+                    <div class="hud-corner bl"></div>
+                    <div class="hud-corner br"></div>
+                    <div class="watermark">YESICA · SV</div>
                     
-                    <div class="flex justify-between items-start border-b-8 border-pink-600 pb-6 mb-10">
+                    <div class="flex justify-between items-start pb-6 mb-10 relative border-b" style="border-color:var(--rep-border);">
+                        <div class="absolute left-0 -bottom-[1px] w-20 h-[2px]" style="background:var(--cyan);"></div>
                         <div>
-                            <h2 class="text-3xl md:text-5xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
-                            <p class="text-sm font-bold text-slate-800 mt-2 tracking-[0.2em] uppercase">Cotización de Referencia de Importación</p>
+                            <h2 class="brand-logo text-2xl md:text-4xl font-black header-pink uppercase leading-none italic tracking-tighter">IMPORTACIONES YESICA</h2>
+                            <p class="font-mono text-[11px] mt-2 tracking-[0.15em] uppercase" style="color:var(--rep-ink-soft);">// Cotización de referencia de importación</p>
                         </div>
                         <div class="text-right">
-                            <p id="fechaActual" class="text-xl font-black text-slate-900"></p>
+                            <p class="font-mono text-[9px] font-bold uppercase tracking-[0.2em] mb-1" style="color:var(--rep-ink-soft);">Emitido</p>
+                            <p id="fechaActual" class="font-mono text-base font-semibold" style="color:var(--rep-ink);"></p>
                         </div>
                     </div>
 
-                    <div class="flex-grow space-y-12">
-                        <div class="bg-slate-50 p-10 rounded-[2rem] border-2 border-slate-100 relative">
-                            <span class="absolute -top-3 left-10 bg-slate-900 text-white text-[10px] font-black px-4 py-1 rounded uppercase tracking-widest italic">Unidad de Referencia</span>
-                            <h3 id="dispVehiculo" class="text-3xl md:text-5xl font-black text-slate-900 uppercase italic leading-tight">---</h3>
-                            <div class="flex justify-between mt-10 border-t pt-6 border-slate-200 text-xl font-bold text-slate-500 uppercase">
-                                <p>LOTE #: <span id="dispLote" class="text-slate-900 font-black">---</span></p>
-                                <p>ORIGEN: <span id="dispCiudad" class="text-slate-900 font-black">---</span></p>
+                    <div class="flex-grow space-y-10">
+                        <div class="p-8 md:p-10 rounded-xl border relative" style="background:var(--rep-card); border-color:var(--rep-border);">
+                            <span class="absolute -top-3 left-8 text-[9px] font-mono font-bold px-4 py-1.5 rounded uppercase tracking-[0.15em]" style="background:var(--cyan); color:#05070c;">Unidad de Referencia</span>
+                            <h3 id="dispVehiculo" class="font-display text-3xl md:text-5xl font-bold leading-tight" style="color:var(--rep-ink);">---</h3>
+                            <div class="route-line mt-8 mb-6">
+                                <span class="node"></span><span class="line"></span>
+                                <span class="font-mono text-[9px] font-bold uppercase tracking-[0.2em] px-1" style="color:var(--cyan);">EE.UU. → El Salvador</span>
+                                <span class="line"></span><span class="node"></span>
+                            </div>
+                            <div class="flex justify-between border-t pt-5 text-base md:text-lg font-bold uppercase font-mono" style="border-color:var(--rep-border); color:var(--rep-ink-soft);">
+                                <p>Lote #: <span id="dispLote" class="font-black" style="color:var(--rep-ink);">---</span></p>
+                                <p>Origen: <span id="dispCiudad" class="font-black" style="color:var(--rep-ink);">---</span></p>
                             </div>
                         </div>
 
-                        <div class="text-center py-12">
-                            <p class="text-sm font-black text-slate-400 uppercase tracking-[0.5em] mb-6">Inversión Total Aproximada</p>
+                        <div class="text-center py-10">
+                            <p class="font-mono text-[11px] font-bold uppercase tracking-[0.5em] mb-6" style="color:var(--rep-ink-soft);">Inversión Total Aproximada</p>
                             
-                            <div class="badge-container">
-                                <span id="resPresupuesto" class="text-slate-900 leading-none tracking-tighter">$0</span>
-                                <div class="badge-todo">Todo Incluido</div>
+                            <div class="badge-container flex flex-col items-center gap-4">
+                                <span id="resPresupuesto" class="font-display leading-none tracking-tight" style="color:var(--rep-ink);">$0</span>
+                                <div class="status-tag"><span class="ping"></span> Todo Incluido</div>
                             </div>
 
-                            <p class="text-md font-bold text-slate-500 mt-24 max-w-xl mx-auto italic leading-relaxed px-8 text-center">
+                            <p class="text-sm font-medium mt-16 max-w-xl mx-auto italic leading-relaxed px-8 text-center" style="color:var(--rep-ink-soft);">
                                 Este monto representa el costo total estimado del vehículo puesto en El Salvador, incluyendo impuestos de aduana cancelados, transporte internacional y gestión profesional hasta primera matrícula.
                             </p>
                         </div>
                     </div>
 
-                    <div class="border-t-4 border-slate-100 pt-10 grid grid-cols-3 gap-6 text-center mt-auto text-sm font-bold">
-                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">País Destino</p><p class="uppercase">EL SALVADOR</p></div>
-                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">Trámite</p><p class="uppercase">1° PLACA</p></div>
-                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-2">Aduana</p><p class="uppercase">CANCELADA</p></div>
+                    <div class="border-t pt-8 grid grid-cols-3 gap-6 text-center mt-auto text-sm font-bold" style="border-color:var(--rep-border);">
+                        <div><p class="font-mono text-[9px] font-bold uppercase tracking-[0.15em] mb-2" style="color:var(--rep-ink-soft);">País Destino</p><p class="uppercase font-mono" style="color:var(--rep-ink);">El Salvador</p></div>
+                        <div class="border-x" style="border-color:var(--rep-border);"><p class="font-mono text-[9px] font-bold uppercase tracking-[0.15em] mb-2" style="color:var(--rep-ink-soft);">Trámite</p><p class="uppercase font-mono" style="color:var(--rep-ink);">1° Placa</p></div>
+                        <div><p class="font-mono text-[9px] font-bold uppercase tracking-[0.15em] mb-2" style="color:var(--rep-ink-soft);">Aduana</p><p class="uppercase font-mono" style="color:var(--rep-ink);">Cancelada</p></div>
                     </div>
                 </div>
             </div>
@@ -298,6 +468,25 @@
     </div>
 
     <script>
+        function mostrarModo(modo) {
+            const rapido = document.getElementById('tabRapido');
+            const cotizacion = document.getElementById('tabCotizacion');
+            const btnRapido = document.getElementById('tabBtnRapido');
+            const btnCotizacion = document.getElementById('tabBtnCotizacion');
+            if (modo === 'cotizacion') {
+                rapido.classList.add('hidden');
+                cotizacion.classList.remove('hidden');
+                btnCotizacion.classList.add('active');
+                btnRapido.classList.remove('active');
+                actualizar();
+            } else {
+                cotizacion.classList.add('hidden');
+                rapido.classList.remove('hidden');
+                btnRapido.classList.add('active');
+                btnCotizacion.classList.remove('active');
+            }
+        }
+
         let navieraManual = false;
         let ciudadSeleccionada = null;
 
@@ -826,14 +1015,15 @@
             Object.keys(CIUDADES).filter(c => c.toLowerCase().includes(input)).forEach(c => {
                 const cData = CIUDADES[c];
                 const div = document.createElement('div');
-                div.className = 'p-4 hover:bg-pink-50 cursor-pointer border-b text-sm flex flex-col gap-1';
+                div.className = 'p-4 cursor-pointer border-b text-sm flex flex-col gap-1 hover:bg-[rgba(34,226,226,0.08)]';
+                div.style.borderColor = 'var(--line)';
                 
                 let textPrices = "";
                 // Mejora visual: ¡Ahora muestra el puerto de salida exacto por naviera en el buscador!
-                if(cData.matus !== null) textPrices += `<span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">Matus (${cData.zMat}): $${cData.matus}</span>`;
-                if(cData.maverick !== null) textPrices += `<span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">Maverick (${cData.zMav}): $${cData.maverick}</span>`;
+                if(cData.matus !== null) textPrices += `<span class="text-xs font-mono font-bold px-2 py-1 rounded" style="color:var(--txt-soft); background:#0a0f1c; border:1px solid var(--line);">Matus (${cData.zMat}): $${cData.matus}</span>`;
+                if(cData.maverick !== null) textPrices += `<span class="text-xs font-mono font-bold px-2 py-1 rounded" style="color:var(--txt-soft); background:#0a0f1c; border:1px solid var(--line);">Maverick (${cData.zMav}): $${cData.maverick}</span>`;
 
-                div.innerHTML = `<span class="font-black text-slate-800">${c}</span> <div class="flex gap-2 flex-wrap">${textPrices}</div>`;
+                div.innerHTML = `<span class="font-bold" style="color:var(--txt);">${c}</span> <div class="flex gap-2 flex-wrap">${textPrices}</div>`;
                 div.onclick = () => {
                     document.getElementById('searchCiudad').value = c;
                     ciudadSeleccionada = c;
@@ -1014,8 +1204,10 @@
                 document.getElementById('detIvaVenta').innerText = f(ivaVentaLocal);
                 document.getElementById('detPagoCuentaVenta').innerText = f(pagoCuentaVenta);
                 document.getElementById('detGananciaNeta').innerText = f(gananciaNeta);
+                document.getElementById('quickGananciaNeta').innerText = f(gananciaNeta);
 
                 document.getElementById('intTotalCosto').innerText = f(costoReal);
+                document.getElementById('quickCostoFinal').innerText = f(costoReal);
                 document.getElementById('detVenta').innerText = f(totalCliente);
 
                 document.getElementById('resPresupuesto').innerText = '$' + Math.round(totalCliente).toLocaleString('en-US');
@@ -1024,7 +1216,7 @@
         }
 
         document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-SV', { day: 'numeric', month: 'long', year: 'numeric' });
-        window.onload = function() { toggleTransferencia(); calcular(); };
+        window.onload = function() { toggleTransferencia(); calcular(); mostrarModo('rapido'); };
     </script>
 </body>
 </html>
