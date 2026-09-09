@@ -6,203 +6,294 @@
 <title>Filtro de inventario</title>
 <style>
 :root{
-  --steel:#e8ecef; --panel:#ffffff; --ink:#16202b; --ink-soft:#5b6b7a;
-  --line:#c9d3db; --line-soft:#e2e8ed;
-  --green:#1f7a4d; --amber:#c8860d; --red:#b03030; --blue:#20567d;
+  --lienzo:#f5f5f7; --sup:#fff; --sup2:#fafafa;
+  --tinta:#1d1d1f; --gris:#6e6e73; --gris2:#8e8e93;
+  --sep:#d2d2d7; --sep2:#ebebed;
+  --azul:#0071e3; --verde:#248a3d; --ambar:#b25000; --rojo:#c7291f;
+  --r:12px; --r2:8px;
+  --sombra:0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.05);
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
-  background:var(--steel); color:var(--ink);
-  font:14px/1.45 "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background:var(--lienzo); color:var(--tinta);
+  font:15px/1.47 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased; letter-spacing:-.01em;
   font-variant-numeric:tabular-nums;
 }
-h1{font-size:19px;font-weight:700;letter-spacing:-.2px;margin:0}
-h2{font-size:12px;font-weight:700;margin:0 0 8px;color:var(--ink-soft)}
-a{color:var(--blue)}
+h1{font-size:20px;font-weight:600;letter-spacing:-.02em;margin:0}
+h2{font-size:13px;font-weight:600;color:var(--gris);margin:0 0 10px;letter-spacing:0}
+a{color:var(--azul);text-decoration:none}
+a:hover{text-decoration:underline}
+.hide{display:none !important}
+.sp{flex:1}
+.note{font-size:12.5px;line-height:1.4;color:var(--gris);margin-top:6px}
 
+/* ---------- encabezado ---------- */
 header{
-  background:var(--ink);color:#fff;padding:12px 18px;
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  position:sticky;top:0;z-index:20;
+  background:rgba(255,255,255,.82); backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--sep2);
+  padding:11px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:40;
 }
-header h1{color:#fff}
-header .stat{font-size:12px;color:#9fb2c2}
-header .stat b{color:#fff;font-size:15px}
+header .stat{font-size:13px;color:var(--gris)}
+header .stat b{color:var(--tinta);font-weight:600}
 
-.wrap{display:flex;align-items:flex-start;gap:14px;padding:14px;max-width:1900px}
-.rail{width:320px;flex:none;position:sticky;top:60px;max-height:calc(100vh - 72px);overflow-y:auto;
-  padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-.rail::-webkit-scrollbar{width:9px}
+/* ---------- estructura ---------- */
+.wrap{display:flex;align-items:flex-start;gap:20px;padding:20px;max-width:1760px;margin:0 auto}
+.rail{width:300px;flex:none;position:sticky;top:76px;max-height:calc(100vh - 96px);overflow-y:auto;
+  padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--sep) transparent}
+.rail::-webkit-scrollbar{width:8px}
 .rail::-webkit-scrollbar-track{background:transparent}
-.rail::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px;border:2px solid var(--steel)}
-.rail::-webkit-scrollbar-thumb:hover{background:var(--ink-soft)}
+.rail::-webkit-scrollbar-thumb{background:var(--sep);border-radius:4px;border:2px solid var(--lienzo)}
 .main{flex:1;min-width:0}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:12px;margin-bottom:10px}
+.card{background:var(--sup);border-radius:var(--r);box-shadow:var(--sombra);padding:16px;margin-bottom:12px}
 
-label.f{display:block;font-size:12px;color:var(--ink-soft);margin:8px 0 3px}
-input[type=text],input[type=number],select,textarea{
-  width:100%;padding:6px 7px;border:1px solid var(--line);border-radius:2px;
-  font:inherit;font-variant-numeric:tabular-nums;background:#fff;color:var(--ink)
+/* ---------- controles ---------- */
+label.f{display:block;font-size:12.5px;color:var(--gris);margin:10px 0 4px}
+input[type=text],input[type=number],input[type=email],input[type=password],input[type=date],select,textarea{
+  width:100%;padding:9px 11px;border:1px solid var(--sep);border-radius:var(--r2);
+  font:inherit;font-size:15px;background:var(--sup);color:var(--tinta);
+  font-variant-numeric:tabular-nums;transition:border-color .15s,box-shadow .15s;
 }
-textarea{resize:vertical;min-height:52px;font-size:12px}
-.row2{display:flex;gap:8px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul);box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+textarea{resize:vertical;min-height:56px;font-size:14px}
+select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%236e6e73' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+.row2{display:flex;gap:10px}
 .row2>*{flex:1;min-width:0}
 
-.chk{display:flex;align-items:center;gap:6px;font-size:13px;padding:2px 0;cursor:pointer}
-.chk input{margin:0;flex:none}
-.chk span.n{margin-left:auto;color:var(--ink-soft);font-size:11px}
+.chk{display:flex;align-items:center;gap:9px;font-size:14.5px;padding:7px 0;cursor:pointer;
+  border-bottom:1px solid var(--sep2)}
+.chk:last-of-type{border-bottom:0}
+.chk input{margin:0;flex:none;width:19px;height:19px;accent-color:var(--azul)}
+.chk span.n{margin-left:auto;color:var(--gris2);font-size:12.5px}
 
 button{
-  font:inherit;font-weight:600;padding:8px 12px;border-radius:2px;cursor:pointer;
-  border:1px solid var(--ink);background:var(--ink);color:#fff
+  font:inherit;font-size:14.5px;font-weight:500;padding:9px 16px;border-radius:980px;cursor:pointer;
+  border:1px solid transparent;background:var(--azul);color:#fff;transition:opacity .15s,background .15s;
 }
-button.ghost{background:#fff;color:var(--ink)}
-button:disabled{opacity:.4;cursor:default}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
-.chk:focus-within{outline:2px solid var(--blue);outline-offset:1px}
+button:hover{opacity:.85}
+button:active{opacity:.7}
+button.ghost{background:rgba(120,120,128,.09);color:var(--tinta)}
+button.ghost:hover{background:rgba(120,120,128,.16);opacity:1}
+button.mini{padding:4px 11px;font-size:12.5px;background:rgba(120,120,128,.09);color:var(--gris)}
+button:disabled{opacity:.35;cursor:default}
+:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
 
-#drop{
-  border:2px dashed var(--line);border-radius:3px;background:#fff;
-  padding:36px 20px;text-align:center;cursor:pointer
-}
-#drop.over{border-color:var(--ink);background:#f2f6f9}
-#drop p{margin:6px 0;color:var(--ink-soft)}
-#drop strong{display:block;font-size:16px;color:var(--ink);margin-bottom:4px}
+/* ---------- carga del archivo ---------- */
+#drop{border:1.5px dashed var(--sep);border-radius:var(--r);background:var(--sup2);
+  padding:28px 16px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+#drop.over{border-color:var(--azul);background:rgba(0,113,227,.05)}
+#drop p{margin:4px 0;color:var(--gris);font-size:13.5px}
+#drop strong{display:block;font-size:16px;font-weight:600;margin-bottom:2px}
+.bar{height:4px;background:var(--sep2);border-radius:2px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--azul);width:0;transition:width .15s}
 
-/* objetivos */
-table.tgt{width:100%;border-collapse:collapse;font-size:12px}
-table.tgt th{text-align:left;font-weight:600;color:var(--ink-soft);padding:2px 3px;font-size:11px}
-table.tgt td{padding:1px 2px}
-table.tgt input{padding:4px 5px;font-size:12px}
-table.tgt td.x{width:22px}
-table.tgt td.x button{padding:2px 6px;border-color:var(--line);background:#fff;color:var(--ink-soft);font-weight:400}
+/* ---------- atajos de fecha ---------- */
+.atajos{display:flex;gap:2px;background:rgba(120,120,128,.09);padding:2px;border-radius:9px}
+.atajos button{flex:1;min-width:0;padding:6px 2px;font-size:12.5px;border-radius:7px;
+  background:transparent;color:var(--tinta);font-weight:400}
+.atajos button:hover{background:rgba(255,255,255,.6);opacity:1}
+.atajos button.on{background:var(--sup);font-weight:590;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
-/* funnel */
-.funnel{font-size:12px}
-.funnel div{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;padding:3px 0;border-bottom:1px solid var(--line-soft)}
-.funnel div span:last-child{text-align:right;min-width:86px}
-.funnel div:last-child{border:0;font-weight:700;font-size:13px}
-.funnel span:last-child{font-variant-numeric:tabular-nums}
+/* ---------- objetivos ---------- */
+table.tgt{width:100%;border-collapse:collapse;font-size:13.5px}
+table.tgt th{text-align:left;font-weight:500;color:var(--gris);padding:0 4px 5px;font-size:12px}
+table.tgt td{padding:2px}
+table.tgt input{padding:7px 9px;font-size:14px}
+table.tgt td.x{width:30px}
 
-/* resultados */
-.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.toolbar .sp{flex:1}
-table.res{width:100%;border-collapse:collapse;background:#fff;font-size:12.5px}
-table.res th{
-  background:var(--ink);color:#fff;text-align:left;padding:7px 6px;font-size:11px;
-  position:sticky;top:56px;z-index:5;cursor:pointer;white-space:nowrap
-}
-table.res th.na{cursor:default}
-table.res td{padding:5px 6px;border-bottom:1px solid var(--line-soft);vertical-align:top}
-table.res tbody tr:hover{background:#f2f6f9}
+/* ---------- embudo ---------- */
+.funnel{font-size:13.5px}
+.funnel div{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:baseline;
+  padding:7px 0;border-bottom:1px solid var(--sep2)}
+.funnel div:last-child{border-bottom:0;font-weight:600}
+.funnel div span:last-child{text-align:right;min-width:92px;color:var(--gris)}
+.funnel div:last-child span:last-child{color:var(--tinta)}
+
+/* ---------- barra de acciones ---------- */
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+
+/* ---------- tabla de resultados ---------- */
+table.res{width:100%;border-collapse:collapse;background:var(--sup);font-size:13.5px;
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--sombra)}
+table.res th{background:var(--sup);color:var(--gris);text-align:left;padding:11px 10px;
+  font-size:12px;font-weight:500;border-bottom:1px solid var(--sep);
+  position:sticky;top:60px;z-index:5;white-space:nowrap}
+table.res td{padding:9px 10px;border-bottom:1px solid var(--sep2);vertical-align:top}
+table.res tbody tr:last-child td{border-bottom:0}
+table.res tbody tr:hover{background:var(--sup2)}
 td.num{text-align:right}
 td.veh{min-width:190px}
-td.veh b{display:block}
-td.veh small{color:var(--ink-soft)}
-img.th{width:78px;height:58px;object-fit:cover;background:var(--line-soft);border-radius:2px;display:block}
+td.veh b{display:block;font-weight:590}
+td.veh small,table.res small{color:var(--gris);font-size:12px}
+img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-radius:var(--r2);display:block}
 
-.lamp{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:baseline}
-.lamp.g{background:var(--green)} .lamp.a{background:var(--amber)} .lamp.r{background:var(--red)}
-.oferta{font-weight:700}
-.oferta.g{color:var(--green)} .oferta.r{color:var(--red)}
+.lamp{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.lamp.g{background:var(--verde)} .lamp.a{background:var(--ambar)} .lamp.r{background:var(--rojo)}
+.oferta{font-weight:640;font-size:15px}
+.oferta.g{color:var(--verde)} .oferta.r{color:var(--rojo)}
 
-.tag{
-  display:inline-block;font-size:10px;padding:1px 5px;border-radius:2px;
-  border:1px solid var(--line);color:var(--ink-soft);margin:1px 3px 1px 0;white-space:nowrap
-}
-.tag.rd{border-color:var(--green);color:var(--green)}
-.tag.st{border-color:var(--amber);color:var(--amber)}
-.tag.nk{border-color:var(--red);color:var(--red)}
-.tag.nv{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
-.tag.of{border-color:var(--green);color:var(--green)}
-.tag.dl{background:var(--amber);border-color:var(--amber);color:#fff;font-weight:700}
-.tag.bn{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}
+.tag{display:inline-block;font-size:11.5px;font-style:normal;padding:2px 8px;border-radius:980px;
+  background:rgba(120,120,128,.12);color:var(--gris);margin:2px 4px 2px 0;white-space:nowrap}
+.tag.rd{background:rgba(36,138,61,.12);color:var(--verde)}
+.tag.st{background:rgba(178,80,0,.12);color:var(--ambar)}
+.tag.nk{background:rgba(199,41,31,.12);color:var(--rojo)}
+.tag.nv{background:var(--azul);color:#fff;font-weight:500}
+.tag.of{background:rgba(36,138,61,.12);color:var(--verde)}
+.tag.bn{background:var(--verde);color:#fff;font-weight:500}
+.tag.dl{background:var(--ambar);color:#fff;font-weight:500}
 
-.empty{background:#fff;border:1px solid var(--line);padding:40px;text-align:center;color:var(--ink-soft)}
-.hide{display:none !important}
-.bar{height:3px;background:var(--line-soft);border-radius:2px;overflow:hidden;margin-top:8px}
-.bar i{display:block;height:100%;background:var(--ink);width:0;transition:width .15s}
-.note{font-size:11px;color:var(--ink-soft);margin-top:6px}
-#login{position:fixed;inset:0;z-index:200;background:var(--ink);display:flex;padding:20px;overflow:auto}
-#loginCaja{background:#fff;border-radius:5px;padding:24px;width:100%;max-width:380px;margin:auto;height:fit-content}
-#loginMarca{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--ink-soft);margin-bottom:10px}
-#loginCaja input{padding:11px;font-size:16px}
-#loginCaja summary::-webkit-details-marker{display:none}
-#loginCaja summary{list-style:none;text-decoration:underline}
-#modal{position:fixed;inset:0;background:rgba(10,18,26,.72);z-index:100;display:flex;padding:18px}
-#modalCaja{background:#fff;border-radius:4px;flex:1;display:flex;flex-direction:column;overflow:hidden;max-width:1500px;margin:auto;height:100%}
-#modalTop{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--ink);color:#fff;flex-wrap:wrap}
-#modalTop b{display:block;font-size:14px}
-#modalTop small{color:#9fb2c2;font-size:11px}
-#btnUsar{background:var(--green);border-color:var(--green)}
-#calcFrame{flex:1;width:100%;border:0;background:#070b14}
-@media (max-width:760px){ #modal{padding:0} #modalCaja{border-radius:0} }
-#hoja{background:#fff;border:1px solid var(--line);border-radius:3px;padding:14px}
-.hoja-top{display:flex;align-items:flex-start;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.empty{background:var(--sup);border-radius:var(--r);box-shadow:var(--sombra);
+  padding:52px 24px;text-align:center;color:var(--gris)}
+
+/* ---------- hoja de pre-bids ---------- */
+#hoja{background:var(--sup);border-radius:var(--r);box-shadow:var(--sombra);padding:20px}
+.hoja-top{display:flex;align-items:flex-start;gap:16px;border-bottom:1px solid var(--sep);padding-bottom:14px}
 .hoja-sum{text-align:right}
-.hoja-sum small{display:block;font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.4px}
-.hoja-sum b{font-size:19px}
-.dia{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-soft);
-     border-bottom:1px solid var(--line);padding:14px 0 4px;margin-bottom:8px}
-.lote{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft);break-inside:avoid;page-break-inside:avoid}
-.lote-foto{width:132px;flex:none}
-.lote-foto img{width:132px;height:99px;object-fit:cover;border-radius:2px;background:var(--line-soft)}
+.hoja-sum small{display:block;font-size:12px;color:var(--gris)}
+.hoja-sum b{font-size:22px;font-weight:600;letter-spacing:-.02em}
+.dia{font-size:13px;font-weight:600;color:var(--gris);padding:20px 0 8px;
+  border-bottom:1px solid var(--sep2);margin-bottom:10px}
+.lote{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--sep2);
+  break-inside:avoid;page-break-inside:avoid}
+.lote:last-child{border-bottom:0}
+.lote-foto{width:140px;flex:none}
+.lote-foto img{width:140px;height:105px;object-fit:cover;border-radius:var(--r2);background:var(--sep2)}
 .lote-cuerpo{flex:1;min-width:0}
-.lote-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:6px}
-.lote-cab b{font-size:15px}
-.lote-id{display:flex;align-items:center;gap:7px;font-size:12px}
-.lotenum{font-weight:700;font-size:15px;letter-spacing:.5px;background:var(--line-soft);padding:1px 7px;border-radius:2px;user-select:all}
-.lote-datos{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:4px 12px}
-.lote-datos small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft)}
-.lote-datos span{font-size:12.5px}
-.lote-bid{width:132px;flex:none;text-align:right;display:flex;flex-direction:column;gap:5px;align-items:flex-end}
-.lote-bid small{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft)}
-.bidrow{display:flex;align-items:center;gap:2px;border:2px solid var(--ink);border-radius:2px;padding:2px 5px;background:#fff}
-.bidrow .sig{font-weight:700}
-.bidrow input{border:0;padding:2px;font-size:17px;font-weight:700;text-align:right;width:82px}
-button.mini{padding:2px 7px;font-size:11px;font-weight:400;border-color:var(--line);color:var(--ink-soft)}
+.lote-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:8px}
+.lote-cab b{font-size:16px;font-weight:600;letter-spacing:-.015em}
+.lote-id{display:flex;align-items:center;gap:8px;font-size:13px}
+.lotenum{font-weight:600;font-size:15px;background:rgba(120,120,128,.1);
+  padding:2px 9px;border-radius:7px;user-select:all}
+.lote-datos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 16px}
+.lote-datos small{display:block;font-size:11.5px;color:var(--gris2)}
+.lote-datos span{font-size:13.5px}
+.lote-bid{width:150px;flex:none;display:flex;flex-direction:column;gap:7px;align-items:flex-end}
+.lote-bid small{font-size:11.5px;color:var(--gris2)}
+.bidrow{display:flex;align-items:center;gap:1px;border:1.5px solid var(--tinta);
+  border-radius:var(--r2);padding:5px 10px;background:var(--sup)}
+.bidrow .sig{font-weight:600;font-size:17px}
+.bidrow input{border:0;padding:0;font-size:20px;font-weight:640;text-align:right;width:88px;
+  letter-spacing:-.02em;background:transparent}
+.bidrow input:focus{box-shadow:none}
 .solo-print{display:none}
-@media (max-width:760px){
-  .lote{flex-wrap:wrap} .lote-foto,.lote-foto img{width:100%;height:auto}
-  .lote-bid{width:100%;text-align:left;align-items:stretch}
-  .bidrow input{width:100%;font-size:20px}
-}
-.atajos{display:flex;gap:4px;flex-wrap:wrap}
-.atajos button{flex:1;min-width:52px;padding:5px 4px;font-size:11.5px}
-.atajos button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-@media print{
-  .solo-print{display:block;font-size:11px;color:#333}
-  #hoja{border:0;padding:0}
-  .lote-foto,.lote-foto img{width:104px} .lote-foto img{height:78px}
-  .lotenum{background:none;padding:0;border:1px solid #000}
-  .bidrow{border-color:#000}
 
-  header,.rail,.toolbar,.noprint,#cardFunnel{display:none !important}
-  .wrap{display:block;padding:0} body{background:#fff}
-  .card{border:0;padding:0} table.res th{background:#fff;color:#000;border-bottom:2px solid #000;position:static}
-  table.res{font-size:11px} a{color:#000;text-decoration:none}
-}
-@media (max-width:760px){
-  header{padding:10px 12px} header h1{font-size:16px}
-  #calcUrl{width:100%;order:9}
-  #btnSubir,#btnBajar{flex:1;padding:12px 8px;font-size:14px}
-  header{gap:8px}
-  .wrap{padding:8px;gap:8px}
+/* ---------- entrada ---------- */
+#login{position:fixed;inset:0;z-index:200;background:var(--lienzo);display:flex;padding:24px;overflow:auto}
+#loginCaja{background:var(--sup);border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,.08);
+  padding:32px 28px;width:100%;max-width:390px;margin:auto;height:fit-content}
+#loginMarca{font-size:13px;font-weight:500;color:var(--gris);margin-bottom:16px}
+#loginCaja input{padding:12px;font-size:16px}
+#loginCaja summary{list-style:none;cursor:pointer;color:var(--azul);font-size:13.5px}
+#loginCaja summary::-webkit-details-marker{display:none}
+
+/* ---------- calculadora ---------- */
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;padding:20px;
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+#modalCaja{background:var(--sup);border-radius:16px;flex:1;display:flex;flex-direction:column;
+  overflow:hidden;max-width:1500px;margin:auto;height:100%;box-shadow:0 12px 48px rgba(0,0,0,.3)}
+#modalTop{display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-bottom:1px solid var(--sep);flex-wrap:wrap}
+#modalTop b{display:block;font-size:15px;font-weight:600}
+#modalTop small{color:var(--gris);font-size:12.5px}
+#btnUsar{background:var(--verde)}
+#calcFrame{flex:1;width:100%;border:0;background:#070b14}
+
+/* ---------- barra inferior (teléfono) ---------- */
+#tabbar{display:none}
+#velo{display:none}
+
+/* ============ TELÉFONO ============ */
+@media (max-width:820px){
+  body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
+  header{padding:10px 14px;gap:8px}
+  header h1{font-size:17px}
+  #calcUrl{display:none}
+  #btnSubir,#btnBajar{flex:1;padding:11px 8px;font-size:14px}
+
+  .wrap{display:block;padding:12px}
+  .main{width:100%}
+
+  /* el panel sale como hoja deslizante */
+  .rail{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;max-height:82vh;
+    background:var(--lienzo);border-radius:18px 18px 0 0;z-index:90;
+    padding:8px 14px calc(24px + env(safe-area-inset-bottom));
+    transform:translateY(102%);transition:transform .28s cubic-bezier(.32,.72,0,1);
+    box-shadow:0 -6px 32px rgba(0,0,0,.18);overflow-y:auto}
+  .rail.abierto{transform:translateY(0)}
+  .rail::before{content:'';display:block;width:38px;height:5px;border-radius:3px;
+    background:var(--sep);margin:6px auto 12px}
+  #velo{display:block;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:89;opacity:0;
+    pointer-events:none;transition:opacity .28s}
+  #velo.on{opacity:1;pointer-events:auto}
+
+  /* barra de pestañas abajo */
+  #tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:95;
+    background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-top:1px solid var(--sep2);padding-bottom:env(safe-area-inset-bottom)}
+  #tabbar button{flex:1;background:none;border:0;border-radius:0;color:var(--gris);
+    font-size:11px;font-weight:400;padding:8px 2px 9px;display:flex;flex-direction:column;
+    align-items:center;gap:3px;letter-spacing:0}
+  #tabbar button b{font-size:16px;font-weight:600;line-height:1;letter-spacing:-.02em}
+  #tabbar button.on{color:var(--azul)}
+  #tabbar button:hover{opacity:1}
+
+  /* fichas en vez de tabla */
+  table.res{box-shadow:none;background:transparent}
   table.res thead{display:none}
-  table.res tr{display:grid;grid-template-columns:88px 1fr;gap:0 10px;
-    border:1px solid var(--line);border-radius:3px;margin-bottom:8px;padding:8px;background:#fff}
+  table.res tbody tr{display:grid;grid-template-columns:96px 1fr;gap:0 12px;
+    background:var(--sup);border-radius:var(--r);box-shadow:var(--sombra);
+    margin-bottom:10px;padding:12px}
+  table.res tbody tr:hover{background:var(--sup)}
   table.res td{border:0;padding:2px 0}
-  table.res td:first-child{grid-column:1/-1}
-  table.res td:nth-child(2){grid-row:2/6}
-  img.th{width:88px;height:66px}
+  table.res td:first-child{grid-column:1/-1;margin-bottom:4px}
+  table.res td:nth-child(2){grid-row:2/7}
+  img.th{width:96px;height:72px}
   td.num{text-align:left}
-  .toolbar{position:sticky;top:52px;background:var(--steel);z-index:8;padding:6px 0}
+  .oferta{font-size:19px}
+
+  .toolbar{position:sticky;top:56px;background:var(--lienzo);z-index:8;
+    padding:8px 0;margin:0 0 8px}
   input,select,button{font-size:16px}
-  table.tgt td input{font-size:16px}
+  table.tgt input{font-size:16px}
+
+  .lote{flex-wrap:wrap;gap:10px}
+  .lote-foto,.lote-foto img{width:100%;height:auto;max-height:220px}
+  .lote-bid{width:100%;align-items:stretch}
+  .bidrow input{width:100%;font-size:24px}
+  .lote-cab b{font-size:17px}
+
+  #modal{padding:0}
+  #modalCaja{border-radius:0}
+  #login{padding:0;align-items:stretch}
+  #loginCaja{border-radius:0;box-shadow:none;max-width:none;padding:28px 22px;
+    margin:auto;height:auto}
 }
-@media (max-width:1100px){ .wrap{flex-direction:column} .rail{width:100%;position:static;max-height:none;overflow:visible} }
+
+@media (max-width:400px){
+  .lote-datos{grid-template-columns:1fr 1fr}
+  table.res tbody tr{grid-template-columns:80px 1fr}
+  img.th{width:80px;height:60px}
+}
+
+@media print{
+  header,.rail,.toolbar,.noprint,#cardFunnel,#tabbar,#velo{display:none !important}
+  .wrap{display:block;padding:0} body{background:#fff;padding:0}
+  .card,#hoja{box-shadow:none;padding:0;border-radius:0}
+  .solo-print{display:block;font-size:12px;color:#444}
+  table.res th{background:#fff;color:#000;position:static}
+  table.res{font-size:11px;box-shadow:none}
+  a{color:#000;text-decoration:none}
+  .lote-foto,.lote-foto img{width:110px} .lote-foto img{height:82px}
+  .lotenum{background:none;border:1px solid #000}
+  .bidrow{border-color:#000}
+}
+
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style>
 </head>
@@ -210,7 +301,7 @@ button.mini{padding:2px 7px;font-size:11px;font-weight:400;border-color:var(--li
 
 <div id="login">
   <div id="loginCaja">
-    <div id="loginMarca">IMPORTACIONES YESICA</div>
+    <div id="loginMarca">Importaciones Yesica</div>
     <h1 style="font-size:20px;margin:0 0 2px">Filtro de inventario</h1>
     <p class="note" style="margin:0 0 16px">Entrá con tu cuenta para trabajar con el equipo.</p>
 
@@ -257,7 +348,7 @@ button.mini{padding:2px 7px;font-size:11px;font-weight:400;border-color:var(--li
 <div class="wrap">
 
 <!-- ================= RAIL ================= -->
-<div class="rail">
+<div class="rail" id="rail">
 
   <div class="card">
     <h2>Archivo del día</h2>
@@ -442,6 +533,14 @@ button.mini{padding:2px 7px;font-size:11px;font-weight:400;border-color:var(--li
 
 </div>
 </div>
+
+<div id="velo"></div>
+<nav id="tabbar">
+  <button id="tbGen"><b id="tbGenN">0</b>General</button>
+  <button id="tbDea"><b id="tbDeaN">0</b>Dealer</button>
+  <button id="tbSel"><b id="tbSelN">0</b>Selección</button>
+  <button id="tbFil"><b>☰</b>Filtros</button>
+</nav>
 
 <div id="modal" class="hide">
   <div id="modalCaja">
@@ -1524,10 +1623,13 @@ function pestanas(){
   $('#btnGeneral').textContent = 'General (' + nG.toLocaleString('en-US') + ')';
   $('#btnDealer').textContent  = 'Zona dealer (' + nD.toLocaleString('en-US') + ')';
   $('#btnVerSel').textContent  = 'Selección (' + SEL.size + ')';
-  const act = b => { b.style.background = 'var(--ink)'; b.style.color = '#fff'; };
-  const off = b => { b.style.background = '#fff'; b.style.color = 'var(--ink)'; };
+  const act = b => { b.classList.remove('ghost'); };
+  const off = b => { b.classList.add('ghost'); };
   [['general',$('#btnGeneral')],['dealer',$('#btnDealer')],['seleccion',$('#btnVerSel')]]
     .forEach(([v,b]) => VISTA === v ? act(b) : off(b));
+  $('#tbGenN').textContent = nG; $('#tbDeaN').textContent = nD; $('#tbSelN').textContent = SEL.size;
+  [['general',$('#tbGen')],['dealer',$('#tbDea')],['seleccion',$('#tbSel')]]
+    .forEach(([v,b]) => b.classList.toggle('on', VISTA === v));
 }
 
 function pintar(){
@@ -1631,14 +1733,14 @@ function grupoSel(){
 
 function textoWhatsapp(){
   const filas = grupoSel();
-  let t = 'PRE-BIDS ' + (SELV === 'dealer' ? '· CUENTA DEALER' : '· CUENTA NORMAL') + ' — ' + new Date().toLocaleDateString('es-SV') + '\n\n';
+  let t = 'Pre-bids ' + (SELV === 'dealer' ? '(cuenta dealer)' : '(cuenta normal)') + ' — ' + new Date().toLocaleDateString('es-SV') + '\n\n';
   for (const [lote, it] of filas){
     const o = it.r.o;
     t += 'Lote ' + lote + '\n';
     t += (it.r.y||'') + ' ' + (o['Make']||'') + ' ' + (o['Model Group']||'') + ' ' + (o['Model Detail']||'') + '\n';
     t += mil(it.r.od) + ' mi · ' + (o['Damage Description']||'') + ' · ' + (o['Sale Title Type']||'') + '\n';
     t += (o['Yard name']||'') + ' · ' + (it.r.fecha ? it.r.fecha.toLocaleDateString('es-SV') : 'sin fecha') + '\n';
-    t += 'OFERTAR HASTA: $' + (it.prebid || '—') + '\n';
+    t += 'Ofertar hasta: $' + (it.prebid || '—') + '\n';
     if (it.nota) t += 'Nota: ' + it.nota + '\n';
     t += '\n';
   }
@@ -1722,7 +1824,7 @@ function pintarSel(){
         </div>
       </div>
       <div class="lote-bid">
-        <small>OFERTAR HASTA</small>
+        <small>Ofertar hasta</small>
         <div class="bidrow">
           <span class="sig">$</span><input class="pb" data-lote="${lote}" type="number" value="${it.prebid}" placeholder="—">
         </div>
@@ -2184,6 +2286,15 @@ $('#titulos').oninput = () => {
 $('#titulos').onchange = () => { if(CRUDO.length) correr(); };
 $('#btnCorrer').onclick = () => { if(CRUDO.length) contarVend(); correr(); };
 $('#btnCsv').onclick = bajarCSV;
+function abrirFiltros(v){
+  $('#rail').classList.toggle('abierto', v);
+  $('#velo').classList.toggle('on', v);
+}
+$('#tbFil').onclick = () => abrirFiltros(!$('#rail').classList.contains('abierto'));
+$('#velo').onclick  = () => abrirFiltros(false);
+$('#tbGen').onclick = () => { abrirFiltros(false); $('#btnGeneral').click(); };
+$('#tbDea').onclick = () => { abrirFiltros(false); $('#btnDealer').click(); };
+$('#tbSel').onclick = () => { abrirFiltros(false); $('#btnVerSel').click(); };
 $('#btnGeneral').onclick = () => { if(!RES.length && SEL.size){ alert('Esta selección se recibió sin el archivo del día. Cargá el CSV si querés ver la lista completa.'); return; } VISTA='general'; pintar(); };
 $('#btnDealer').onclick  = () => { if(!RES.length && SEL.size){ alert('Esta selección se recibió sin el archivo del día. Cargá el CSV si querés ver la lista completa.'); return; } VISTA='dealer'; pintar(); };
 $('#btnVerSel').onclick  = () => { VISTA='seleccion'; pintarSel(); };
