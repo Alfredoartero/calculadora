@@ -391,6 +391,11 @@ table.tgt td.on{text-align:center}
            style="margin-top:6px;font-size:13px">
     <input type="file" id="calcFile" accept=".html" class="hide">
 
+    <label class="chk" style="border-bottom:1px solid var(--sep2);padding-bottom:10px">
+      <input type="checkbox" id="modoEspejo"> Reflejar la lista del equipo
+    </label>
+    <div class="note" style="margin-bottom:4px">Para quien solo revisa y pone pre-bids: la lista queda igual a la de quien busca, y se refresca sola. Vos no agregás ni quitás lotes.</div>
+
     <label class="f">Selección y ajustes</label>
     <button class="ghost" id="btnRecibir" style="width:100%">Abrir selección recibida</button>
     <input type="file" id="selFile" accept=".json" class="hide">
@@ -1272,6 +1277,9 @@ let AYER  = null;    // set de números de lote del archivo anterior
 let SEL   = new Map(); // lote -> {o, y, od, alta, bin, fecha, prebid, nota}
 let VISTA = 'general'; // 'general' | 'dealer' | 'seleccion'
 let SELV = 'normal';   // hoja activa: 'normal' | 'dealer'
+let QUITADOS = new Set(); // lotes que quité y todavía no he subido
+let SUCIOS   = new Set(); // lotes cuyo pre-bid o nota cambié yo
+const espejo = () => document.getElementById('modoEspejo').checked;
 let CALC = null;       // HTML de la calculadora (modo completo)
 let CALC_URL = null;   // link de la calculadora (modo respaldo)
 let CALC_LOTE = null;  // lote que se está calculando
@@ -1740,7 +1748,8 @@ function togglePick(lote, on){
   if (on){
     const r = RES.find(x => String(x.o['Lot number']).trim() === lote);
     if (r) SEL.set(lote, {r, prebid: r.maxOf === null ? '' : Math.round(r.maxOf), nota: ''});
-  } else SEL.delete(lote);
+    QUITADOS.delete(lote);
+  } else { SEL.delete(lote); if (lote) QUITADOS.add(lote); }
   $('#btnVerSel').textContent = 'Ver selección (' + SEL.size + ')';
   guardarLocal();
   pestanas();
@@ -1852,6 +1861,7 @@ function pintarSel(){
           ${dato('Yarda', esc(o['Yard name']) + ' — ' + esc(o['Location city']) + ' ' + esc(o['Location state']))}
           ${dato('Subasta', (it.r.fecha ? it.r.fecha.toLocaleString('es-SV',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}) : 'sin fecha') + ' · ' + esc(o['Sale Status']))}
           ${dato('Oferta actual', '$' + mil(it.r.alta))}
+          ${it.r.porQuien ? dato('Marcado por', esc(it.r.porQuien.split('@')[0])) : ''}
           ${it.r.bin > 0 ? dato('Buy-It-Now', '$' + mil(it.r.bin)) : ''}
           ${it.r.flete ? dato('Flete', '$' + mil(it.r.flete.total) + ' vía ' + it.r.flete.nav) : ''}
           ${it.r.adu ? dato('Aduana', it.r.adu.txt + ' — DAI ' + (it.r.adu.dai*100).toFixed(0) + '%') : ''}
@@ -1881,15 +1891,15 @@ function pintarSel(){
     $('#tabDea').onclick = () => { SELV='dealer'; pintarSel(); };
   }
 
-  document.querySelectorAll('.pb').forEach(i => i.onchange = e => { const it = SEL.get(e.target.dataset.lote); if(it){ it.prebid = e.target.value; guardarLocal(); pintarSel(); } });
-  document.querySelectorAll('.nt').forEach(i => i.onchange = e => { const it = SEL.get(e.target.dataset.lote); if(it){ it.nota = e.target.value; guardarLocal(); } });
+  document.querySelectorAll('.pb').forEach(i => i.onchange = e => { const it = SEL.get(e.target.dataset.lote); if(it){ it.prebid = e.target.value; SUCIOS.add(e.target.dataset.lote); guardarLocal(); pintarSel(); } });
+  document.querySelectorAll('.nt').forEach(i => i.onchange = e => { const it = SEL.get(e.target.dataset.lote); if(it){ it.nota = e.target.value; SUCIOS.add(e.target.dataset.lote); guardarLocal(); } });
   document.querySelectorAll('[data-quitar]').forEach(b => b.onclick = e => togglePick(e.target.dataset.quitar, false));
   document.querySelectorAll('[data-calc]').forEach(b => b.onclick = e => abrirCalc(e.target.dataset.calc));
   document.querySelectorAll('[data-cop]').forEach(b => b.onclick = e => copiar(e.target.dataset.cop, e.target));
   $('#btnCopLotes').onclick = e => copiar(lotes, e.target);
   $('#btnCopWa').onclick    = e => copiar(textoWhatsapp(), e.target);
   $('#btnImprimir').onclick = () => window.print();
-  $('#btnVaciar').onclick   = () => { if(confirm('¿Vaciar toda la selección?')){ SEL.clear(); guardarLocal(); togglePick('',false); pintarSel(); } };
+  $('#btnVaciar').onclick   = () => { if(confirm('¿Vaciar toda la selección? Se quita también para el resto del equipo.')){ SEL.forEach((v,k)=>QUITADOS.add(k)); SEL.clear(); guardarLocal(); togglePick('',false); pintarSel(); } };
   $('#btnSelCsv').onclick   = bajarSelCsv;
   $('#btnSelEnv').onclick   = enviarSeleccion;
 }
@@ -1915,7 +1925,7 @@ function cargarSel(lotes){
       prebid: x.prebid || '', nota: x.nota || '',
       r: { o:x.o, y:x.y, od:x.od, rd:x.rd, vc:x.vc, alta:x.alta, bin:x.bin,
            dealer:x.dealer, maxOf:x.maxOf, flete:x.flete, adu:x.adu,
-           fecha: x.fecha ? new Date(x.fecha) : null, nuevo:null, motivo:'' }
+           fecha: x.fecha ? new Date(x.fecha) : null, nuevo:null, motivo:'', porQuien: x.porQuien || '' }
     });
   }
 }
@@ -1925,6 +1935,7 @@ function guardarLocal(){
     localStorage.setItem(LLAVE, JSON.stringify({
       guardado: new Date().toISOString(),
       lotes: serializarSel(),
+      quitados: [...QUITADOS],
       cfg: cfgActual()
     }));
     hayGuardado = true;
@@ -1943,6 +1954,7 @@ function restaurarLocal(){
   catch(e){ return; }
   if (!d) return;
   if (d.cfg) aplicarCfg(d.cfg);
+  if (d.quitados) QUITADOS = new Set(d.quitados);
   if (d.lotes && d.lotes.length){
     cargarSel(d.lotes);
     hayGuardado = true;
@@ -2076,7 +2088,7 @@ function usarOferta(){
   } catch(err){}
   if (v === null){ alert('Poné una oferta en el campo de la calculadora antes de usarla.'); return; }
   const it = SEL.get(CALC_LOTE);
-  if (it){ it.prebid = v; it.nota = (it.nota ? it.nota + ' · ' : '') + 'calculado'; guardarLocal(); }
+  if (it){ it.prebid = v; it.nota = (it.nota ? it.nota + ' · ' : '') + 'calculado'; SUCIOS.add(CALC_LOTE); guardarLocal(); }
   cerrarCalc();
   pintarSel();
 }
@@ -2107,7 +2119,7 @@ function cfgActual(){
     cSubasta:$('#cSubasta').value, cTam:$('#cTam').value, cPago:$('#cPago').value, cDivs:$('#cDivs').value, cVersion:$('#cVersion').value, cDealer:$('#cDealer').value, titulos:$('#titulos').value,
     rd:[...document.querySelectorAll('.rd:checked')].map(c=>c.value),
     vd:[...document.querySelectorAll('.vd:checked')].map(c=>c.value), palabras:$('#palabras').value, soloUSA:$('#soloUSA').checked, edos:$('#edos').value, calcUrl:$('#calcUrl').value, fDesde:$('#fDesde').value, fHasta:$('#fHasta').value, conFecha:$('#conFecha').checked, soloAutos:$('#soloAutos').checked, noElec:$('#noElec').checked, soloOferta:$('#soloOferta').checked, soloBIN:$('#soloBIN').checked,
-    dn:[...document.querySelectorAll('.dn:checked')].map(c=>c.value), dondeDano:$('#dondeDano').value,
+    dn:[...document.querySelectorAll('.dn:checked')].map(c=>c.value), dondeDano:$('#dondeDano').value, modoEspejo:$('#modoEspejo').checked,
     tgts:[...document.querySelectorAll('#tgtBody tr')].map(tr=>({
       marca:tr.querySelector('.t-marca').value, modelo:tr.querySelector('.t-modelo').value,
       a1:tr.querySelector('.t-a1').value, a2:tr.querySelector('.t-a2').value,
@@ -2133,6 +2145,7 @@ function aplicarCfg(c){
   ['soloAutos','noElec','soloOferta','soloBIN'].forEach(k=>{ if(c[k]!==undefined) $('#'+k).checked=c[k]; });
   if(c.dn) document.querySelectorAll('.dn').forEach(x=>x.checked=c.dn.includes(x.value));
   if(c.dondeDano) $('#dondeDano').value=c.dondeDano;
+  if(c.modoEspejo!==undefined){ $('#modoEspejo').checked=c.modoEspejo; $('#modoEspejo').onchange && $('#modoEspejo').onchange(); }
   $('#tgtBody').innerHTML=''; (c.tgts||[]).forEach(addTgt); if(!(c.tgts||[]).length) addTgt();
   if(CRUDO.length) correr();
 }
@@ -2238,6 +2251,23 @@ async function entrarEquipo(){
 
 async function subirEquipo(){
   if (!SB) return;
+  if (espejo()){
+    if (!SUCIOS.size) return;
+    sbLuz('guardando pre-bids…');
+    try {
+      for (const lote of [...SUCIOS]){
+        const it = SEL.get(lote); if (!it) { SUCIOS.delete(lote); continue; }
+        await sbFetch('seleccion?lote=eq.' + encodeURIComponent(lote), {
+          method:'PATCH', headers:{'Prefer':'return=minimal'},
+          body: JSON.stringify({ prebid: it.prebid === '' ? null : Number(it.prebid),
+                                 nota: it.nota || null, actualizado: new Date().toISOString() })
+        });
+        SUCIOS.delete(lote);
+      }
+      sbLuz('guardado ' + new Date().toLocaleTimeString('es-SV',{hour:'numeric',minute:'2-digit'}), '#7ee2a8');
+    } catch (err) { sbLuz('error al guardar', '#ff9d9d'); console.warn(err); }
+    return;
+  }
   sbLuz('subiendo…');
   try {
     const filas = [...SEL.entries()].map(([lote, it]) => ({
@@ -2247,6 +2277,13 @@ async function subirEquipo(){
       nota: it.nota || null, dealer: !!it.r.dealer, marcado_por: SB.quien,
       actualizado: new Date().toISOString()
     }));
+    if (QUITADOS.size){
+      const lista = [...QUITADOS].filter(x => /^[\w-]+$/.test(x));
+      if (lista.length)
+        await sbFetch('seleccion?lote=in.(' + lista.join(',') + ')', {method:'DELETE'});
+      QUITADOS.clear();
+      guardarLocal();
+    }
     if (filas.length)
       await sbFetch('seleccion', {method:'POST', headers:{'Prefer':'resolution=merge-duplicates'}, body: JSON.stringify(filas)});
     sbLuz('subido ' + new Date().toLocaleTimeString('es-SV',{hour:'numeric',minute:'2-digit'}), 'var(--verde)');
@@ -2259,9 +2296,11 @@ async function bajarEquipo(){
   try {
     const hoy = new Date().toISOString().slice(0,10);
     const filas = await sbFetch('seleccion?dia=eq.' + hoy + '&select=*');
-    if (filas && filas.length){
-      cargarSel(filas.map(f => Object.assign({}, f.datos, {
-        lote: f.lote, prebid: f.prebid ?? '', nota: f.nota || ''
+    if (filas){
+      const utiles = espejo() ? filas : filas.filter(f => !QUITADOS.has(f.lote));
+      cargarSel(utiles.map(f => Object.assign({}, f.datos, {
+        lote: f.lote, prebid: f.prebid ?? '', nota: f.nota || '',
+        porQuien: f.marcado_por || ''
       })));
       guardarLocal();
       $('#toolbar').classList.remove('hide');
@@ -2274,7 +2313,10 @@ async function bajarEquipo(){
 
 function prenderAuto(){
   if (sbTimer) clearInterval(sbTimer);
-  sbTimer = setInterval(async () => { await subirEquipo(); await bajarEquipo(); }, 30000);
+  sbTimer = setInterval(async () => {
+    await subirEquipo();
+    await bajarEquipo();
+  }, espejo() ? 15000 : 30000);
 }
 function apagarAuto(){ if (sbTimer){ clearInterval(sbTimer); sbTimer = null; } }
 
@@ -2381,6 +2423,12 @@ $('#btnEntrar').onclick = entrarEquipo;
 $('#btnSubir').onclick  = subirEquipo;
 $('#btnBajar').onclick  = bajarEquipo;
 $('#btnSinConectar').onclick = () => $('#login').classList.add('hide');
+$('#modoEspejo').onchange = () => {
+  $('#btnSubir').textContent = espejo() ? '↑ Guardar pre-bids' : '↑ Subir mi selección';
+  $('#btnBajar').textContent = espejo() ? '↻ Actualizar ahora' : '↓ Traer del equipo';
+  if (SB){ prenderAuto(); bajarEquipo(); }
+  guardarLocal();
+};
 $('#sbPass').onkeydown = e => { if (e.key === 'Enter') entrarEquipo(); };
 $('#syncLuz').ondblclick = salirEquipo;
 $('#btnCfgSave').onclick = guardarCfg;
