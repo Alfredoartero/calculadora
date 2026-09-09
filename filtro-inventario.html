@@ -12,6 +12,10 @@
   --azul:#0071e3; --verde:#248a3d; --ambar:#b25000; --rojo:#c7291f;
   --r:12px; --r2:8px;
   --sombra:0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.05);
+  /* respaldo por si queda alguna referencia vieja */
+  --ink:#1d1d1f; --ink-soft:#6e6e73; --line:#d2d2d7; --line-soft:#ebebed;
+  --steel:#f5f5f7; --panel:#fff; --green:#248a3d; --blue:#0071e3;
+  --red:#c7291f; --amber:#b25000;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
@@ -210,8 +214,9 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
 /* ============ TELÉFONO ============ */
 @media (max-width:820px){
   body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
-  header{padding:10px 14px;gap:8px}
-  header h1{font-size:17px}
+  header{padding:9px 14px;gap:8px}
+  header h1{font-size:17px;flex:1 1 100%}
+  header .stat{font-size:12px}
   #calcUrl{display:none}
   #btnSubir,#btnBajar{flex:1;padding:11px 8px;font-size:14px}
 
@@ -257,8 +262,9 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
   td.num{text-align:left}
   .oferta{font-size:19px}
 
-  .toolbar{position:sticky;top:56px;background:var(--lienzo);z-index:8;
-    padding:8px 0;margin:0 0 8px}
+  .toolbar{position:static;padding:0;margin:0 0 10px}
+  .toolbar button{flex:1 1 auto;min-width:44%}
+  table.res th{position:static}
   input,select,button{font-size:16px}
   table.tgt input{font-size:16px}
 
@@ -329,20 +335,11 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
 <header>
   <h1>Filtro de inventario</h1>
   <div class="stat" id="hstat"></div>
-  <div style="flex:1"></div>
-  <button id="btnSubir" class="hide" style="background:var(--green);border-color:var(--green)">↑ Subir mi selección</button>
-  <button id="btnBajar" class="hide" style="background:var(--blue);border-color:var(--blue)">↓ Traer del equipo</button>
+  <button id="btnSubir" class="hide" style="background:var(--verde);border-color:var(--verde)">↑ Subir mi selección</button>
+  <button id="btnBajar" class="hide" style="background:var(--azul);border-color:var(--azul)">↓ Traer del equipo</button>
   <span class="stat" id="syncLuz"></span>
-  <input type="text" id="calcUrl" value="https://alfredoartero.github.io/calculadora/"
-         style="width:250px;padding:5px 7px;font-size:12px" title="Dirección de tu calculadora">
-  <button class="ghost" id="btnCalc">Conectar</button>
-  <input type="file" id="calcFile" accept=".html" class="hide">
-  <button class="ghost" id="btnCalcFile" title="Si el link no jala, cargá el archivo">archivo</button>
-  <button class="ghost" id="btnRecibir">Abrir selección recibida</button>
-  <input type="file" id="selFile" accept=".json" class="hide">
-  <button class="ghost" id="btnCfgSave">Guardar ajustes</button>
-  <button class="ghost" id="btnCfgLoad">Cargar ajustes</button>
-  <input type="file" id="cfgFile" accept=".json" class="hide">
+  <div class="sp"></div>
+
 </header>
 
 <div class="wrap">
@@ -365,6 +362,27 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
     <input type="file" id="fileAyer" accept=".csv" class="hide">
     <div class="note" id="fnameAyer">Sirve para marcar cuáles lotes entraron hoy.</div>
     <label class="chk" style="margin-top:6px"><input type="checkbox" id="soloNuevos"> Mostrar solo los nuevos</label>
+  </div>
+
+  <div class="card">
+    <h2>Herramientas</h2>
+    <label class="f" style="margin-top:0">Calculadora</label>
+    <div style="display:flex;gap:6px">
+      <button class="ghost" id="btnCalc" style="flex:1">Conectar</button>
+      <button class="ghost" id="btnCalcFile" title="Si el link no jala, cargá el archivo">archivo</button>
+    </div>
+    <input type="text" id="calcUrl" value="https://alfredoartero.github.io/calculadora/"
+           style="margin-top:6px;font-size:13px">
+    <input type="file" id="calcFile" accept=".html" class="hide">
+
+    <label class="f">Selección y ajustes</label>
+    <button class="ghost" id="btnRecibir" style="width:100%">Abrir selección recibida</button>
+    <input type="file" id="selFile" accept=".json" class="hide">
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button class="ghost" id="btnCfgSave" style="flex:1">Guardar ajustes</button>
+      <button class="ghost" id="btnCfgLoad" style="flex:1">Cargar ajustes</button>
+    </div>
+    <input type="file" id="cfgFile" accept=".json" class="hide">
   </div>
 
   <div class="card">
@@ -455,8 +473,8 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
     <button class="ghost" id="btnTit" style="margin-top:6px;width:100%">Ver códigos del archivo</button>
   </div>
 
-  <div class="card" style="border-color:var(--ink);border-width:2px">
-    <h2 style="color:var(--ink)">Hasta cuánto ofertar</h2>
+  <div class="card" style="border-color:var(--tinta);border-width:2px">
+    <h2 style="color:var(--tinta)">Hasta cuánto ofertar</h2>
     <label class="f">Costo total objetivo (puesto en El Salvador)</label>
     <input type="number" id="costoObj" placeholder="Ej: 9500" style="font-size:17px;font-weight:700">
     <div class="note">La herramienta tantea con tu calculadora hasta dar con la oferta más alta que todavía cabe en ese costo.</div>
@@ -528,7 +546,7 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
     </select>
   </div>
 
-  <div id="avisoRestaurado" class="card hide" style="border-color:var(--blue);background:#eef5fb"></div>
+  <div id="avisoRestaurado" class="card hide" style="border-color:var(--azul);background:#eef5fb"></div>
   <div id="salida"><div class="empty">Cargá el archivo del día para empezar.</div></div>
 
 </div>
@@ -550,7 +568,7 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
         <small id="modalLote"></small>
       </div>
       <div style="flex:1"></div>
-      <small id="modalAviso" style="color:var(--amber)"></small>
+      <small id="modalAviso" style="color:var(--ambar)"></small>
       <button id="btnUsar">Usar esta oferta →</button>
       <button class="ghost" id="btnCerrar">Cerrar</button>
     </div>
@@ -1322,13 +1340,13 @@ function fecha(v, hora){
 }
 const DIAS = ['dom','lun','mar','mié','jue','vie','sáb'];
 function verFecha(d){
-  if (!d) return '<span style="color:var(--ink-soft)">sin fecha</span>';
+  if (!d) return '<span style="color:var(--gris)">sin fecha</span>';
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const dd = new Date(d); dd.setHours(0,0,0,0);
   const dif = Math.round((dd-hoy)/86400000);
   const txt = DIAS[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1);
   const et = dif < 0 ? 'ya pasó' : dif === 0 ? 'HOY' : dif === 1 ? 'mañana' : 'en '+dif+' días';
-  const col = dif <= 1 ? 'var(--red)' : dif <= 3 ? 'var(--amber)' : 'var(--ink-soft)';
+  const col = dif <= 1 ? 'var(--rojo)' : dif <= 3 ? 'var(--ambar)' : 'var(--gris)';
   return txt + '<small style="display:block;color:'+col+';font-weight:'+(dif<=1?'700':'400')+'">'+et+'</small>';
 }
 const esc = v => String(v??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1568,18 +1586,18 @@ function correr(){
 
 function pintarFunnel(f, tits, danos, tgts){
   const verTgts = (!tgts || !tgts.length)
-    ? '<span style="color:var(--ink-soft);font-weight:400"> — sin filtro, pasan todas las marcas</span>'
-    : '<span style="color:var(--ink-soft);font-weight:400"> — ' +
+    ? '<span style="color:var(--gris);font-weight:400"> — sin filtro, pasan todas las marcas</span>'
+    : '<span style="color:var(--gris);font-weight:400"> — ' +
       tgts.slice(0,3).map(t => (t.marca||'*') + (t.modelo ? ' ' + t.modelo : '')).join(', ') +
       (tgts.length > 3 ? ' +' + (tgts.length-3) : '') + '</span>';
   const dd = document.getElementById('fDesde').value, dh = document.getElementById('fHasta').value;
   const rango = (dd || dh)
-    ? '<span style="color:var(--ink-soft);font-weight:400"> — ' + (dd||'…') + ' a ' + (dh||'…') + '</span>'
-    : '<span style="color:var(--ink-soft);font-weight:400"> — todas</span>';
+    ? '<span style="color:var(--gris);font-weight:400"> — ' + (dd||'…') + ' a ' + (dh||'…') + '</span>'
+    : '<span style="color:var(--gris);font-weight:400"> — todas</span>';
   const lista = (a, vacio) => {
-    if (!a || !a.length) return '<span style="color:var(--ink-soft);font-weight:400"> — '+vacio+'</span>';
+    if (!a || !a.length) return '<span style="color:var(--gris);font-weight:400"> — '+vacio+'</span>';
     const t = a.slice(0,4).join(', ') + (a.length>4 ? ' +'+(a.length-4) : '');
-    return '<span style="color:var(--ink-soft);font-weight:400"> — '+t+'</span>';
+    return '<span style="color:var(--gris);font-weight:400"> — '+t+'</span>';
   };
   const L = [
     ['Lotes en el archivo',            f.tot,  null],
@@ -1599,7 +1617,7 @@ function pintarFunnel(f, tits, danos, tgts){
   $('#funnel').innerHTML = L.map(([k, q, quita], i) => {
     const cero = quita === 0;
     const marca = quita === null ? ''
-      : `<span style="color:${cero?'var(--line)':'var(--red)'};font-size:11px">${cero?'no quita nada':'−'+quita.toLocaleString('en-US')}</span>`;
+      : `<span style="color:${cero?'var(--sep)':'var(--rojo)'};font-size:11px">${cero?'no quita nada':'−'+quita.toLocaleString('en-US')}</span>`;
     return `<div${i===L.length-1?' style="font-weight:700"':''}>
       <span>${k}</span>${marca}<span>quedan ${q.toLocaleString('en-US')}</span></div>`;
   }).join('');
@@ -1677,18 +1695,18 @@ function pintar(){
       <td class="veh"><b>${r.y||''} ${esc(o['Make'])} ${esc(o['Model Group'])}</b>
         <small>${esc(o['Model Detail'])} ${esc(o['Body Style'])}</small></td>
       <td><a href="https://www.copart.com/lot/${lote}" target="_blank" rel="noopener">${lote}</a>
-        <small style="display:block;color:var(--ink-soft)">${esc(o['VIN'])}</small></td>
-      <td>${esc(o['Damage Description'])}<small style="display:block;color:var(--ink-soft)">${esc(o['Secondary Damage'])}</small></td>
+        <small style="display:block;color:var(--gris)">${esc(o['VIN'])}</small></td>
+      <td>${esc(o['Damage Description'])}<small style="display:block;color:var(--gris)">${esc(o['Secondary Damage'])}</small></td>
       <td class="num">${mil(r.od)}</td>
-      <td>${esc(o['Sale Title Type'])} <small style="color:var(--ink-soft)">${esc(o['Sale Title State'])}</small></td>
-      <td>${esc(limpiaVend(o['Seller Name'])) || '<span style="color:var(--ink-soft)">sin identificar</span>'}</td>
-      <td>${esc(o['Yard name'])}<small style="display:block;color:var(--ink-soft)">${esc(o['Location state'])}${o['Special Note']?' · '+esc(o['Special Note']):''}</small></td>
+      <td>${esc(o['Sale Title Type'])} <small style="color:var(--gris)">${esc(o['Sale Title State'])}</small></td>
+      <td>${esc(limpiaVend(o['Seller Name'])) || '<span style="color:var(--gris)">sin identificar</span>'}</td>
+      <td>${esc(o['Yard name'])}<small style="display:block;color:var(--gris)">${esc(o['Location state'])}${o['Special Note']?' · '+esc(o['Special Note']):''}</small></td>
       <td>${verFecha(r.fecha)}</td>
       <td>${esc(o['Sale Status']||'')}</td>
       <td class="num">$${mil(r.alta)}</td>
       <td class="num oferta ${r.maxOf===null?'':(r.alta<=r.maxOf?'g':'r')}">
-        ${luz}${r.maxOf===null ? '<span style="font-weight:400;color:var(--ink-soft)">'+esc(r.motivo||'—')+'</span>' : '$'+mil(r.maxOf)}
-        ${r.flete ? '<small style="display:block;font-weight:400;color:var(--ink-soft)">flete $'+mil(r.flete.total)+' '+r.flete.nav+' · '+r.adu.txt+'</small>' : ''}</td>
+        ${luz}${r.maxOf===null ? '<span style="font-weight:400;color:var(--gris)">'+esc(r.motivo||'—')+'</span>' : '$'+mil(r.maxOf)}
+        ${r.flete ? '<small style="display:block;font-weight:400;color:var(--gris)">flete $'+mil(r.flete.total)+' '+r.flete.nav+' · '+r.adu.txt+'</small>' : ''}</td>
       <td>${tags.join('')}</td>
     </tr>`;
   }
@@ -1767,7 +1785,7 @@ function pintarSel(){
     <div id="hoja">
     <div class="hoja-top">
       <div>
-        <h2 style="font-size:17px;color:var(--ink);margin:0">Hoja de pre-bids · ${SELV === 'dealer' ? 'cuenta dealer' : 'cuenta normal'}</h2>
+        <h2 style="font-size:17px;color:var(--tinta);margin:0">Hoja de pre-bids · ${SELV === 'dealer' ? 'cuenta dealer' : 'cuenta normal'}</h2>
         <div class="note" style="margin:2px 0 0">${filas.length} lotes · ${new Date().toLocaleDateString('es-SV',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
       </div>
       <div style="flex:1"></div>
@@ -1782,7 +1800,7 @@ function pintarSel(){
       <button class="ghost" id="btnCopWa">Copiar para WhatsApp</button>
       <button class="ghost" id="btnImprimir">Imprimir / PDF</button>
       <button class="ghost" id="btnSelCsv">Bajar CSV</button>
-      <button id="btnSelEnv" style="background:var(--blue);border-color:var(--blue)">Enviar selección</button>
+      <button id="btnSelEnv" style="background:var(--azul);border-color:var(--azul)">Enviar selección</button>
       <div class="sp"></div>
       <button class="ghost" id="btnVaciar">Vaciar</button>
     </div>`;
@@ -1840,7 +1858,7 @@ function pintarSel(){
     '<div class="empty" style="margin-top:10px">No hay lotes seleccionados en esta cuenta.</div>';
   $('#salida').innerHTML = h;
 
-  const act = b => { b.style.background='var(--ink)'; b.style.color='#fff'; };
+  const act = b => { b.style.background='var(--tinta)'; b.style.color='#fff'; };
   if ($('#tabNor')){
     (SELV==='normal' ? act($('#tabNor')) : act($('#tabDea')));
     $('#tabNor').onclick = () => { SELV='normal'; pintarSel(); };
@@ -2163,7 +2181,7 @@ async function arranque(){
 }
 
 function sbLuz(txt, color){
-  const el = $('#syncLuz'); el.textContent = txt; el.style.color = color || 'var(--ink-soft)';
+  const el = $('#syncLuz'); el.textContent = txt; el.style.color = color || 'var(--gris)';
 }
 
 async function sbFetch(ruta, opciones){
@@ -2215,8 +2233,8 @@ async function subirEquipo(){
     }));
     if (filas.length)
       await sbFetch('seleccion', {method:'POST', headers:{'Prefer':'resolution=merge-duplicates'}, body: JSON.stringify(filas)});
-    sbLuz('subido ' + new Date().toLocaleTimeString('es-SV',{hour:'numeric',minute:'2-digit'}), 'var(--green)');
-  } catch (err) { sbLuz('error al subir', 'var(--red)'); console.warn(err); }
+    sbLuz('subido ' + new Date().toLocaleTimeString('es-SV',{hour:'numeric',minute:'2-digit'}), 'var(--verde)');
+  } catch (err) { sbLuz('error al subir', 'var(--rojo)'); console.warn(err); }
 }
 
 async function bajarEquipo(){
@@ -2234,8 +2252,8 @@ async function bajarEquipo(){
       pestanas();
       if (VISTA === 'seleccion') pintarSel();
     }
-    sbLuz('al día ' + new Date().toLocaleTimeString('es-SV',{hour:'numeric',minute:'2-digit'}), 'var(--green)');
-  } catch (err) { sbLuz('error al bajar', 'var(--red)'); console.warn(err); }
+    sbLuz('al día ' + new Date().toLocaleTimeString('es-SV',{hour:'numeric',minute:'2-digit'}), 'var(--verde)');
+  } catch (err) { sbLuz('error al bajar', 'var(--rojo)'); console.warn(err); }
 }
 
 function prenderAuto(){
