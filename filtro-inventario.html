@@ -185,6 +185,8 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
   letter-spacing:-.02em;background:transparent}
 .bidrow input:focus{box-shadow:none}
 .solo-print{display:none}
+.solo-cel{display:none}
+table.tgt td.on{text-align:center}
 
 /* ---------- entrada ---------- */
 #login{position:fixed;inset:0;z-index:200;background:var(--lienzo);display:flex;padding:24px;overflow:auto}
@@ -267,6 +269,20 @@ img.th{width:84px;height:63px;object-fit:cover;background:var(--sep2);border-rad
   table.res th{position:static}
   input,select,button{font-size:16px}
   table.tgt input{font-size:16px}
+
+  /* la tabla de marca y modelo se vuelve ficha */
+  table.tgt thead{display:none}
+  table.tgt,table.tgt tbody{display:block;width:100%}
+  table.tgt tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;
+    background:var(--sup2);border:1px solid var(--sep2);border-radius:var(--r2);
+    padding:12px;margin-bottom:10px;align-items:center}
+  table.tgt td{display:block;padding:0}
+  table.tgt td:nth-child(1),table.tgt td:nth-child(2){grid-column:span 2}
+  table.tgt td.on{grid-column:1;text-align:left}
+  table.tgt td.x{grid-column:2;text-align:right;width:auto}
+  table.tgt td.x button{padding:7px 16px}
+  table.tgt input{font-size:16px;padding:9px 11px;background:var(--sup)}
+  .solo-cel{display:inline;font-size:14.5px}
 
   .lote{flex-wrap:wrap;gap:10px}
   .lote-foto,.lote-foto img{width:100%;height:auto;max-height:220px}
@@ -1358,11 +1374,11 @@ function addTgt(v){
   tr.innerHTML = `
     <td><input class="t-marca"  value="${v.marca||''}"  placeholder="Toyota"></td>
     <td><input class="t-modelo" value="${v.modelo||''}" placeholder="Corolla"></td>
-    <td><input class="t-a1" type="number" value="${v.a1||''}"></td>
-    <td><input class="t-a2" type="number" value="${v.a2||''}"></td>
-    <td><input class="t-mi" type="number" value="${v.mi||''}" placeholder="general"></td>
-    <td><input class="t-of" type="number" value="${v.of||''}" placeholder="general"></td>
-    <td style="text-align:center"><input class="t-on" type="checkbox" ${v.on===false?'':'checked'}></td>
+    <td><input class="t-a1" type="number" value="${v.a1||''}" placeholder="Año desde"></td>
+    <td><input class="t-a2" type="number" value="${v.a2||''}" placeholder="Año hasta"></td>
+    <td><input class="t-mi" type="number" value="${v.mi||''}" placeholder="Millas tope"></td>
+    <td><input class="t-of" type="number" value="${v.of||''}" placeholder="Oferta máx"></td>
+    <td class="on"><label class="chk" style="border:0;padding:0"><input class="t-on" type="checkbox" ${v.on===false?'':'checked'}> <span class="solo-cel">Activo</span></label></td>
     <td class="x"><button class="ghost" title="Quitar">×</button></td>`;
   tr.querySelector('td.x button').onclick = () => tr.remove();
   $('#tgtBody').appendChild(tr);
