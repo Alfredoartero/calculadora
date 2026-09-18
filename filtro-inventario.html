@@ -558,6 +558,7 @@ table.tgt td.on{text-align:center}
   <div class="toolbar hide" id="toolbar">
     <button id="btnCorrer">Aplicar filtros</button>
     <button class="ghost" id="btnCsv">Bajar la lista</button>
+    <button class="ghost" id="btnTodos">Seleccionar todos</button>
     <button class="ghost" id="btnGeneral">General (0)</button>
     <button class="ghost" id="btnDealer">Zona dealer (0)</button>
     <button class="ghost" id="btnVerSel">Selección (0)</button>
@@ -1675,6 +1676,16 @@ function pestanas(){
   [['general',$('#btnGeneral')],['dealer',$('#btnDealer')],['seleccion',$('#btnVerSel')]]
     .forEach(([v,b]) => VISTA === v ? act(b) : off(b));
   $('#tbGenN').textContent = nG; $('#tbDeaN').textContent = nD; $('#tbSelN').textContent = SEL.size;
+  const bt = $('#btnTodos');
+  if (bt){
+    const esp = espejo();
+    bt.classList.toggle('hide', esp || VISTA === 'seleccion');
+    if (!esp && VISTA !== 'seleccion'){
+      const base = baseVista();
+      const todos = base.length && base.every(r => SEL.has(String(r.o['Lot number']).trim()));
+      bt.textContent = todos ? 'Quitar los ' + base.length : 'Seleccionar los ' + base.length.toLocaleString('en-US');
+    }
+  }
   [['general',$('#tbGen')],['dealer',$('#tbDea')],['seleccion',$('#tbSel')]]
     .forEach(([v,b]) => b.classList.toggle('on', VISTA === v));
 }
@@ -1682,7 +1693,7 @@ function pestanas(){
 function pintar(){
   if (VISTA !== 'dealer') VISTA = 'general';
   pestanas();
-  const base = RES.filter(r => VISTA === 'dealer' ? r.dealer : !r.dealer);
+  const base = baseVista();
   if (!base.length){
     $('#salida').innerHTML = '<div class="empty">' + (VISTA === 'dealer'
       ? 'Ningún lote de la zona dealer pasó los filtros.'
@@ -1749,6 +1760,47 @@ function pintar(){
 }
 
 /* ---------- selección ---------- */
+const TOPE_SEL = 500;
+
+function baseVista(){
+  return RES.filter(r => VISTA === 'dealer' ? r.dealer : !r.dealer);
+}
+
+function marcarTodos(){
+  if (espejo()){
+    alert('Estás en modo espejo: tu lista refleja la de quien busca, así que no agregás lotes desde acá.');
+    return;
+  }
+  const base = baseVista();
+  if (!base.length){ alert('No hay lotes en esta lista.'); return; }
+
+  const lotes = base.map(r => String(r.o['Lot number']).trim());
+  const yaTodos = lotes.every(l => SEL.has(l));
+
+  if (yaTodos){
+    if (!confirm('Los ' + lotes.length + ' ya están seleccionados. ¿Quitarlos todos?')) return;
+    lotes.forEach(l => { SEL.delete(l); QUITADOS.add(l); });
+  } else {
+    const nuevos = lotes.filter(l => !SEL.has(l));
+    if (SEL.size + nuevos.length > TOPE_SEL){
+      alert('Serían ' + (SEL.size + nuevos.length).toLocaleString('en-US') + ' lotes y el tope es ' + TOPE_SEL + '.\n\n' +
+            'Apretá más los filtros — por marca y modelo, o por fecha de subasta — y volvé a intentar. ' +
+            'Una lista de cientos de carros nadie la revisa de verdad.');
+      return;
+    }
+    if (nuevos.length > 40 && !confirm('¿Seleccionar ' + nuevos.length + ' lotes?')) return;
+    for (const r of base){
+      const l = String(r.o['Lot number']).trim();
+      if (SEL.has(l)) continue;
+      SEL.set(l, {r, prebid: r.maxOf === null ? '' : Math.round(r.maxOf), nota: ''});
+      QUITADOS.delete(l);
+    }
+  }
+  guardarLocal();
+  pestanas();
+  pintar();
+}
+
 function togglePick(lote, on){
   if (on){
     const r = RES.find(x => String(x.o['Lot number']).trim() === lote);
@@ -2367,6 +2419,7 @@ $('#titulos').oninput = () => {
 $('#titulos').onchange = () => { if(CRUDO.length) correr(); };
 $('#btnCorrer').onclick = () => { if(CRUDO.length) contarVend(); correr(); };
 $('#btnCsv').onclick = bajarCSV;
+$('#btnTodos').onclick = marcarTodos;
 function abrirFiltros(v){
   $('#rail').classList.toggle('abierto', v);
   $('#velo').classList.toggle('on', v);
