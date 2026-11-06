@@ -175,6 +175,26 @@
         .tab-btn.active { background: linear-gradient(90deg, var(--brand), #ff5fa3); color: #05070c; box-shadow: 0 4px 16px -4px rgba(255,46,136,0.5); }
         .modo-ganancia-btn span { color: var(--txt-soft); transition: all 0.15s; }
         .modo-ganancia-btn input:checked + span { background: linear-gradient(90deg, var(--cyan), #5eead4); color: #05070c; }
+
+        /* ===== Subastas de clientes ===== */
+        .sub-btn { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; padding:7px 12px; border-radius:8px; border:1px solid var(--line-strong); background:#0a0f1c; color:var(--txt); cursor:pointer; }
+        .sub-btn:hover { border-color:var(--cyan); }
+        .sub-btn-primary { background:linear-gradient(90deg, var(--brand), #ff5fa3); color:#05070c; border-color:transparent; }
+        .sub-table { width:100%; min-width:1250px; border-collapse:separate; border-spacing:0; font-size:12px; }
+        .sub-table th { text-align:left; font-family:'JetBrains Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--txt-soft); padding:8px 6px; border-bottom:1px solid var(--line-strong); white-space:nowrap; }
+        .sub-table td { padding:3px 4px; border-bottom:1px solid var(--line); vertical-align:middle; }
+        .sub-table tr.sub-day td { padding:10px 6px 6px; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:11px; color:var(--brand); text-transform:uppercase; letter-spacing:.1em; border-bottom:1px solid var(--brand-soft); }
+        .sub-table input, .sub-table select { width:100%; background:transparent; color:var(--txt); border:1px solid transparent; border-radius:6px; padding:6px; font:inherit; color-scheme:dark; }
+        .sub-table select option { background:#0a0f1c; }
+        .sub-table input:hover, .sub-table select:hover { border-color:var(--line-strong); }
+        .sub-table input:focus, .sub-table select:focus { outline:none; border-color:var(--cyan); background:#0a0f1c; }
+        .sub-table input.sub-max { background:var(--brand-soft); color:#ff7db4; font-weight:700; border-color:rgba(255,46,136,.35); }
+        .sub-table a.sub-lot { color:var(--cyan); font-size:10px; text-decoration:none; white-space:nowrap; padding-left:6px; }
+        .sub-table tr.sub-ganado td { background:rgba(16,185,129,.10); }
+        .sub-table tr.sub-perdido td { opacity:.45; }
+        .sub-icon { background:none; border:0; cursor:pointer; font-size:15px; padding:4px 6px; color:var(--txt-soft); }
+        .sub-icon:hover { color:var(--txt); }
+        .sub-del:hover { color:#f87171; }
     </style>
 </head>
 <body class="p-3 md:p-6">
@@ -196,6 +216,7 @@
                 <button id="tabBtnRapido" onclick="mostrarModo('rapido')" class="tab-btn flex-1 sm:flex-none">⚡ Cálculo Rápido</button>
                 <button id="tabBtnGanado" onclick="mostrarModo('ganado')" class="tab-btn flex-1 sm:flex-none">🏆 Ya Ganado</button>
                 <button id="tabBtnCotizacion" onclick="mostrarModo('cotizacion')" class="tab-btn flex-1 sm:flex-none">📄 Generar Cotización</button>
+                <button id="tabBtnSubastas" onclick="mostrarModo('subastas')" class="tab-btn flex-1 sm:flex-none">📋 Subastas</button>
             </div>
         </div>
 
@@ -467,6 +488,42 @@
             </div>
         </div>
 
+        <div id="tabSubastas" class="hidden no-print">
+            <div class="card p-4 sm:p-6 space-y-4" style="border-top:2px solid var(--brand);">
+                <div class="step-eyebrow border-b pb-3 flex-wrap" style="border-color:var(--line);">
+                    <span class="step-num">📋</span>
+                    <h2 class="font-mono text-xs font-bold text-[var(--txt)] uppercase tracking-[0.15em]">Subastas de Clientes — Hasta cuánto apostar</h2>
+                    <div class="ml-auto flex gap-2 flex-wrap">
+                        <button onclick="subAgregar()" class="sub-btn sub-btn-primary">+ Agregar carro</button>
+                        <button onclick="subCopiar()" class="sub-btn">Copiar lista</button>
+                    </div>
+                </div>
+                <p class="text-[11px] leading-relaxed" style="color:var(--txt-soft);">
+                    Ordenado por fecha, hora de inicio y número de item (número más bajo pasa primero). Edita cualquier celda.
+                    <strong style="color:var(--txt);">🧮</strong> manda el máximo (o la oferta actual) a "⚡ Cálculo Rápido" para ver costo y precio al cliente;
+                    ahí puedes guardar la oferta como máximo. Se guarda en este navegador. <span id="subStatus" style="color:var(--cyan);"></span>
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="sub-table">
+                        <thead><tr>
+                            <th>Fecha</th><th>Arranca</th><th>Item</th><th>Carro</th><th>Lote</th><th>Yarda</th>
+                            <th>Cliente</th><th>Presup. cliente</th><th>Oferta actual</th><th style="color:var(--brand);">Máx. a apostar</th>
+                            <th>Estado</th><th>Notas</th><th></th>
+                        </tr></thead>
+                        <tbody id="subRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aviso flotante: oferta cargada desde Subastas -->
+        <div id="subBanner" class="hidden no-print fixed bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-xl px-4 py-3 flex items-center gap-3 flex-wrap" style="background:#0a0f1c;border:1px solid var(--brand);box-shadow:0 10px 30px -10px rgba(255,46,136,.6);max-width:95vw;">
+            <span id="subBannerTxt" class="font-mono text-[11px]" style="color:var(--txt);"></span>
+            <button onclick="subGuardarMax()" class="sub-btn sub-btn-primary">Guardar oferta como máximo</button>
+            <button onclick="mostrarModo('subastas')" class="sub-btn">← Volver a la lista</button>
+            <button onclick="subCerrarBanner()" class="sub-btn" title="Cerrar">×</button>
+        </div>
+
         <div id="tabCotizacion" class="hidden">
             <div class="max-w-[560px] mx-auto mb-6 no-print">
                 <div class="card p-6 space-y-4" style="border-top:2px solid var(--brand);">
@@ -547,8 +604,8 @@
 
     <script>
         function mostrarModo(modo) {
-            const tabs = { rapido: 'tabRapido', ganado: 'tabGanado', cotizacion: 'tabCotizacion' };
-            const btns = { rapido: 'tabBtnRapido', ganado: 'tabBtnGanado', cotizacion: 'tabBtnCotizacion' };
+            const tabs = { rapido: 'tabRapido', ganado: 'tabGanado', cotizacion: 'tabCotizacion', subastas: 'tabSubastas' };
+            const btns = { rapido: 'tabBtnRapido', ganado: 'tabBtnGanado', cotizacion: 'tabBtnCotizacion', subastas: 'tabBtnSubastas' };
             Object.keys(tabs).forEach(key => {
                 const tabEl = document.getElementById(tabs[key]);
                 const btnEl = document.getElementById(btns[key]);
@@ -561,6 +618,7 @@
                 }
             });
             if (modo === 'cotizacion') actualizar();
+            if (modo === 'subastas') { try { subRender(); } catch(e) { console.error(e); } }
         }
 
         let navieraManual = false;
@@ -1421,5 +1479,145 @@
         document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-SV', { day: 'numeric', month: 'long', year: 'numeric' });
         window.onload = function() { toggleTransferencia(); toggleValorDirecto(); calcular(); mostrarModo('rapido'); };
     </script>
+    <!-- ===== SUBASTAS DE CLIENTES (lista editable, se guarda en este navegador) ===== -->
+    <script>
+    (function () {
+        const SUB_KEY = 'iy_subastas_clientes_v1';
+        const SUB_ESTADOS = ['Pendiente', 'Apostando', 'Ganado', 'Perdido', 'No apostar'];
+        const SUB_SEED = [
+            {fecha:'2026-11-06',hora:'09:00',item:'2',carro:'2024 Mitsubishi Mirage G4 ES',lote:'71024076',yarda:'PA - Philadelphia',cliente:'Marta Velasquez (sin responder)',presupuesto:'7500',oferta:'2000',max:'',estado:'Pendiente',notas:''},
+            {fecha:'2026-11-06',hora:'09:00',item:'5',carro:'2019 Hyundai Elantra SE',lote:'75186336',yarda:'NY - Long Island',cliente:'Medardo Merino',presupuesto:'6700',oferta:'2200',max:'',estado:'Pendiente',notas:''},
+            {fecha:'2026-11-06',hora:'09:00',item:'89',carro:'2024 Mitsubishi Mirage G4 ES',lote:'70702826',yarda:'FL - Punta Gorda',cliente:'Marta Velasquez (sin responder)',presupuesto:'7500',oferta:'3000',max:'',estado:'Pendiente',notas:''},
+            {fecha:'2026-11-06',hora:'09:00',item:'A/137',carro:'2020 Hyundai Elantra SE',lote:'71617266',yarda:'PA - Philadelphia',cliente:'Carlos Pablo',presupuesto:'6800',oferta:'2250',max:'',estado:'Pendiente',notas:''},
+            {fecha:'2026-11-06',hora:'09:00',item:'2034',carro:'2020 Hyundai Elantra SEL',lote:'75406386',yarda:'NY - Long Island',cliente:'Carlos Pablo',presupuesto:'6800',oferta:'1900',max:'',estado:'Pendiente',notas:''},
+            {fecha:'2026-11-06',hora:'09:00',item:'2048',carro:'2019 Hyundai Elantra SE',lote:'72156126',yarda:'PA - Chambersburg',cliente:'Medardo Merino',presupuesto:'6700',oferta:'2000',max:'',estado:'Pendiente',notas:''},
+            {fecha:'2026-11-06',hora:'09:00',item:'B/2274',carro:'2019 Hyundai Elantra Value Edition',lote:'74291476',yarda:'PA - Philadelphia',cliente:'Medardo Merino y Carlos Pablo',presupuesto:'6700 / 6800',oferta:'2450',max:'',estado:'Pendiente',notas:'Lo eligieron los dos'},
+            {fecha:'2026-11-06',hora:'12:00',item:'99',carro:'2020 Kia Forte LXS',lote:'65926726',yarda:'LA - Baton Rouge',cliente:'Carlos Pablo',presupuesto:'6800',oferta:'3050',max:'',estado:'Pendiente',notas:''}
+        ];
+        const COLS = [
+            ['fecha','date','118px'],['hora','time','92px'],['item','text','70px'],['carro','text','210px'],['lote','text','150px'],
+            ['yarda','text','140px'],['cliente','text','180px'],['presupuesto','text','90px'],['oferta','number','90px'],
+            ['max','number','105px'],['estado','select','110px'],['notas','text','170px']
+        ];
+
+        let subRows = [];
+        let subActivo = null; // índice de la fila mandada a la calculadora
+
+        function load() {
+            try {
+                const raw = localStorage.getItem(SUB_KEY);
+                subRows = raw ? JSON.parse(raw) : SUB_SEED.slice();
+            } catch (e) { subRows = SUB_SEED.slice(); }
+        }
+        function save() {
+            try { localStorage.setItem(SUB_KEY, JSON.stringify(subRows)); setStatus('Guardado ✓'); }
+            catch (e) { setStatus('No se pudo guardar en este navegador'); }
+        }
+        function setStatus(t) { const el = document.getElementById('subStatus'); if (el) { el.textContent = t; clearTimeout(setStatus._t); setStatus._t = setTimeout(() => el.textContent = '', 2500); } }
+        function itemNum(v) { const m = String(v || '').match(/(\d+)\s*$/); return m ? parseInt(m[1], 10) : 99999; }
+        function sortRows() {
+            subRows.sort((a, b) => (a.fecha || '9').localeCompare(b.fecha || '9') || (a.hora || '99').localeCompare(b.hora || '99') || itemNum(a.item) - itemNum(b.item));
+        }
+        function fmtDay(d) {
+            if (!d) return 'Sin fecha';
+            const s = new Date(d + 'T12:00:00').toLocaleDateString('es-SV', { weekday: 'long', day: 'numeric', month: 'long' });
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+        function fmtHora(h) {
+            if (!h) return '';
+            const [H, M] = h.split(':').map(Number); const ap = H >= 12 ? 'p.m.' : 'a.m.';
+            return ((H % 12) || 12) + ':' + String(M).padStart(2, '0') + ' ' + ap;
+        }
+
+        function render() {
+            const tb = document.getElementById('subRows'); if (!tb) return;
+            sortRows();
+            tb.innerHTML = '';
+            let lastDay = null;
+            subRows.forEach((r, i) => {
+                if (r.fecha !== lastDay) {
+                    lastDay = r.fecha;
+                    const trd = document.createElement('tr'); trd.className = 'sub-day';
+                    const tdd = document.createElement('td'); tdd.colSpan = 13; tdd.textContent = fmtDay(r.fecha);
+                    trd.appendChild(tdd); tb.appendChild(trd);
+                }
+                const tr = document.createElement('tr');
+                const est = (r.estado || '').toLowerCase();
+                if (est === 'ganado') tr.className = 'sub-ganado';
+                if (est === 'perdido' || est === 'no apostar') tr.className = 'sub-perdido';
+                COLS.forEach(([k, type, w]) => {
+                    const td = document.createElement('td'); td.style.width = w;
+                    let el;
+                    if (type === 'select') {
+                        el = document.createElement('select');
+                        SUB_ESTADOS.forEach(o => { const op = document.createElement('option'); op.textContent = o; if (o === r[k]) op.selected = true; el.appendChild(op); });
+                    } else {
+                        el = document.createElement('input'); el.type = type; el.value = r[k] || '';
+                        if (type === 'number') { el.min = '0'; el.step = '25'; el.placeholder = '$'; }
+                        if (k === 'max') el.className = 'sub-max';
+                        if (k === 'lote') el.placeholder = '# lote';
+                        if (k === 'carro') el.placeholder = 'Año marca modelo';
+                    }
+                    el.addEventListener('change', () => {
+                        r[k] = el.value; save();
+                        if (['fecha', 'hora', 'item', 'estado', 'lote'].includes(k)) render();
+                    });
+                    if (k === 'lote') {
+                        const wrap = document.createElement('div'); wrap.style.display = 'flex'; wrap.style.alignItems = 'center';
+                        wrap.appendChild(el);
+                        if (r.lote) { const a = document.createElement('a'); a.className = 'sub-lot'; a.href = 'https://www.copart.com/lot/' + encodeURIComponent(r.lote); a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Copart ↗'; wrap.appendChild(a); }
+                        td.appendChild(wrap);
+                    } else td.appendChild(el);
+                    tr.appendChild(td);
+                });
+                const tdA = document.createElement('td'); tdA.style.whiteSpace = 'nowrap';
+                const bc = document.createElement('button'); bc.className = 'sub-icon'; bc.title = 'Calcular en Cálculo Rápido'; bc.textContent = '🧮';
+                bc.onclick = () => usarEnCalc(i);
+                const bd = document.createElement('button'); bd.className = 'sub-icon sub-del'; bd.title = 'Quitar'; bd.textContent = '×';
+                bd.onclick = () => { if (subActivo === i) subCerrarBanner(); subRows.splice(i, 1); subActivo = null; save(); render(); };
+                tdA.append(bc, bd); tr.appendChild(tdA);
+                tb.appendChild(tr);
+            });
+        }
+
+        function usarEnCalc(i) {
+            const r = subRows[i]; if (!r) return;
+            subActivo = i;
+            const val = r.max || r.oferta || '';
+            const bid = document.getElementById('inputBid');
+            if (bid) bid.value = val;
+            mostrarModo('rapido');
+            try { calcular(); } catch (e) { console.error(e); }
+            document.getElementById('subBannerTxt').textContent = (r.carro || 'Carro') + ' · Lote ' + (r.lote || '—') + ' · ' + (r.cliente || '') + ' · ' + fmtHora(r.hora) + (r.item ? ' item ' + r.item : '');
+            document.getElementById('subBanner').classList.remove('hidden');
+            if (bid) { bid.focus(); bid.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+        }
+
+        window.subGuardarMax = function () {
+            if (subActivo === null || !subRows[subActivo]) return;
+            const v = (document.getElementById('inputBid') || {}).value || '';
+            subRows[subActivo].max = v; save();
+            const t = document.getElementById('subBannerTxt'); if (t) t.textContent = 'Máximo guardado: $' + Number(v || 0).toLocaleString('en-US') + ' — ' + (subRows[subActivo].carro || '');
+        };
+        window.subCerrarBanner = function () { const b = document.getElementById('subBanner'); if (b) b.classList.add('hidden'); subActivo = null; };
+        window.subAgregar = function () {
+            const hoy = new Date().toLocaleDateString('en-CA', { timeZone: 'America/El_Salvador' });
+            subRows.push({ fecha: hoy, hora: '09:00', item: '', carro: '', lote: '', yarda: '', cliente: '', presupuesto: '', oferta: '', max: '', estado: 'Pendiente', notas: '' });
+            save(); render(); setStatus('Carro agregado — llénalo');
+        };
+        window.subCopiar = async function () {
+            sortRows();
+            const txt = subRows.map(r => `${fmtDay(r.fecha)} ${fmtHora(r.hora)} | Item ${r.item || '-'} | ${r.carro} | Lote ${r.lote} | ${r.yarda} | ${r.cliente} | Máx: ${r.max ? '$' + r.max : '—'} | ${r.estado}`).join('\n');
+            try { await navigator.clipboard.writeText(txt); setStatus('Lista copiada ✓'); } catch (e) { setStatus('No se pudo copiar'); }
+        };
+        window.subRender = render;
+
+        load();
+        // Ocultar el aviso flotante si se cambia a otra pestaña que no sea Cálculo Rápido
+        const _mm = window.mostrarModo;
+        window.mostrarModo = function (modo) { _mm(modo); if (modo !== 'rapido') { const b = document.getElementById('subBanner'); if (b) b.classList.add('hidden'); } };
+    })();
+    </script>
+
 </body>
 </html>
