@@ -180,7 +180,7 @@
         .sub-btn { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; padding:7px 12px; border-radius:8px; border:1px solid var(--line-strong); background:#0a0f1c; color:var(--txt); cursor:pointer; }
         .sub-btn:hover { border-color:var(--cyan); }
         .sub-btn-primary { background:linear-gradient(90deg, var(--brand), #ff5fa3); color:#05070c; border-color:transparent; }
-        .sub-table { width:100%; min-width:1250px; border-collapse:separate; border-spacing:0; font-size:12px; }
+        .sub-table { width:100%; min-width:1650px; table-layout:fixed; border-collapse:separate; border-spacing:0; font-size:12px; }
         .sub-table th { text-align:left; font-family:'JetBrains Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--txt-soft); padding:8px 6px; border-bottom:1px solid var(--line-strong); white-space:nowrap; }
         .sub-table td { padding:3px 4px; border-bottom:1px solid var(--line); vertical-align:middle; }
         .sub-table tr.sub-day td { padding:10px 6px 6px; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:11px; color:var(--brand); text-transform:uppercase; letter-spacing:.1em; border-bottom:1px solid var(--brand-soft); }
@@ -505,6 +505,7 @@
                 </p>
                 <div class="overflow-x-auto">
                     <table class="sub-table">
+                        <colgroup><col style="width:130px"><col style="width:110px"><col style="width:75px"><col style="width:250px"><col style="width:150px"><col style="width:160px"><col style="width:230px"><col style="width:100px"><col style="width:100px"><col style="width:115px"><col style="width:125px"><col style="width:190px"><col style="width:70px"></colgroup>
                         <thead><tr>
                             <th>Fecha</th><th>Arranca</th><th>Item</th><th>Carro</th><th>Lote</th><th>Yarda</th>
                             <th>Cliente</th><th>Presup. cliente</th><th>Oferta actual</th><th style="color:var(--brand);">Máx. a apostar</th>
@@ -1495,9 +1496,9 @@
             {fecha:'2026-11-06',hora:'12:00',item:'99',carro:'2020 Kia Forte LXS',lote:'65926726',yarda:'LA - Baton Rouge',cliente:'Carlos Pablo',presupuesto:'6800',oferta:'3050',max:'',estado:'Pendiente',notas:''}
         ];
         const COLS = [
-            ['fecha','date','118px'],['hora','time','92px'],['item','text','70px'],['carro','text','210px'],['lote','text','150px'],
-            ['yarda','text','140px'],['cliente','text','180px'],['presupuesto','text','90px'],['oferta','number','90px'],
-            ['max','number','105px'],['estado','select','110px'],['notas','text','170px']
+            ['fecha','date','130px'],['hora','time','110px'],['item','text','75px'],['carro','text','250px'],['lote','text','150px'],
+            ['yarda','text','160px'],['cliente','text','230px'],['presupuesto','text','100px'],['oferta','number','100px'],
+            ['max','number','115px'],['estado','select','125px'],['notas','text','190px']
         ];
 
         let subRows = [];
