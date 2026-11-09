@@ -309,6 +309,7 @@
                             <p id="quickGananciaNeta" class="font-mono text-base font-bold text-emerald-400">$0.00</p>
                         </div>
                     </div>
+                    <button type="button" onclick="enviarAlControl()" class="sub-btn sub-btn-primary" style="width:100%;justify-content:center;margin-top:10px;">Enviar al centro de control &rarr;</button>
 
                     <div>
                         <label class="font-mono text-[10px] font-bold uppercase text-[var(--cyan)] mb-1 block tracking-wide">Aduana</label>
@@ -479,6 +480,7 @@
                             <p id="quickGananciaNetaGanado" class="font-mono text-base font-bold text-emerald-400">$0.00</p>
                         </div>
                     </div>
+                    <button type="button" onclick="enviarAlControl()" class="sub-btn sub-btn-primary" style="width:100%;justify-content:center;margin-top:10px;">Enviar al centro de control &rarr;</button>
 
                     <p class="text-[10px] italic" style="color:var(--txt-soft);">
                         Los demás campos (Ganancia, Categoría, Pago, Puerto/Grúa/Naviera, Aduana) están en la pestaña
@@ -1473,8 +1475,38 @@
                 document.getElementById('detVenta').innerText = f(totalCliente);
 
                 document.getElementById('resPresupuesto').innerText = '$' + Math.round(totalCliente).toLocaleString('en-US');
-            }
+
+                // Último cálculo, para mandarlo al centro de control
+                const r2 = n => Math.round(n * 100) / 100;
+                const partidas = [
+                    { k:'subasta', n: usarDirecto ? 'Compra en subasta (factura final)' : 'Compra en subasta (oferta + fees)', m: r2(valorCompra) },
+                    feePago ? { k:'pago', n:'Fee de pago en USA', m: r2(feePago) } : null,
+                    { k:'grua', n:'Grúa terrestre', m: r2(grua) },
+                    { k:'naviera', n:'Flete marítimo (' + (naviera === 'matus' ? 'Matus' : naviera === 'maverick' ? 'Maverick' : naviera) + ')', m: r2(tarifaMaritima) },
+                    { k:'aduana', n:'Impuestos de aduana', m: r2(impuestos) },
+                    { k:'operativos', n:'Operativos (jurídico, grúa, revisión)', m: r2(gastosOperativos) },
+                    cesarExtra ? { k:'cesar', n:'Ganancia dueña (César)', m: cesarExtra } : null,
+                    dealerExtra ? { k:'dealer', n:'Fee dealer', m: dealerExtra } : null
+                ].filter(x => x && x.m > 0);
+                window.__cotiz = {
+                    v: 1, fecha: new Date().toISOString(),
+                    subasta: subasta === 'copart' ? 'Copart' : 'IAAI',
+                    oferta: usarDirecto ? 0 : r2(bid), compraFinal: usarDirecto ? r2(valorDirecto) : 0,
+                    partidas, costoTotal: r2(costoReal), ventaSugerida: Math.round(totalCliente), gananciaNeta: r2(gananciaNeta),
+                    ...(window.__subInfo || {})
+                };
+            } else { window.__cotiz = null; }
             actualizar();
+        }
+
+        // Manda el cálculo al centro de control (abre el control con los datos en el enlace)
+        function enviarAlControl() {
+            calcular();
+            const c = window.__cotiz;
+            if (!c) { alert('Primero escribe la oferta (o el total de compra) para calcular.'); return; }
+            const json = JSON.stringify(c);
+            const b64 = btoa(unescape(encodeURIComponent(json))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            window.open('https://alfredoartero.github.io/control-yesica/#cotizacion=' + b64, '_blank');
         }
 
         document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-SV', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -1584,6 +1616,7 @@
         function usarEnCalc(i) {
             const r = subRows[i]; if (!r) return;
             subActivo = i;
+            window.__subInfo = { carro: r.carro || '', lote: r.lote || '', cliente: r.cliente || '' };
             const val = r.max || r.oferta || '';
             const bid = document.getElementById('inputBid');
             if (bid) bid.value = val;
@@ -1600,7 +1633,7 @@
             subRows[subActivo].max = v; save();
             const t = document.getElementById('subBannerTxt'); if (t) t.textContent = 'Máximo guardado: $' + Number(v || 0).toLocaleString('en-US') + ' — ' + (subRows[subActivo].carro || '');
         };
-        window.subCerrarBanner = function () { const b = document.getElementById('subBanner'); if (b) b.classList.add('hidden'); subActivo = null; };
+        window.subCerrarBanner = function () { const b = document.getElementById('subBanner'); if (b) b.classList.add('hidden'); subActivo = null; window.__subInfo = null; };
         window.subAgregar = function () {
             const hoy = new Date().toLocaleDateString('en-CA', { timeZone: 'America/El_Salvador' });
             subRows.push({ fecha: hoy, hora: '09:00', item: '', carro: '', lote: '', yarda: '', cliente: '', presupuesto: '', oferta: '', max: '', estado: 'Pendiente', notas: '' });
