@@ -302,7 +302,7 @@
             .sub-table tbody tr:not(.sub-day) td:nth-child(13)::before { content: none; }
             /* orden: Carro (título) arriba, luego datos */
             .sub-table tbody tr:not(.sub-day) td:nth-child(4) { order: -2; grid-column: 1 / -1; padding-right: 0; }
-            .sub-table tbody tr:not(.sub-day) td:nth-child(4) input { font-family: var(--display); font-weight: 600; font-size: 16px; }
+            .sub-table tbody tr:not(.sub-day) td:nth-child(4) input { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: -0.01em; text-overflow: ellipsis; }
             .sub-table tbody tr:not(.sub-day) td:nth-child(6), .sub-table tbody tr:not(.sub-day) td:nth-child(7), .sub-table tbody tr:not(.sub-day) td:nth-child(12) { grid-column: 1 / -1; }
             .sub-table tbody tr:not(.sub-day) td:nth-child(13) { position: absolute; top: 8px; right: 8px; width: auto !important; }
             .sub-table tbody tr:not(.sub-day) td:nth-child(13)::before { display: none; }
@@ -312,6 +312,11 @@
             .sub-table tr.sub-ganado { background: rgba(16,185,129,0.10); border-color: rgba(16,185,129,0.35); }
             .sub-table tr.sub-perdido { opacity: .5; }
             .sub-table a.sub-lot { font-size: 12px; padding-left: 10px; }
+            .sub-table tbody tr:not(.sub-day) td { overflow: hidden; }
+            .sub-table tbody tr:not(.sub-day) input, .sub-table tbody tr:not(.sub-day) select { width: 100% !important; min-width: 0 !important; max-width: 100%; box-sizing: border-box; text-align: left; }
+            .sub-table input[type=date], .sub-table input[type=time] { -webkit-appearance: none; appearance: none; display: block; min-height: 42px; }
+            .sub-table input::-webkit-date-and-time-value { text-align: left; min-height: 1.2em; }
+            .sub-table input::-webkit-datetime-edit { padding: 0; }
         }
     </style>
 </head>
